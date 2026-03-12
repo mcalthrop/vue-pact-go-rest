@@ -68,6 +68,19 @@ describe('RecipeView', () => {
     expect(wrapper.text()).toContain('Failed to load recipe');
   });
 
+  it('does not refetch when route id becomes undefined', async () => {
+    vi.mocked(fetchRecipeModule.fetchRecipe).mockResolvedValue(mockRecipe);
+
+    mount(RecipeView, { global: { plugins: [router] } });
+    await flushPromises();
+
+    const callsBefore = vi.mocked(fetchRecipeModule.fetchRecipe).mock.calls.length;
+    await router.push('/');
+    await flushPromises();
+
+    expect(vi.mocked(fetchRecipeModule.fetchRecipe)).toHaveBeenCalledTimes(callsBefore);
+  });
+
   it('refetches when route id changes', async () => {
     const secondRecipe = { ...mockRecipe, id: 'rye-bread', name: 'Rye Bread' };
     vi.mocked(fetchRecipeModule.fetchRecipe)

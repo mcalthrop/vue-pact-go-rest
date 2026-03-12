@@ -61,8 +61,8 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 3.5: Linting and formatting
 
-- [ ] 3.5.1 Add `golangci-lint` config (`.golangci.yml`) with `gofmt`, `goimports`, `govet`, `errcheck` enabled
-- [ ] 3.5.2 Verify all code passes linting and formatting checks; add `lint` Makefile target
+- [x] 3.5.1 Add `golangci-lint` config (`.golangci.yml`) with `gofmt`, `goimports`, `govet`, `errcheck` enabled
+- [x] 3.5.2 Verify all code passes linting and formatting checks; add `lint` Makefile target
 
 ---
 
@@ -70,27 +70,27 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 4.1: Set up Vue project
 
-- [ ] 4.1.1 Scaffold Vue 3 + TypeScript project with Vite under `apps/frontend` using pnpm; pin all dependencies to exact versions (no `^` or `~`)
-- [ ] 4.1.2 Add `.nvmrc` and `engines` field in `apps/frontend/package.json`
-- [ ] 4.1.3 Add `apps/frontend/README.md` with setup, dev server, test, and build instructions
+- [x] 4.1.1 Scaffold Vue 3 + TypeScript project with Vite under `apps/frontend` using pnpm; pin all dependencies to exact versions (no `^` or `~`)
+- [x] 4.1.2 Add `.nvmrc` and `engines` field in `apps/frontend/package.json`
+- [x] 4.1.3 Add `apps/frontend/README.md` with setup, dev server, test, and build instructions
 
 ### Task 4.2: Generate TypeScript types from OpenAPI spec
 
-- [ ] 4.2.1 Add `openapi-typescript` (exact version) as a dev dependency; add a `generate:types` script to regenerate types from `openapi/openapi.yaml`
-- [ ] 4.2.2 Commit generated `src/types/api.ts` and document regeneration process in README
+- [x] 4.2.1 Add `openapi-typescript` (exact version) as a dev dependency; add a `generate:types` script to regenerate types from `openapi/openapi.yaml`
+- [x] 4.2.2 Commit generated `src/types/api.gen.ts` and document regeneration process in README
 
 ### Task 4.3: Implement API client
 
-- [ ] 4.3.1 Implement a typed API client in `src/api/client.ts` using the generated types; methods: `fetchRecipes()` and `fetchRecipe(id)`
-- [ ] 4.3.2 Write unit tests for the API client with mocked `fetch` (100% coverage)
+- [x] 4.3.1 Implement typed API functions in `src/api/` using the generated types: `baseUrl.ts`, `fetchRecipes.ts`, `fetchRecipe.ts` (one function per file)
+- [x] 4.3.2 Write unit tests for the API client with mocked `fetch` (100% coverage)
 
 ### Task 4.4: Implement routing and pages
 
-- [ ] 4.4.1 Set up Vue Router with two routes: `/` (Home) and `/recipes/:id` (Recipe detail)
-- [ ] 4.4.2 Implement `HomeView.vue`: fetches and displays a grid/list of recipes with photo, name, and summary; each card links to the recipe detail page
-- [ ] 4.4.3 Implement `RecipeView.vue`: fetches and displays full recipe details including larger photo, ingredients list, and instructions
-- [ ] 4.4.4 Implement a `RecipeCard.vue` component used by `HomeView`
-- [ ] 4.4.5 Write unit tests for all components and views (100% coverage)
+- [x] 4.4.1 Set up Vue Router with two routes: `/` (Home) and `/recipes/:id` (Recipe detail)
+- [x] 4.4.2 Implement `HomeView.vue`: fetches and displays a grid/list of recipes with photo, name, and summary; each card links to the recipe detail page
+- [x] 4.4.3 Implement `RecipeView.vue`: fetches and displays full recipe details including larger photo, ingredients list, and instructions
+- [x] 4.4.4 Implement a `RecipeCard.vue` component used by `HomeView`
+- [x] 4.4.5 Write unit tests for all components and views (100% coverage)
 
 ### Task 4.5: Styling
 
@@ -105,7 +105,7 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 4.7: Test coverage
 
-- [ ] 4.7.1 Configure Vitest with `@vitest/coverage-v8`; add `coverage` script enforcing 100% threshold in `vitest.config.ts`
+- [-] 4.7.1 Configure Vitest with `@vitest/coverage-v8`; add `coverage` script enforcing 100% threshold in `vite.config.ts`
 
 ---
 

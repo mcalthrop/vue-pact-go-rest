@@ -16,5 +16,20 @@ export default defineConfig({
     environment: 'jsdom',
     exclude: [...configDefaults.exclude, 'e2e/**'],
     root: fileURLToPath(new URL('./', import.meta.url)),
+    coverage: {
+      provider: 'v8',
+      thresholds: {
+        lines: 100,
+        functions: 100,
+        branches: 100,
+        statements: 100,
+      },
+      exclude: [
+        ...(configDefaults.coverage.exclude ?? []),
+        'src/main.ts',
+        'src/router/index.ts',
+        'src/types/api.gen.ts',
+      ],
+    },
   },
 });
