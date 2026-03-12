@@ -6,8 +6,9 @@ import (
 	"time"
 )
 
-// CORSMiddleware adds permissive CORS headers to every response.
-// OPTIONS preflight requests are answered immediately with 204 No Content.
+// CORSMiddleware adds CORS headers to every response, allowing GET requests
+// from any origin. OPTIONS preflight requests are answered immediately with
+// 204 No Content.
 func CORSMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -22,10 +23,13 @@ func CORSMiddleware(next http.Handler) http.Handler {
 }
 
 // LoggingMiddleware logs each request's method, URL path, and elapsed time.
+// The log line is deferred so it runs even if the downstream handler panics.
 func LoggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
+		defer func() {
+			log.Printf("%s %s %s", r.Method, r.URL.Path, time.Since(start))
+		}()
 		next.ServeHTTP(w, r)
-		log.Printf("%s %s %s", r.Method, r.URL.Path, time.Since(start))
 	})
 }

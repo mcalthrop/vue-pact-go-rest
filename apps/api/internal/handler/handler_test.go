@@ -76,6 +76,9 @@ func TestListRecipes_RepoError(t *testing.T) {
 	if got.Code != 500 {
 		t.Errorf("expected code 500, got %d", got.Code)
 	}
+	if got.Message != "internal server error" {
+		t.Errorf("expected generic error message, got %q", got.Message)
+	}
 }
 
 func TestGetRecipe_Success(t *testing.T) {
@@ -117,6 +120,9 @@ func TestGetRecipe_NotFound(t *testing.T) {
 	if got.Code != 404 {
 		t.Errorf("expected code 404, got %d", got.Code)
 	}
+	if got.Message != "recipe not found" {
+		t.Errorf("expected stable 404 message, got %q", got.Message)
+	}
 }
 
 func TestGetRecipe_RepoError(t *testing.T) {
@@ -137,6 +143,9 @@ func TestGetRecipe_RepoError(t *testing.T) {
 	}
 	if got.Code != 500 {
 		t.Errorf("expected code 500, got %d", got.Code)
+	}
+	if got.Message != "internal server error" {
+		t.Errorf("expected generic error message, got %q", got.Message)
 	}
 }
 

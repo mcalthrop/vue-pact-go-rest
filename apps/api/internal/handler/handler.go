@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+	"log"
 
 	"github.com/mcalthrop/vue-pact-go-rest/api/internal/gen"
 	"github.com/mcalthrop/vue-pact-go-rest/api/internal/repository"
@@ -24,7 +25,8 @@ func NewRecipeHandler(repo repository.RecipeRepository) *RecipeHandler {
 func (h *RecipeHandler) ListRecipes(_ context.Context, _ gen.ListRecipesRequestObject) (gen.ListRecipesResponseObject, error) {
 	summaries, err := h.repo.ListRecipes()
 	if err != nil {
-		return gen.ListRecipes500JSONResponse{Code: 500, Message: err.Error()}, nil
+		log.Printf("ListRecipes: repository error: %v", err)
+		return gen.ListRecipes500JSONResponse{Code: 500, Message: "internal server error"}, nil
 	}
 	return gen.ListRecipes200JSONResponse{Recipes: summaries}, nil
 }
@@ -34,9 +36,10 @@ func (h *RecipeHandler) GetRecipe(_ context.Context, request gen.GetRecipeReques
 	recipe, err := h.repo.GetRecipe(request.Id)
 	if err != nil {
 		if errors.Is(err, repository.ErrRecipeNotFound) {
-			return gen.GetRecipe404JSONResponse{Code: 404, Message: err.Error()}, nil
+			return gen.GetRecipe404JSONResponse{Code: 404, Message: "recipe not found"}, nil
 		}
-		return gen.GetRecipe500JSONResponse{Code: 500, Message: err.Error()}, nil
+		log.Printf("GetRecipe(%q): repository error: %v", request.Id, err)
+		return gen.GetRecipe500JSONResponse{Code: 500, Message: "internal server error"}, nil
 	}
 	return gen.GetRecipe200JSONResponse(*recipe), nil
 }
