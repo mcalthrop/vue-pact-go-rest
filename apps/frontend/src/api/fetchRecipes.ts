@@ -1,7 +1,7 @@
 import type { components } from '../types/api.gen';
 import { BASE_URL } from './baseUrl';
 
-export type RecipeSummary = components['schemas']['RecipeSummary']
+export type RecipeSummary = components['schemas']['RecipeSummary'];
 
 export async function fetchRecipes(): Promise<RecipeSummary[]> {
   const res = await fetch(`${BASE_URL}/recipes`);
