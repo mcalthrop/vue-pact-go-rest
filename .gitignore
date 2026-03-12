@@ -1,0 +1,36 @@
+# Node
+node_modules/
+.pnpm-store/
+dist/
+build/
+coverage/
+*.log
+
+# Turborepo
+.turbo/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+bin/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
