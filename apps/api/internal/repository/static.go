@@ -6,6 +6,8 @@ import (
 	"github.com/mcalthrop/vue-pact-go-rest/api/internal/gen"
 )
 
+var _ RecipeRepository = (*StaticRecipeRepository)(nil)
+
 // StaticRecipeRepository implements RecipeRepository using hard-coded seed data.
 type StaticRecipeRepository struct {
 	recipes []gen.Recipe
@@ -31,13 +33,15 @@ func (r *StaticRecipeRepository) ListRecipes() ([]gen.RecipeSummary, error) {
 }
 
 // GetRecipe returns the full recipe for the given id, or an error if not found.
+// Returns ErrRecipeNotFound (wrapped) when no recipe matches, so callers can use errors.Is.
 func (r *StaticRecipeRepository) GetRecipe(id string) (*gen.Recipe, error) {
-	for i := range r.recipes {
-		if r.recipes[i].Id == id {
-			return &r.recipes[i], nil
+	for _, recipe := range r.recipes {
+		if recipe.Id == id {
+			copy := recipe
+			return &copy, nil
 		}
 	}
-	return nil, fmt.Errorf("recipe not found: %s", id)
+	return nil, fmt.Errorf("%w: %s", ErrRecipeNotFound, id)
 }
 
 func seedRecipes() []gen.Recipe {
