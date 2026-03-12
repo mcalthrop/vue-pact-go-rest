@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "type-check": "vue-tsc --build",
     "test": "vitest run",
-    "coverage": "vitest run --coverage",
+    "coverage": "vitest run --coverage --project unit",
     "test:watch": "vitest",
     "lint": "run-s lint:*",
     "lint:eslint": "eslint . --fix --cache",
