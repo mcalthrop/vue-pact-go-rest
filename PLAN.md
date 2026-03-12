@@ -136,8 +136,8 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 5.3: Pact provider verification (Go API)
 
-- [ ] 5.3.1 Add `pact-go` dependency to `apps/api`; write provider verification test that fetches pacts from the Broker and verifies against the running API
-- [ ] 5.3.2 Add `pact:verify` Makefile target
+- [x] 5.3.1 Add `pact-go` dependency to `apps/api`; write provider verification test that fetches pacts from the Broker and verifies against the running API
+- [x] 5.3.2 Add `pact:verify` Makefile target
 
 ---
 

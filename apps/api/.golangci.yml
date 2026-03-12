@@ -1,16 +1,15 @@
-version: "2"  # requires golangci-lint >= v1.62.0
+version: "2"  # requires golangci-lint >= v2.0.0
 
 linters:
   enable:
     - errcheck
     - govet
     - staticcheck
+  exclusions:
+    paths:
+      - internal/gen
 
 formatters:
   enable:
     - gofmt
     - goimports
-
-issues:
-  exclude-dirs:
-    - internal/gen
