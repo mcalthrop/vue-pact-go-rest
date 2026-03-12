@@ -61,6 +61,7 @@ The front end must satisfy the following requirements:
 - uses Husky for `pre-commit` and `pre-push` validation
 - uses the back end REST API for data retrieval
 - uses the OpenAPI spec to enforce strict typing of API calls
+- uses [MSW (Mock Service Worker)](https://mswjs.io/) to mock API calls in tests
 
 ### Back end API
 

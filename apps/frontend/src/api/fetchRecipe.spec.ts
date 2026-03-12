@@ -1,15 +1,11 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest';
+import { http, HttpResponse } from 'msw';
+import { server } from '../mocks/server';
 import { fetchRecipe } from './fetchRecipe';
 
-const mockFetch = vi.fn();
-
-beforeEach(() => {
-  vi.stubGlobal('fetch', mockFetch);
-});
-
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 const mockRecipe = {
   id: 'sourdough-boule',
@@ -23,19 +19,23 @@ const mockRecipe = {
 
 describe('fetchRecipe', () => {
   it('returns a recipe on success', async () => {
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(mockRecipe),
-    });
+    server.use(
+      http.get('http://localhost:8080/recipes/:id', () =>
+        HttpResponse.json(mockRecipe),
+      ),
+    );
 
     const result = await fetchRecipe('sourdough-boule');
 
     expect(result).toEqual(mockRecipe);
-    expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('/recipes/sourdough-boule'));
   });
 
   it('throws on non-ok response', async () => {
-    mockFetch.mockResolvedValue({ ok: false, status: 404 });
+    server.use(
+      http.get('http://localhost:8080/recipes/:id', () =>
+        new HttpResponse(null, { status: 404 }),
+      ),
+    );
 
     await expect(fetchRecipe('unknown')).rejects.toThrow('fetchRecipe failed: 404');
   });

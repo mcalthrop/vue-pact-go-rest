@@ -105,7 +105,11 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 4.7: Test coverage
 
-- [-] 4.7.1 Configure Vitest with `@vitest/coverage-v8`; add `coverage` script enforcing 100% threshold in `vite.config.ts`
+- [x] 4.7.1 Configure Vitest with `@vitest/coverage-v8`; add `coverage` script enforcing 100% threshold in `vite.config.ts`
+
+### Task 4.8: MSW API mocking
+
+- [-] 4.8.1 Replace `vi.stubGlobal('fetch', ...)` in API unit tests with MSW (`msw/node` `setupServer`); add `src/mocks/handlers.ts` and `src/mocks/server.ts`
 
 ---
 
