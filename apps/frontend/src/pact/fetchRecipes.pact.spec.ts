@@ -40,10 +40,15 @@ describe('fetchRecipes — pact consumer', () => {
         },
       })
       .executeTest(async (mockServer) => {
-        (globalThis as { __pactMockUrl?: string }).__pactMockUrl = mockServer.url;
-        const result = await fetchRecipes();
-        expect(result).toHaveLength(1);
-        expect(result[0].id).toBe('sourdough-boule');
+        const globalWithPact = globalThis as { __pactMockUrl?: string };
+        globalWithPact.__pactMockUrl = mockServer.url;
+        try {
+          const result = await fetchRecipes();
+          expect(result).toHaveLength(1);
+          expect(result[0].id).toBe('sourdough-boule');
+        } finally {
+          delete globalWithPact.__pactMockUrl;
+        }
       });
   });
 });

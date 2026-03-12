@@ -48,9 +48,14 @@ describe('fetchRecipe — pact consumer', () => {
         },
       })
       .executeTest(async (mockServer) => {
-        (globalThis as { __pactMockUrl?: string }).__pactMockUrl = mockServer.url;
-        const result = await fetchRecipe('sourdough-boule');
-        expect(result.id).toBe('sourdough-boule');
+        const globalWithPact = globalThis as { __pactMockUrl?: string };
+        globalWithPact.__pactMockUrl = mockServer.url;
+        try {
+          const result = await fetchRecipe('sourdough-boule');
+          expect(result.id).toBe('sourdough-boule');
+        } finally {
+          delete globalWithPact.__pactMockUrl;
+        }
       });
   });
 
@@ -68,8 +73,13 @@ describe('fetchRecipe — pact consumer', () => {
         },
       })
       .executeTest(async (mockServer) => {
-        (globalThis as { __pactMockUrl?: string }).__pactMockUrl = mockServer.url;
-        await expect(fetchRecipe('unknown-recipe')).rejects.toThrow('fetchRecipe failed: 404');
+        const globalWithPact = globalThis as { __pactMockUrl?: string };
+        globalWithPact.__pactMockUrl = mockServer.url;
+        try {
+          await expect(fetchRecipe('unknown-recipe')).rejects.toThrow('fetchRecipe failed: 404');
+        } finally {
+          delete globalWithPact.__pactMockUrl;
+        }
       });
   });
 });
