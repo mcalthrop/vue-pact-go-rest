@@ -107,8 +107,22 @@ func TestGetRecipe_AllSeedRecipes(t *testing.T) {
 func TestGetRecipe_ReturnsCopy(t *testing.T) {
 	repo := repository.NewStaticRecipeRepository()
 
-	r1, _ := repo.GetRecipe("sourdough-boule")
-	r2, _ := repo.GetRecipe("sourdough-boule")
+	r1, err := repo.GetRecipe("sourdough-boule")
+	if err != nil {
+		t.Fatalf("GetRecipe(%q) returned unexpected error: %v", "sourdough-boule", err)
+	}
+	if r1 == nil {
+		t.Fatalf("GetRecipe(%q) returned nil recipe", "sourdough-boule")
+	}
+
+	r2, err := repo.GetRecipe("sourdough-boule")
+	if err != nil {
+		t.Fatalf("GetRecipe(%q) returned unexpected error on second call: %v", "sourdough-boule", err)
+	}
+	if r2 == nil {
+		t.Fatalf("GetRecipe(%q) returned nil recipe on second call", "sourdough-boule")
+	}
+
 	if r1 == r2 {
 		t.Error("GetRecipe() returned the same pointer on two calls; expected independent copies")
 	}

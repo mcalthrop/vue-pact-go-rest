@@ -37,8 +37,8 @@ func (r *StaticRecipeRepository) ListRecipes() ([]gen.RecipeSummary, error) {
 func (r *StaticRecipeRepository) GetRecipe(id string) (*gen.Recipe, error) {
 	for _, recipe := range r.recipes {
 		if recipe.Id == id {
-			copy := recipe
-			return &copy, nil
+			recipeCopy := recipe
+			return &recipeCopy, nil
 		}
 	}
 	return nil, fmt.Errorf("%w: %s", ErrRecipeNotFound, id)
