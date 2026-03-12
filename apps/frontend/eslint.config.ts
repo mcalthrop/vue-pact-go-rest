@@ -1,8 +1,9 @@
-import { globalIgnores } from 'eslint/config'
-import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
-import pluginVue from 'eslint-plugin-vue'
-import pluginVitest from '@vitest/eslint-plugin'
-import pluginOxlint from 'eslint-plugin-oxlint'
+import { globalIgnores } from 'eslint/config';
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript';
+import pluginVue from 'eslint-plugin-vue';
+import pluginVitest from '@vitest/eslint-plugin';
+import pluginOxlint from 'eslint-plugin-oxlint';
+import pluginStylistic from '@stylistic/eslint-plugin';
 
 // To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
 // import { configureVueProject } from '@vue/eslint-config-typescript'
@@ -26,4 +27,11 @@ export default defineConfigWithVueTs(
   },
 
   ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
-)
+
+  {
+    plugins: { '@stylistic': pluginStylistic },
+    rules: {
+      '@stylistic/semi': ['error', 'always'],
+    },
+  },
+);
