@@ -1,0 +1,11 @@
+extends:
+  - recommended
+
+rules:
+  operation-operationId: error
+  no-empty-servers: error
+  tags-alphabetical: off
+  # Localhost URL is intentional for local development
+  no-server-example.com: off
+  # List endpoint has no natural 4xx response
+  operation-4xx-response: off

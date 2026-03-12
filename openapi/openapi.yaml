@@ -7,6 +7,9 @@ info:
   contact:
     name: API Support
     url: https://github.com/mcalthrop/vue-pact-go-rest
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 
 tags:
   - name: recipes
@@ -15,6 +18,8 @@ tags:
 servers:
   - url: http://localhost:8080
     description: Local development server
+
+security: []
 
 paths:
   /recipes:
