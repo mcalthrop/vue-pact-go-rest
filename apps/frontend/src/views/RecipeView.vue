@@ -58,3 +58,55 @@ watch(
     </template>
   </main>
 </template>
+
+<style scoped>
+main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: var(--space-xl);
+}
+
+.recipe-photo {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-xl);
+}
+
+h1 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-sm);
+}
+
+.summary {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-lg);
+}
+
+.description {
+  margin-bottom: var(--space-xl);
+  line-height: 1.8;
+}
+
+h2 {
+  font-size: var(--font-size-xl);
+  margin: var(--space-xl) 0 var(--space-md);
+  padding-bottom: var(--space-xs);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.ingredients {
+  margin-bottom: var(--space-xl);
+}
+
+.ingredients li,
+.instructions li {
+  padding: var(--space-xs) 0;
+}
+
+.error {
+  color: var(--color-error);
+}
+</style>

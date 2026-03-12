@@ -94,8 +94,8 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 4.5: Styling
 
-- [ ] 4.5.1 Define a clean, minimalist, responsive CSS design system (CSS variables for colour palette, typography, spacing) appropriate for a bread/baking site
-- [ ] 4.5.2 Apply styles to `HomeView`, `RecipeView`, and `RecipeCard`; ensure responsiveness on mobile, tablet, and desktop breakpoints
+- [-] 4.5.1 Define a clean, minimalist, responsive CSS design system (CSS variables for colour palette, typography, spacing) appropriate for a bread/baking site
+- [-] 4.5.2 Apply styles to `HomeView`, `RecipeView`, and `RecipeCard`; ensure responsiveness on mobile, tablet, and desktop breakpoints
 
 ### Task 4.6: Linting, formatting, and Husky hooks
 
@@ -113,7 +113,7 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 4.9: knip
 
-- [-] 4.9.1 Add `knip` to detect unused exports, dependencies, and files; add `knip` script to `package.json`; configure to exclude generated and test-infrastructure files
+- [x] 4.9.1 Add `knip` to detect unused exports, dependencies, and files; add `knip` script to `package.json`; configure to exclude generated and test-infrastructure files
 
 ---
 
