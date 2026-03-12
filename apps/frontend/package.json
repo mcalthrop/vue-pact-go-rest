@@ -21,16 +21,6 @@
     "generate:types": "openapi-typescript ../../openapi/openapi.yaml -o src/types/api.gen.ts",
     "lint-staged": "lint-staged"
   },
-  "lint-staged": {
-    "*.{ts,vue}": [
-      "oxlint --fix",
-      "eslint --fix --cache",
-      "prettier --write"
-    ],
-    "*.{css,json,md,yaml}": [
-      "prettier --write"
-    ]
-  },
   "dependencies": {
     "vue": "3.5.30",
     "vue-router": "5.0.3"
