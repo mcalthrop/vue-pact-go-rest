@@ -87,6 +87,7 @@ The broker is available at `http://localhost:9292`.
 | Username | `pact` |
 | Password | `pact` |
 
+Note: These credentials are development-only defaults for local Docker Compose usage. Do not reuse them in shared, staging, or production environments; configure real credentials via environment variables (for example via a `.env` file used by `docker compose`).
 Public read access is enabled so provider verification can fetch pacts without credentials. Write operations (publish) require the username/password above.
 
 ```bash
