@@ -11,9 +11,11 @@
     "test": "turbo test",
     "lint": "turbo lint",
     "format": "turbo format",
-    "dev": "turbo dev"
+    "dev": "turbo dev",
+    "openapi:validate": "spectral lint openapi/openapi.yaml --ruleset openapi/spectral.yaml"
   },
   "devDependencies": {
+    "@stoplight/spectral-cli": "6.15.0",
     "turbo": "2.8.16"
   }
 }

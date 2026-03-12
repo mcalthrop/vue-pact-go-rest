@@ -22,9 +22,9 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 2.1: Create and validate the OpenAPI spec
 
-- [ ] 2.1.1 Create `openapi/openapi.yaml` defining schemas: `Recipe` (id, name, summary, description, photo_url, ingredients, instructions) and `RecipeList`
-- [ ] 2.1.2 Define endpoints: `GET /recipes` (list) and `GET /recipes/{id}` (detail) with request/response schemas and error responses
-- [ ] 2.1.3 Add a script (or CI step) to validate the OpenAPI spec with a linter (e.g. `spectral`)
+- [x] 2.1.1 Create `openapi/openapi.yaml` defining schemas: `Recipe` (id, name, summary, description, photo_url, ingredients, instructions) and `RecipeList`
+- [x] 2.1.2 Define endpoints: `GET /recipes` (list) and `GET /recipes/{id}` (detail) with request/response schemas and error responses
+- [x] 2.1.3 Add a script (or CI step) to validate the OpenAPI spec with a linter (e.g. `spectral`)
 
 ---
 
