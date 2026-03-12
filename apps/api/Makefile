@@ -30,7 +30,7 @@ lint:
 	golangci-lint run ./...
 
 pact\:verify:
-	go test -tags pact -v -run TestPactProviderVerification $(CMD_DIR)
+	go test -count=1 -tags pact -v -run TestPactProviderVerification $(CMD_DIR)
 
 clean:
 	rm -rf $(BUILD_DIR) coverage.out coverage.filtered.out

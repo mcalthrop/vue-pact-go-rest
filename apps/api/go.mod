@@ -5,7 +5,7 @@ go 1.25.5
 require (
 	github.com/getkin/kin-openapi v0.133.0
 	github.com/oapi-codegen/runtime v1.2.0
-	github.com/pact-foundation/pact-go/v2 v2.4.2
+	github.com/pact-foundation/pact-go/v2 v2.4.2 // pact build tag only — run `go mod tidy -tags pact` to keep this entry
 )
 
 require (

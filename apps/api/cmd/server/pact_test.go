@@ -3,9 +3,11 @@
 package main
 
 import (
+	"fmt"
 	"net/http/httptest"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -17,9 +19,16 @@ func TestPactProviderVerification(t *testing.T) {
 	srv := httptest.NewServer(newServer())
 	defer srv.Close()
 
+	publishResults, _ := strconv.ParseBool(os.Getenv("PACT_PUBLISH_RESULTS"))
+
+	version, err := providerVersion()
+	if err != nil && publishResults {
+		t.Fatalf("cannot publish verification results: %v", err)
+	}
+
 	verifier := provider.NewVerifier()
 
-	err := verifier.VerifyProvider(t, provider.VerifyRequest{
+	err = verifier.VerifyProvider(t, provider.VerifyRequest{
 		Provider:        "go-api",
 		ProviderBaseURL: srv.URL,
 
@@ -33,13 +42,13 @@ func TestPactProviderVerification(t *testing.T) {
 		FailIfNoPactsFound: true,
 
 		StateHandlers: models.StateHandlers{
-			"recipes exist": noopStateHandler,
-			"recipe sourdough-boule exists":      noopStateHandler,
+			"recipes exist":                        noopStateHandler,
+			"recipe sourdough-boule exists":        noopStateHandler,
 			"recipe unknown-recipe does not exist": noopStateHandler,
 		},
 
-		PublishVerificationResults: os.Getenv("PACT_PUBLISH_RESULTS") == "true",
-		ProviderVersion:            providerVersion(),
+		PublishVerificationResults: publishResults,
+		ProviderVersion:            version,
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -57,13 +66,16 @@ func envOrDefault(key, def string) string {
 	return def
 }
 
-func providerVersion() string {
+// providerVersion returns the current git commit SHA, or falls back to the
+// PACT_PROVIDER_VERSION environment variable. Returns an error if neither is
+// available (e.g. running from a source archive without a .git directory).
+func providerVersion() (string, error) {
 	if v := os.Getenv("PACT_PROVIDER_VERSION"); v != "" {
-		return v
+		return v, nil
 	}
 	out, err := exec.Command("git", "rev-parse", "HEAD").Output()
 	if err != nil {
-		return "unknown"
+		return "", fmt.Errorf("could not determine provider version: set PACT_PROVIDER_VERSION or ensure git is available")
 	}
-	return strings.TrimSpace(string(out))
+	return strings.TrimSpace(string(out)), nil
 }
