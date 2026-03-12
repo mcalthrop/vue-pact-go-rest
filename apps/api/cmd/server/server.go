@@ -14,10 +14,14 @@ func newServer() http.Handler {
 	repo := repository.NewStaticRecipeRepository()
 	h := handler.NewRecipeHandler(repo)
 	strict := gen.NewStrictHandler(h, nil)
-	return gen.HandlerWithOptions(strict, gen.StdHTTPServerOptions{
-		Middlewares: []gen.MiddlewareFunc{
-			handler.LoggingMiddleware,
-			handler.CORSMiddleware,
-		},
-	})
+
+	// Build the OpenAPI handler without per-operation middleware.
+	openapiHandler := gen.HandlerWithOptions(strict, gen.StdHTTPServerOptions{})
+
+	// Wrap the entire handler with CORS and logging so they apply to all
+	// requests, including OPTIONS preflight and unmatched routes.
+	var wrapped http.Handler = openapiHandler
+	wrapped = handler.CORSMiddleware(wrapped)
+	wrapped = handler.LoggingMiddleware(wrapped)
+	return wrapped
 }

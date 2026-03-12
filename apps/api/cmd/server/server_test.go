@@ -104,3 +104,35 @@ func TestNewServer_CORSHeaders(t *testing.T) {
 		t.Errorf("expected Access-Control-Allow-Origin *, got %q", got)
 	}
 }
+
+func TestNewServer_CORSPreflightOptions(t *testing.T) {
+	srv := httptest.NewServer(newServer())
+	defer srv.Close()
+
+	req, err := http.NewRequest(http.MethodOptions, srv.URL+"/recipes", nil)
+	if err != nil {
+		t.Fatalf("creating OPTIONS /recipes request: %v", err)
+	}
+	req.Header.Set("Origin", "http://example.com")
+	req.Header.Set("Access-Control-Request-Method", "GET")
+	req.Header.Set("Access-Control-Request-Headers", "Content-Type")
+
+	resp, err := srv.Client().Do(req)
+	if err != nil {
+		t.Fatalf("OPTIONS /recipes: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusNoContent {
+		t.Fatalf("expected 204 for OPTIONS preflight, got %d", resp.StatusCode)
+	}
+	if got := resp.Header.Get("Access-Control-Allow-Origin"); got != "*" {
+		t.Errorf("expected Access-Control-Allow-Origin *, got %q", got)
+	}
+	if got := resp.Header.Get("Access-Control-Allow-Methods"); got == "" {
+		t.Error("expected Access-Control-Allow-Methods header to be set")
+	}
+	if got := resp.Header.Get("Access-Control-Allow-Headers"); got == "" {
+		t.Error("expected Access-Control-Allow-Headers header to be set")
+	}
+}
