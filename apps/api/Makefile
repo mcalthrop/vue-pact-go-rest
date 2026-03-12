@@ -2,7 +2,7 @@ BINARY_NAME := api
 BUILD_DIR   := bin
 CMD_DIR     := ./cmd/server
 
-.PHONY: all build generate test lint coverage run clean
+.PHONY: all build generate test lint coverage run clean pact\:verify
 
 all: build
 
@@ -28,6 +28,9 @@ coverage:
 
 lint:
 	golangci-lint run ./...
+
+pact\:verify:
+	go test -tags pact -v -run TestPactProviderVerification $(CMD_DIR)
 
 clean:
 	rm -rf $(BUILD_DIR) coverage.out coverage.filtered.out
