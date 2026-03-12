@@ -1,5 +1,8 @@
 # Node
 node_modules/
+
+# Pact
+apps/frontend/pacts/
 .pnpm-store/
 dist/
 build/
