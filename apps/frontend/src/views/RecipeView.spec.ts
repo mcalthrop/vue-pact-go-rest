@@ -71,7 +71,7 @@ describe('RecipeView', () => {
   it('does not refetch when route id becomes undefined', async () => {
     vi.mocked(fetchRecipeModule.fetchRecipe).mockResolvedValue(mockRecipe);
 
-    mount(RecipeView, { global: { plugins: [router] } });
+    const wrapper = mount(RecipeView, { global: { plugins: [router] } });
     await flushPromises();
 
     const callsBefore = vi.mocked(fetchRecipeModule.fetchRecipe).mock.calls.length;
@@ -79,6 +79,7 @@ describe('RecipeView', () => {
     await flushPromises();
 
     expect(vi.mocked(fetchRecipeModule.fetchRecipe)).toHaveBeenCalledTimes(callsBefore);
+    wrapper.unmount();
   });
 
   it('refetches when route id changes', async () => {
@@ -87,12 +88,13 @@ describe('RecipeView', () => {
       .mockResolvedValueOnce(mockRecipe)
       .mockResolvedValueOnce(secondRecipe);
 
-    mount(RecipeView, { global: { plugins: [router] } });
+    const wrapper = mount(RecipeView, { global: { plugins: [router] } });
     await flushPromises();
 
     await router.push('/recipes/rye-bread');
     await flushPromises();
 
     expect(vi.mocked(fetchRecipeModule.fetchRecipe)).toHaveBeenCalledWith('rye-bread');
+    wrapper.unmount();
   });
 });
