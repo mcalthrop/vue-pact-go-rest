@@ -109,7 +109,11 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 4.8: MSW API mocking
 
-- [-] 4.8.1 Replace `vi.stubGlobal('fetch', ...)` in API unit tests with MSW (`msw/node` `setupServer`); add `src/mocks/handlers.ts` and `src/mocks/server.ts`
+- [x] 4.8.1 Replace `vi.stubGlobal('fetch', ...)` in API unit tests with MSW (`msw/node` `setupServer`); add `src/mocks/handlers.ts` and `src/mocks/server.ts`
+
+### Task 4.9: knip
+
+- [-] 4.9.1 Add `knip` to detect unused exports, dependencies, and files; add `knip` script to `package.json`; configure to exclude generated and test-infrastructure files
 
 ---
 
