@@ -113,7 +113,7 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 4.9: knip
 
-- [-] 4.9.1 Add `knip` to detect unused exports, dependencies, and files; add `knip` script to `package.json`; configure to exclude generated and test-infrastructure files
+- [x] 4.9.1 Add `knip` to detect unused exports, dependencies, and files; add `knip` script to `package.json`; configure to exclude generated and test-infrastructure files
 
 ---
 
