@@ -62,6 +62,7 @@ The front end must satisfy the following requirements:
 - uses the back end REST API for data retrieval
 - uses the OpenAPI spec to enforce strict typing of API calls
 - uses [MSW (Mock Service Worker)](https://mswjs.io/) to mock API calls in tests
+- uses [knip](https://knip.dev/) to detect unused exports, dependencies, and files
 
 ### Back end API
 

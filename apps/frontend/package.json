@@ -13,8 +13,9 @@
     "coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "lint": "run-s lint:*",
-    "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
+    "lint:knip": "knip",
+    "lint:oxlint": "oxlint . --fix",
     "format": "eslint . --fix",
     "generate:types": "openapi-typescript ../../openapi/openapi.yaml -o src/types/api.gen.ts"
   },
@@ -38,6 +39,7 @@
     "eslint-plugin-vue": "10.8.0",
     "jiti": "2.6.1",
     "jsdom": "28.1.0",
+    "knip": "5.86.0",
     "msw": "2.12.10",
     "npm-run-all2": "8.0.4",
     "openapi-typescript": "7.13.0",
