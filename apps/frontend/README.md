@@ -26,11 +26,11 @@ All commands are run from `apps/frontend/`.
 | `pnpm test:watch` | Run unit tests in watch mode |
 | `pnpm type-check` | Run `vue-tsc` type checking |
 | `pnpm lint` | Run oxlint + ESLint with auto-fix |
-| `pnpm generate:types` | Regenerate TypeScript types from `openapi/openapi.yaml` |
+| `pnpm generate:types` | Regenerate TypeScript types from `../../openapi/openapi.yaml` (repo root: `openapi/openapi.yaml`) |
 
 ## Generated types
 
-TypeScript types in `src/types/api.gen.ts` are generated from the OpenAPI spec at `openapi/openapi.yaml`. Regenerate after any spec change:
+TypeScript types in `src/types/api.gen.ts` are generated from the OpenAPI spec at `../../openapi/openapi.yaml` (relative to `apps/frontend/`; `openapi/openapi.yaml` from the repo root). Regenerate after any spec change:
 
 ```bash
 pnpm generate:types
