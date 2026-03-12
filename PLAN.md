@@ -121,8 +121,8 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 5.1: Self-hosted Pact Broker
 
-- [ ] 5.1.1 Add `docker-compose.yml` at repo root to spin up Pact Broker (PostgreSQL + Pact Broker image) with documented environment variables
-- [ ] 5.1.2 Add Broker setup instructions to root `README.md`
+- [x] 5.1.1 Add `docker-compose.yml` at repo root to spin up Pact Broker (PostgreSQL + Pact Broker image) with documented environment variables
+- [x] 5.1.2 Add Broker setup instructions to root `README.md`
 
 ### Task 5.2: Pact consumer tests (Vue front end)
 
