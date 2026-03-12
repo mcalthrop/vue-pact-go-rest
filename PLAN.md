@@ -126,9 +126,9 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 5.2: Pact consumer tests (Vue front end)
 
-- [ ] 5.2.1 Add `@pact-foundation/pact` (exact version) to `apps/frontend` dev dependencies
-- [ ] 5.2.2 Write Pact consumer tests for `fetchRecipes()` and `fetchRecipe(id)` defining expected interactions
-- [ ] 5.2.3 Add `pact:publish` script to publish generated pacts to the Pact Broker
+- [x] 5.2.1 Add `@pact-foundation/pact` (exact version) to `apps/frontend` dev dependencies
+- [x] 5.2.2 Write Pact consumer tests for `fetchRecipes()` and `fetchRecipe(id)` defining expected interactions
+- [x] 5.2.3 Add `pact:publish` script to publish generated pacts to the Pact Broker
 
 ### Task 5.3: Pact provider verification (Go API)
 

@@ -13,8 +13,6 @@ export default defineConfig({
     },
   },
   test: {
-    environment: 'jsdom',
-    exclude: [...configDefaults.exclude, 'e2e/**'],
     root: fileURLToPath(new URL('./', import.meta.url)),
     coverage: {
       provider: 'v8',
@@ -30,7 +28,28 @@ export default defineConfig({
         'src/mocks/**',
         'src/router/index.ts',
         'src/types/api.gen.ts',
+        'src/pact/**',
       ],
     },
+    projects: [
+      {
+        // Unit tests: jsdom environment, excludes pact test files.
+        extends: true,
+        test: {
+          name: 'unit',
+          environment: 'jsdom',
+          exclude: [...configDefaults.exclude, 'e2e/**', 'src/pact/**'],
+        },
+      },
+      {
+        // Pact consumer tests: node environment, forks pool (required by Pact Rust engine).
+        test: {
+          name: 'pact',
+          include: ['src/pact/**/*.pact.spec.ts'],
+          pool: 'forks',
+          environment: 'node',
+        },
+      },
+    ],
   },
 });
