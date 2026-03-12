@@ -69,10 +69,30 @@ pnpm dev
 
 ## Pact Broker
 
-The self-hosted Pact Broker runs via Docker Compose:
+The self-hosted Pact Broker runs via Docker Compose (PostgreSQL + Pact Broker):
 
 ```bash
+# Start broker in the background
 docker compose up -d
+
+# Check it is healthy
+docker compose ps
 ```
 
-See [Phase 5 setup instructions](docs/pact-broker.md) _(coming soon)_ for configuration details.
+The broker is available at `http://localhost:9292`.
+
+| Setting | Value |
+| --- | --- |
+| URL | `http://localhost:9292` |
+| Username | `pact` |
+| Password | `pact` |
+
+Public read access is enabled so provider verification can fetch pacts without credentials. Write operations (publish) require the username/password above.
+
+```bash
+# Stop and remove containers (data is preserved in the postgres_data volume)
+docker compose down
+
+# Stop and wipe all data
+docker compose down -v
+```
