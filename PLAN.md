@@ -96,7 +96,7 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 ### Task 4.6: Linting, formatting, and Husky hooks
 
 - [ ] 4.6.1 Configure ESLint with `@typescript-eslint` and Vue recommended rules; configure Prettier; add `.eslintrc` and `.prettierrc`
-- [ ] 4.6.2 Add Husky: `pre-commit` hook runs lint + format check; `pre-push` hook runs full test suite
+- [ ] 4.6.2 Add Husky: `pre-commit` hook runs lint + format check; `pre-push` hook runs full test suite and checks generated Go types are in sync with the OpenAPI spec (`make generate` + `git diff --exit-code apps/api/internal/gen/`)
 - [ ] 4.6.3 Add `lint-staged` to run linting only on staged files during pre-commit
 
 ### Task 4.7: Test coverage
@@ -135,7 +135,8 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 ### Task 6.2: Back end CI workflow
 
 - [ ] 6.2.1 Create `.github/workflows/api.yml`: set up Go, run `golangci-lint`, run tests with coverage (fail if < 100%), build binary
-- [ ] 6.2.2 Add Pact provider verification step to the API workflow (on push to main, after consumer publishes)
+- [ ] 6.2.2 Add generated-types drift check: run `make generate` then `git diff --exit-code apps/api/internal/gen/` to fail the build if generated code is out of sync with the OpenAPI spec
+- [ ] 6.2.3 Add Pact provider verification step to the API workflow (on push to main, after consumer publishes)
 
 ### Task 6.3: Deployment workflow
 

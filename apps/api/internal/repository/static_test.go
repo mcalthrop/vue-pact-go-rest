@@ -1,6 +1,7 @@
 package repository_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/mcalthrop/vue-pact-go-rest/api/internal/repository"
@@ -17,8 +18,8 @@ func TestListRecipes(t *testing.T) {
 		t.Fatal("ListRecipes() returned no recipes")
 	}
 	for _, s := range summaries {
-		if s.ID == "" {
-			t.Error("recipe summary has empty ID")
+		if s.Id == "" {
+			t.Error("recipe summary has empty Id")
 		}
 		if s.Name == "" {
 			t.Error("recipe summary has empty Name")
@@ -26,8 +27,8 @@ func TestListRecipes(t *testing.T) {
 		if s.Summary == "" {
 			t.Error("recipe summary has empty Summary")
 		}
-		if s.PhotoURL == "" {
-			t.Error("recipe summary has empty PhotoURL")
+		if s.PhotoUrl == "" {
+			t.Error("recipe summary has empty PhotoUrl")
 		}
 	}
 }
@@ -35,15 +36,24 @@ func TestListRecipes(t *testing.T) {
 func TestGetRecipe_Found(t *testing.T) {
 	repo := repository.NewStaticRecipeRepository()
 
-	summaries, _ := repo.ListRecipes()
-	firstID := summaries[0].ID
+	summaries, err := repo.ListRecipes()
+	if err != nil {
+		t.Fatalf("ListRecipes() returned unexpected error: %v", err)
+	}
+	if len(summaries) == 0 {
+		t.Fatal("ListRecipes() returned no recipes; cannot test GetRecipe")
+	}
+	firstID := summaries[0].Id
 
 	recipe, err := repo.GetRecipe(firstID)
 	if err != nil {
 		t.Fatalf("GetRecipe(%q) returned unexpected error: %v", firstID, err)
 	}
-	if recipe.ID != firstID {
-		t.Errorf("GetRecipe(%q) returned recipe with ID %q", firstID, recipe.ID)
+	if recipe == nil {
+		t.Fatalf("GetRecipe(%q) returned nil recipe", firstID)
+	}
+	if recipe.Id != firstID {
+		t.Errorf("GetRecipe(%q) returned recipe with Id %q", firstID, recipe.Id)
 	}
 	if recipe.Description == "" {
 		t.Error("recipe has empty Description")
@@ -63,6 +73,9 @@ func TestGetRecipe_NotFound(t *testing.T) {
 	if err == nil {
 		t.Fatal("GetRecipe() expected an error for unknown ID, got nil")
 	}
+	if !errors.Is(err, repository.ErrRecipeNotFound) {
+		t.Errorf("GetRecipe() expected ErrRecipeNotFound, got %v", err)
+	}
 	if recipe != nil {
 		t.Error("GetRecipe() expected nil recipe for unknown ID")
 	}
@@ -71,15 +84,46 @@ func TestGetRecipe_NotFound(t *testing.T) {
 func TestGetRecipe_AllSeedRecipes(t *testing.T) {
 	repo := repository.NewStaticRecipeRepository()
 
-	summaries, _ := repo.ListRecipes()
+	summaries, err := repo.ListRecipes()
+	if err != nil {
+		t.Fatalf("ListRecipes() returned unexpected error: %v", err)
+	}
 	for _, s := range summaries {
-		recipe, err := repo.GetRecipe(s.ID)
+		recipe, err := repo.GetRecipe(s.Id)
 		if err != nil {
-			t.Errorf("GetRecipe(%q) returned unexpected error: %v", s.ID, err)
+			t.Errorf("GetRecipe(%q) returned unexpected error: %v", s.Id, err)
 			continue
 		}
-		if recipe.ID != s.ID {
-			t.Errorf("GetRecipe(%q) returned recipe with wrong ID %q", s.ID, recipe.ID)
+		if recipe == nil {
+			t.Errorf("GetRecipe(%q) returned nil recipe", s.Id)
+			continue
 		}
+		if recipe.Id != s.Id {
+			t.Errorf("GetRecipe(%q) returned recipe with wrong Id %q", s.Id, recipe.Id)
+		}
+	}
+}
+
+func TestGetRecipe_ReturnsCopy(t *testing.T) {
+	repo := repository.NewStaticRecipeRepository()
+
+	r1, err := repo.GetRecipe("sourdough-boule")
+	if err != nil {
+		t.Fatalf("GetRecipe(%q) returned unexpected error: %v", "sourdough-boule", err)
+	}
+	if r1 == nil {
+		t.Fatalf("GetRecipe(%q) returned nil recipe", "sourdough-boule")
+	}
+
+	r2, err := repo.GetRecipe("sourdough-boule")
+	if err != nil {
+		t.Fatalf("GetRecipe(%q) returned unexpected error on second call: %v", "sourdough-boule", err)
+	}
+	if r2 == nil {
+		t.Fatalf("GetRecipe(%q) returned nil recipe on second call", "sourdough-boule")
+	}
+
+	if r1 == r2 {
+		t.Error("GetRecipe() returned the same pointer on two calls; expected independent copies")
 	}
 }

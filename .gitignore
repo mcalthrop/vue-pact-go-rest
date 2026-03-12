@@ -25,6 +25,9 @@ bin/
 .env.local
 .env.*.local
 
+# Claude Code
+.claude/
+
 # IDE
 .vscode/
 .idea/
