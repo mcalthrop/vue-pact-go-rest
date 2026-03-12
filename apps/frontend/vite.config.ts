@@ -43,6 +43,7 @@ export default defineConfig({
       },
       {
         // Pact consumer tests: node environment, forks pool (required by Pact Rust engine).
+        extends: true,
         test: {
           name: 'pact',
           include: ['src/pact/**/*.pact.spec.ts'],

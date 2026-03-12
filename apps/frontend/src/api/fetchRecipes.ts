@@ -1,4 +1,4 @@
-import type { components } from '../types/api.gen';
+import type { components } from '@/types/api.gen';
 import { BASE_URL } from './baseUrl';
 
 export type RecipeSummary = components['schemas']['RecipeSummary'];

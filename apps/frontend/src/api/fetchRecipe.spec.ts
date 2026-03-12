@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest';
 import { http, HttpResponse } from 'msw';
-import { server } from '../mocks/server';
+import { server } from '@/mocks/server';
 import { fetchRecipe } from './fetchRecipe';
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));

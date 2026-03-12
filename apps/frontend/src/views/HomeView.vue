@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import RecipeCard from '../components/RecipeCard.vue';
-import { fetchRecipes } from '../api/fetchRecipes';
-import type { RecipeSummary } from '../api/fetchRecipes';
+import RecipeCard from '@/components/RecipeCard.vue';
+import { fetchRecipes } from '@/api/fetchRecipes';
+import type { RecipeSummary } from '@/api/fetchRecipes';
 
 const recipes = ref<RecipeSummary[]>([]);
 const error = ref<string | null>(null);
