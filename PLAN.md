@@ -4,6 +4,10 @@ This plan breaks the project into phases with tasks and subtasks. Each subtask i
 
 Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
+## Conventions
+
+- **npm/pnpm package versions**: always pin to exact latest versions (no `^` or `~`); update to latest before adding any new dependency
+
 ---
 
 ## Phase 1: Monorepo Setup
