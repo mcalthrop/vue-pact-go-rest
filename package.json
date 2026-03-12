@@ -12,10 +12,12 @@
     "lint": "turbo lint",
     "format": "turbo format",
     "dev": "turbo dev",
-    "openapi:validate": "redocly lint openapi/openapi.yaml"
+    "openapi:validate": "redocly lint openapi/openapi.yaml",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@redocly/cli": "2.21.1",
+    "husky": "9.1.7",
     "turbo": "2.8.16"
   }
 }

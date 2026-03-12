@@ -19,11 +19,7 @@ const mockRecipe = {
 
 describe('fetchRecipe', () => {
   it('returns a recipe on success', async () => {
-    server.use(
-      http.get('http://localhost:8080/recipes/:id', () =>
-        HttpResponse.json(mockRecipe),
-      ),
-    );
+    server.use(http.get('http://localhost:8080/recipes/:id', () => HttpResponse.json(mockRecipe)));
 
     const result = await fetchRecipe('sourdough-boule');
 
@@ -32,9 +28,7 @@ describe('fetchRecipe', () => {
 
   it('throws on non-ok response', async () => {
     server.use(
-      http.get('http://localhost:8080/recipes/:id', () =>
-        new HttpResponse(null, { status: 404 }),
-      ),
+      http.get('http://localhost:8080/recipes/:id', () => new HttpResponse(null, { status: 404 })),
     );
 
     await expect(fetchRecipe('unknown')).rejects.toThrow('fetchRecipe failed: 404');

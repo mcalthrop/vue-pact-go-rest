@@ -94,14 +94,14 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 4.5: Styling
 
-- [-] 4.5.1 Define a clean, minimalist, responsive CSS design system (CSS variables for colour palette, typography, spacing) appropriate for a bread/baking site
-- [-] 4.5.2 Apply styles to `HomeView`, `RecipeView`, and `RecipeCard`; ensure responsiveness on mobile, tablet, and desktop breakpoints
+- [x] 4.5.1 Define a clean, minimalist, responsive CSS design system (CSS variables for colour palette, typography, spacing) appropriate for a bread/baking site
+- [x] 4.5.2 Apply styles to `HomeView`, `RecipeView`, and `RecipeCard`; ensure responsiveness on mobile, tablet, and desktop breakpoints
 
 ### Task 4.6: Linting, formatting, and Husky hooks
 
-- [ ] 4.6.1 Configure ESLint with `@typescript-eslint` and Vue recommended rules; configure Prettier; add `.eslintrc` and `.prettierrc`
-- [ ] 4.6.2 Add Husky: `pre-commit` hook runs lint + format check; `pre-push` hook runs full test suite and checks generated Go types are in sync with the OpenAPI spec (`make generate` + `git diff --exit-code apps/api/internal/gen/`)
-- [ ] 4.6.3 Add `lint-staged` to run linting only on staged files during pre-commit
+- [-] 4.6.1 Configure ESLint with `@typescript-eslint` and Vue recommended rules; configure Prettier; add `eslint.config.ts` and `.prettierrc`
+- [-] 4.6.2 Add Husky: `pre-commit` hook runs `lint-staged`; `pre-push` hook runs full test suite and checks generated TS types are in sync with the OpenAPI spec
+- [-] 4.6.3 Add `lint-staged` to run oxlint, ESLint, and Prettier on staged files during pre-commit
 
 ### Task 4.7: Test coverage
 

@@ -29,9 +29,7 @@ describe('fetchRecipes', () => {
 
   it('throws on non-ok response', async () => {
     server.use(
-      http.get('http://localhost:8080/recipes', () =>
-        new HttpResponse(null, { status: 500 }),
-      ),
+      http.get('http://localhost:8080/recipes', () => new HttpResponse(null, { status: 500 })),
     );
 
     await expect(fetchRecipes()).rejects.toThrow('fetchRecipes failed: 500');
