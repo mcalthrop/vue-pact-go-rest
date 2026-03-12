@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { fetchRecipe } from '../api/fetchRecipe';
 import type { Recipe } from '../api/fetchRecipe';
@@ -9,15 +9,29 @@ const recipe = ref<Recipe | null>(null);
 const error = ref<string | null>(null);
 const loading = ref(true);
 
-onMounted(async () => {
+async function loadRecipe(id: string) {
+  loading.value = true;
+  error.value = null;
+  recipe.value = null;
   try {
-    recipe.value = await fetchRecipe(route.params.id as string);
+    recipe.value = await fetchRecipe(id);
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Failed to load recipe';
   } finally {
     loading.value = false;
   }
-});
+}
+
+onMounted(() => loadRecipe(route.params.id as string));
+
+watch(
+  () => route.params.id,
+  (newId) => {
+    if (newId) {
+      loadRecipe(newId as string);
+    }
+  },
+);
 </script>
 
 <template>
@@ -31,7 +45,7 @@ onMounted(async () => {
       <p class="description">{{ recipe.description }}</p>
       <h2>Ingredients</h2>
       <ul class="ingredients">
-        <li v-for="ingredient in recipe.ingredients" :key="ingredient.name">
+        <li v-for="(ingredient, index) in recipe.ingredients" :key="index">
           {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
         </li>
       </ul>

@@ -67,4 +67,19 @@ describe('RecipeView', () => {
 
     expect(wrapper.text()).toContain('Failed to load recipe');
   });
+
+  it('refetches when route id changes', async () => {
+    const secondRecipe = { ...mockRecipe, id: 'rye-bread', name: 'Rye Bread' };
+    vi.mocked(fetchRecipeModule.fetchRecipe)
+      .mockResolvedValueOnce(mockRecipe)
+      .mockResolvedValueOnce(secondRecipe);
+
+    mount(RecipeView, { global: { plugins: [router] } });
+    await flushPromises();
+
+    await router.push('/recipes/rye-bread');
+    await flushPromises();
+
+    expect(vi.mocked(fetchRecipeModule.fetchRecipe)).toHaveBeenCalledWith('rye-bread');
+  });
 });
