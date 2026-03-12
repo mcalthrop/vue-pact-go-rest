@@ -3,12 +3,12 @@ import { PactV3, MatchersV3, SpecificationVersion } from '@pact-foundation/pact'
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { fetchRecipes } from '../api/fetchRecipes';
+import { fetchRecipes } from '@/api/fetchRecipes';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Point the API client at the Pact mock server during executeTest.
-vi.mock('../api/baseUrl', () => ({
+vi.mock('@/api/baseUrl', () => ({
   get BASE_URL() {
     return (globalThis as { __pactMockUrl?: string }).__pactMockUrl ?? 'http://localhost:8080';
   },
@@ -45,7 +45,7 @@ describe('fetchRecipes — pact consumer', () => {
         try {
           const result = await fetchRecipes();
           expect(result).toHaveLength(1);
-          expect(result[0].id).toBe('sourdough-boule');
+          expect(result[0]?.id).toBe('sourdough-boule');
         } finally {
           delete globalWithPact.__pactMockUrl;
         }

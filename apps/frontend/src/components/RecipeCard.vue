@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import type { RecipeSummary } from '../api/fetchRecipes';
+import type { RecipeSummary } from '@/api/fetchRecipes';
 
 defineProps<{ recipe: RecipeSummary }>();
 </script>

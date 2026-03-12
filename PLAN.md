@@ -115,6 +115,10 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 - [x] 4.9.1 Add `knip` to detect unused exports, dependencies, and files; add `knip` script to `package.json`; configure to exclude generated and test-infrastructure files
 
+### Task 4.10: TypeScript `@` alias and import lint rule
+
+- [x] 4.10.1 Enforce `@/` alias for all cross-directory imports; add `import/no-relative-parent-imports` oxlint rule to prevent `../` imports; convert all existing `../` imports to `@/`
+
 ---
 
 ## Phase 5: Pact Contract Testing

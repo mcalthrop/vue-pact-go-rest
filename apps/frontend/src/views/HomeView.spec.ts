@@ -2,9 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import HomeView from './HomeView.vue';
-import * as fetchRecipesModule from '../api/fetchRecipes';
+import * as fetchRecipesModule from '@/api/fetchRecipes';
 
-vi.mock('../api/fetchRecipes');
+vi.mock('@/api/fetchRecipes');
 
 const router = createRouter({
   history: createMemoryHistory(),

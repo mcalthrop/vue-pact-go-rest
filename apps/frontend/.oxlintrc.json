@@ -1,10 +1,13 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["eslint", "typescript", "unicorn", "oxc", "vue", "vitest"],
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "vue", "vitest", "import"],
   "env": {
     "browser": true
   },
   "categories": {
     "correctness": "error"
+  },
+  "rules": {
+    "import/no-relative-parent-imports": "error"
   }
 }
