@@ -49,15 +49,15 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 3.3: Implement HTTP handlers
 
-- [ ] 3.3.1 Implement `GET /recipes` handler returning all recipes as JSON
-- [ ] 3.3.2 Implement `GET /recipes/{id}` handler returning a single recipe or 404
-- [ ] 3.3.3 Write unit tests for both handlers using mocked repository (100% coverage)
-- [ ] 3.3.4 Add middleware: CORS headers, JSON content-type, basic request logging
+- [x] 3.3.1 Implement `GET /recipes` handler returning all recipes as JSON
+- [x] 3.3.2 Implement `GET /recipes/{id}` handler returning a single recipe or 404
+- [x] 3.3.3 Write unit tests for both handlers using mocked repository (100% coverage)
+- [x] 3.3.4 Add middleware: CORS headers, JSON content-type, basic request logging
 
 ### Task 3.4: Wire up HTTP server
 
-- [ ] 3.4.1 Implement `cmd/server/main.go` wiring router, repository, and handlers
-- [ ] 3.4.2 Add integration smoke test confirming server starts and responds to both endpoints
+- [x] 3.4.1 Implement `cmd/server/main.go` wiring router, repository, and handlers
+- [x] 3.4.2 Add integration smoke test confirming server starts and responds to both endpoints
 
 ### Task 3.5: Linting and formatting
 
@@ -99,9 +99,9 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 4.6: Linting, formatting, and Husky hooks
 
-- [-] 4.6.1 Configure ESLint with `@typescript-eslint` and Vue recommended rules; configure Prettier; add `eslint.config.ts` and `.prettierrc`
-- [-] 4.6.2 Add Husky: `pre-commit` hook runs `lint-staged`; `pre-push` hook runs full test suite and checks generated TS types are in sync with the OpenAPI spec
-- [-] 4.6.3 Add `lint-staged` to run oxlint, ESLint, and Prettier on staged files during pre-commit
+- [x] 4.6.1 Configure ESLint with `@typescript-eslint` and Vue recommended rules; configure Prettier; add `eslint.config.ts` and `.prettierrc`
+- [x] 4.6.2 Add Husky: `pre-commit` hook runs `lint-staged`; `pre-push` hook runs full test suite and checks generated TS types are in sync with the OpenAPI spec
+- [x] 4.6.3 Add `lint-staged` to run oxlint, ESLint, and Prettier on staged files during pre-commit
 
 ### Task 4.7: Test coverage
 
