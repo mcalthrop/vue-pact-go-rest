@@ -29,7 +29,6 @@ bin/
 .claude/
 
 # IDE
-.vscode/
 .idea/
 *.swp
 *.swo
