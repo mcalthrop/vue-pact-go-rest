@@ -13,11 +13,11 @@
     "coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "lint": "run-s lint:*",
-    "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
+    "lint:knip": "knip",
+    "lint:oxlint": "oxlint . --fix",
     "format": "eslint . --fix",
-    "generate:types": "openapi-typescript ../../openapi/openapi.yaml -o src/types/api.gen.ts",
-    "knip": "knip"
+    "generate:types": "openapi-typescript ../../openapi/openapi.yaml -o src/types/api.gen.ts"
   },
   "dependencies": {
     "vue": "3.5.30",
