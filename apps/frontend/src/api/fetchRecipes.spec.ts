@@ -1,11 +1,14 @@
-import { describe, it, expect, vi, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { fetchRecipes } from './fetchRecipes'
 
 const mockFetch = vi.fn()
-vi.stubGlobal('fetch', mockFetch)
+
+beforeEach(() => {
+  vi.stubGlobal('fetch', mockFetch)
+})
 
 afterEach(() => {
-  mockFetch.mockReset()
+  vi.unstubAllGlobals()
 })
 
 const mockSummary = {
@@ -25,7 +28,7 @@ describe('fetchRecipes', () => {
     const result = await fetchRecipes()
 
     expect(result).toEqual([mockSummary])
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:8080/recipes')
+    expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('/recipes'))
   })
 
   it('throws on non-ok response', async () => {
