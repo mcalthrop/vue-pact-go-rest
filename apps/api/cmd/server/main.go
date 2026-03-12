@@ -1,5 +1,19 @@
 package main
 
+import (
+	"log"
+	"net/http"
+	"os"
+)
+
 func main() {
-	// TODO: wire up router, repository, and handlers (task 3.4)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	addr := ":" + port
+	log.Printf("server listening on %s", addr)
+	if err := http.ListenAndServe(addr, newServer()); err != nil {
+		log.Fatal(err)
+	}
 }

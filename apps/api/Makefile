@@ -20,7 +20,7 @@ test:
 
 coverage:
 	go test -coverprofile=coverage.out ./...
-	@grep -v "internal/gen/" coverage.out > coverage.filtered.out
+	@grep -v -E "internal/gen/|cmd/server/main\.go" coverage.out > coverage.filtered.out
 	@go tool cover -func=coverage.filtered.out
 	@TOTAL=$$(go tool cover -func=coverage.filtered.out | grep "^total:" | awk '{print $$3}'); \
 	echo "Coverage (excluding generated code): $$TOTAL"; \
