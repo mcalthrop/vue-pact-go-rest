@@ -94,8 +94,8 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 4.5: Styling
 
-- [ ] 4.5.1 Define a clean, minimalist, responsive CSS design system (CSS variables for colour palette, typography, spacing) appropriate for a bread/baking site
-- [ ] 4.5.2 Apply styles to `HomeView`, `RecipeView`, and `RecipeCard`; ensure responsiveness on mobile, tablet, and desktop breakpoints
+- [-] 4.5.1 Define a clean, minimalist, responsive CSS design system (CSS variables for colour palette, typography, spacing) appropriate for a bread/baking site
+- [-] 4.5.2 Apply styles to `HomeView`, `RecipeView`, and `RecipeCard`; ensure responsiveness on mobile, tablet, and desktop breakpoints
 
 ### Task 4.6: Linting, formatting, and Husky hooks
 
