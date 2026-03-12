@@ -13,6 +13,7 @@
     "format": "turbo format",
     "dev": "turbo dev",
     "coverage": "turbo coverage",
+    "type-check": "turbo type-check",
     "openapi:validate": "redocly lint openapi/openapi.yaml",
     "prepare": "husky"
   },

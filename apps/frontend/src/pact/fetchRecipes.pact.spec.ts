@@ -45,7 +45,7 @@ describe('fetchRecipes — pact consumer', () => {
         try {
           const result = await fetchRecipes();
           expect(result).toHaveLength(1);
-          expect(result[0].id).toBe('sourdough-boule');
+          expect(result[0]?.id).toBe('sourdough-boule');
         } finally {
           delete globalWithPact.__pactMockUrl;
         }
