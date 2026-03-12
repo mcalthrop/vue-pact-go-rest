@@ -17,7 +17,7 @@ func TestListRecipes(t *testing.T) {
 		t.Fatal("ListRecipes() returned no recipes")
 	}
 	for _, s := range summaries {
-		if s.ID == "" {
+		if s.Id == "" {
 			t.Error("recipe summary has empty ID")
 		}
 		if s.Name == "" {
@@ -26,8 +26,8 @@ func TestListRecipes(t *testing.T) {
 		if s.Summary == "" {
 			t.Error("recipe summary has empty Summary")
 		}
-		if s.PhotoURL == "" {
-			t.Error("recipe summary has empty PhotoURL")
+		if s.PhotoUrl == "" {
+			t.Error("recipe summary has empty PhotoUrl")
 		}
 	}
 }
@@ -36,14 +36,14 @@ func TestGetRecipe_Found(t *testing.T) {
 	repo := repository.NewStaticRecipeRepository()
 
 	summaries, _ := repo.ListRecipes()
-	firstID := summaries[0].ID
+	firstID := summaries[0].Id
 
 	recipe, err := repo.GetRecipe(firstID)
 	if err != nil {
 		t.Fatalf("GetRecipe(%q) returned unexpected error: %v", firstID, err)
 	}
-	if recipe.ID != firstID {
-		t.Errorf("GetRecipe(%q) returned recipe with ID %q", firstID, recipe.ID)
+	if recipe.Id != firstID {
+		t.Errorf("GetRecipe(%q) returned recipe with ID %q", firstID, recipe.Id)
 	}
 	if recipe.Description == "" {
 		t.Error("recipe has empty Description")
@@ -73,13 +73,13 @@ func TestGetRecipe_AllSeedRecipes(t *testing.T) {
 
 	summaries, _ := repo.ListRecipes()
 	for _, s := range summaries {
-		recipe, err := repo.GetRecipe(s.ID)
+		recipe, err := repo.GetRecipe(s.Id)
 		if err != nil {
-			t.Errorf("GetRecipe(%q) returned unexpected error: %v", s.ID, err)
+			t.Errorf("GetRecipe(%q) returned unexpected error: %v", s.Id, err)
 			continue
 		}
-		if recipe.ID != s.ID {
-			t.Errorf("GetRecipe(%q) returned recipe with wrong ID %q", s.ID, recipe.ID)
+		if recipe.Id != s.Id {
+			t.Errorf("GetRecipe(%q) returned recipe with wrong ID %q", s.Id, recipe.Id)
 		}
 	}
 }
