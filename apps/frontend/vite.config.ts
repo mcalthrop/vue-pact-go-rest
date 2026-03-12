@@ -27,6 +27,7 @@ export default defineConfig({
       exclude: [
         ...(configDefaults.coverage.exclude ?? []),
         'src/main.ts',
+        'src/mocks/**',
         'src/router/index.ts',
         'src/types/api.gen.ts',
       ],
