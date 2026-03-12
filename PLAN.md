@@ -32,9 +32,9 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 3.1: Set up Go project structure
 
-- [ ] 3.1.1 Initialise Go module under `apps/api`; set up directory layout (`cmd/server`, `internal/handler`, `internal/repository`, `internal/model`)
-- [ ] 3.1.2 Add `Makefile` with targets: `build`, `test`, `lint`, `coverage`, `run`
-- [ ] 3.1.3 Add `apps/api/README.md` with setup, run, and test instructions
+- [x] 3.1.1 Initialise Go module under `apps/api`; set up directory layout (`cmd/server`, `internal/handler`, `internal/repository`, `internal/model`)
+- [x] 3.1.2 Add `Makefile` with targets: `build`, `test`, `lint`, `coverage`, `run`
+- [x] 3.1.3 Add `apps/api/README.md` with setup, run, and test instructions
 
 ### Task 3.2: Implement data models and static repository
 
