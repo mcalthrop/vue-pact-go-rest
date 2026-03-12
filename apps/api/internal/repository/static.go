@@ -27,9 +27,10 @@ func (r *StaticRecipeRepository) ListRecipes() ([]model.RecipeSummary, error) {
 
 // GetRecipe returns the full recipe for the given id, or an error if not found.
 func (r *StaticRecipeRepository) GetRecipe(id string) (*model.Recipe, error) {
-	for i := range r.recipes {
-		if r.recipes[i].ID == id {
-			return &r.recipes[i], nil
+	for _, recipe := range r.recipes {
+		if recipe.ID == id {
+			recipeCopy := recipe
+			return &recipeCopy, nil
 		}
 	}
 	return nil, fmt.Errorf("recipe not found: %s", id)
@@ -98,7 +99,7 @@ func seedRecipes() []model.Recipe {
 				{Quantity: 7, Unit: "g", Name: "instant yeast"},
 				{Quantity: 8, Unit: "g", Name: "fine sea salt"},
 				{Quantity: 50, Unit: "g", Name: "caster sugar"},
-				{Quantity: 4, Unit: "", Name: "large eggs"},
+				{Quantity: 4, Unit: "pcs", Name: "large eggs"},
 				{Quantity: 60, Unit: "ml", Name: "whole milk (warm)"},
 				{Quantity: 200, Unit: "g", Name: "unsalted butter (softened, cubed)"},
 			},
