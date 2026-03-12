@@ -26,7 +26,7 @@ func TestNewServer_ListRecipes(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GET /recipes: %v", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected 200, got %d", resp.StatusCode)
@@ -52,7 +52,7 @@ func TestNewServer_GetRecipe_Found(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GET /recipes/sourdough-boule: %v", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected 200, got %d", resp.StatusCode)
@@ -75,7 +75,7 @@ func TestNewServer_GetRecipe_NotFound(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GET /recipes/does-not-exist: %v", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusNotFound {
 		t.Fatalf("expected 404, got %d", resp.StatusCode)
@@ -98,7 +98,7 @@ func TestNewServer_CORSHeaders(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GET /recipes: %v", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if got := resp.Header.Get("Access-Control-Allow-Origin"); got != "*" {
 		t.Errorf("expected Access-Control-Allow-Origin *, got %q", got)
@@ -121,7 +121,7 @@ func TestNewServer_CORSPreflightOptions(t *testing.T) {
 	if err != nil {
 		t.Fatalf("OPTIONS /recipes: %v", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusNoContent {
 		t.Fatalf("expected 204 for OPTIONS preflight, got %d", resp.StatusCode)

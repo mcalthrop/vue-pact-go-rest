@@ -20,7 +20,7 @@ func newServer() http.Handler {
 
 	// Wrap the entire handler with CORS and logging so they apply to all
 	// requests, including OPTIONS preflight and unmatched routes.
-	var wrapped http.Handler = openapiHandler
+	wrapped := openapiHandler
 	wrapped = handler.CORSMiddleware(wrapped)
 	wrapped = handler.LoggingMiddleware(wrapped)
 	return wrapped
