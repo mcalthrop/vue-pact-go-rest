@@ -38,10 +38,10 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 3.2: Implement data models and static repository
 
-- [ ] 3.2.1 Define Go structs in `internal/model` that mirror the OpenAPI `Recipe` schema
-- [ ] 3.2.2 Define `RecipeRepository` interface in `internal/repository` (abstraction layer)
-- [ ] 3.2.3 Implement `StaticRecipeRepository` with at least 4 seed bread recipes including photo URLs
-- [ ] 3.2.4 Write unit tests for `StaticRecipeRepository` (100% coverage)
+- [x] 3.2.1 Define Go structs in `internal/model` that mirror the OpenAPI `Recipe` schema
+- [x] 3.2.2 Define `RecipeRepository` interface in `internal/repository` (abstraction layer)
+- [x] 3.2.3 Implement `StaticRecipeRepository` with at least 4 seed bread recipes including photo URLs
+- [x] 3.2.4 Write unit tests for `StaticRecipeRepository` (100% coverage)
 
 ### Task 3.3: Implement HTTP handlers
 
