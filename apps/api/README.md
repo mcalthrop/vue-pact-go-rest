@@ -47,6 +47,7 @@ All commands are run from `apps/api/`.
 ```bash
 make run
 # Server starts at http://localhost:8080
+# Recipes endpoint: http://localhost:8080/recipes
 ```
 
 ## Running tests
