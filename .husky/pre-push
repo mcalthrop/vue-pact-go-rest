@@ -1,0 +1,3 @@
+cd apps/frontend
+pnpm coverage
+pnpm generate:types && git diff --exit-code src/types/api.gen.ts

@@ -17,15 +17,15 @@ pnpm install
 
 All commands are run from `apps/frontend/`.
 
-| Command | Description |
-| --- | --- |
-| `pnpm dev` | Start the Vite dev server (hot-reload) |
-| `pnpm build` | Type-check and compile for production |
-| `pnpm preview` | Preview the production build locally |
-| `pnpm test` | Run unit tests once (Vitest) |
-| `pnpm test:watch` | Run unit tests in watch mode |
-| `pnpm type-check` | Run `vue-tsc` type checking |
-| `pnpm lint` | Run oxlint + ESLint with auto-fix |
+| Command               | Description                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------- |
+| `pnpm dev`            | Start the Vite dev server (hot-reload)                                                            |
+| `pnpm build`          | Type-check and compile for production                                                             |
+| `pnpm preview`        | Preview the production build locally                                                              |
+| `pnpm test`           | Run unit tests once (Vitest)                                                                      |
+| `pnpm test:watch`     | Run unit tests in watch mode                                                                      |
+| `pnpm type-check`     | Run `vue-tsc` type checking                                                                       |
+| `pnpm lint`           | Run oxlint + ESLint with auto-fix                                                                 |
 | `pnpm generate:types` | Regenerate TypeScript types from `../../openapi/openapi.yaml` (repo root: `openapi/openapi.yaml`) |
 
 ## Generated types
