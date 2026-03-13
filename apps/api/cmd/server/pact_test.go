@@ -38,6 +38,7 @@ func TestPactProviderVerification(t *testing.T) {
 
 		ConsumerVersionSelectors: []provider.Selector{
 			&provider.ConsumerVersionSelector{MainBranch: true},
+			&provider.ConsumerVersionSelector{Branch: os.Getenv("PACT_PROVIDER_BRANCH")},
 		},
 		FailIfNoPactsFound: true,
 
@@ -49,6 +50,7 @@ func TestPactProviderVerification(t *testing.T) {
 
 		PublishVerificationResults: publishResults,
 		ProviderVersion:            version,
+		ProviderBranch:             os.Getenv("PACT_PROVIDER_BRANCH"),
 	})
 	if err != nil {
 		t.Fatal(err)

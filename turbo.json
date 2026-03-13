@@ -7,7 +7,7 @@
     },
     "test": {
       "dependsOn": ["^build"],
-      "outputs": ["coverage/**"]
+      "outputs": []
     },
     "coverage": {
       "dependsOn": ["^build"],
@@ -37,10 +37,12 @@
     },
     "pact:consumer-publish": {
       "dependsOn": ["pact:consumer-test"],
-      "cache": false
+      "cache": false,
+      "passThroughEnv": ["PACT_CONSUMER_BRANCH"]
     },
     "pact:provider-verify": {
-      "cache": false
+      "cache": false,
+      "passThroughEnv": ["PACT_PROVIDER_BRANCH", "PACT_PROVIDER_VERSION", "PACT_PUBLISH_RESULTS"]
     },
     "dev": {
       "cache": false,

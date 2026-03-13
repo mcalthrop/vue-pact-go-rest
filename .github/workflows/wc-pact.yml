@@ -2,6 +2,10 @@ name: Pact
 
 on:
   workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
 
 jobs:
   pact:
@@ -22,22 +26,28 @@ jobs:
           --health-retries 5
 
       pact-broker:
-        image: pactfoundation/pact-broker:2.113.0
+        image: pactfoundation/pact-broker:2.137.0-pactbroker2.118.0
         env:
           PACT_BROKER_DATABASE_URL: postgres://pact:pact@postgres/pact
           PACT_BROKER_BASIC_AUTH_USERNAME: pact
           PACT_BROKER_BASIC_AUTH_PASSWORD: pact
           PACT_BROKER_ALLOW_PUBLIC_READ: "true"
+          PACT_BROKER_PUBLIC_HEARTBEAT: "true"
+          PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES: "30"
         ports:
           - 9292:9292
-        options: >-
-          --health-cmd "wget -q -O /dev/null http://localhost:9292/diagnostic/status/heartbeat"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
 
     steps:
       - uses: actions/checkout@v6.0.2
+
+      - name: Wait for Pact Broker
+        uses: nick-fields/retry@v3.0.2
+        with:
+          timeout_seconds: 10
+          max_attempts: 30
+          retry_wait_seconds: 5
+          retry_on: error
+          command: wget -q -O /dev/null http://localhost:9292/diagnostic/status/heartbeat
 
       - uses: pnpm/action-setup@v4.4.0
 
@@ -46,22 +56,32 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
 
+      - name: Install pnpm dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Publish Pact contracts
+        env:
+          PACT_CONSUMER_BRANCH: ${{ inputs.branch }}
+        run: pnpm pact:consumer-publish
+
       - uses: actions/setup-go@v6.3.0
         with:
           go-version-file: apps/api/go.mod
           cache-dependency-path: apps/api/go.sum
 
-      - name: Install pnpm dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install Pact FFI library
+        working-directory: apps/api
+        run: |
+          set -ux
 
-      - name: Run Pact consumer tests
-        run: pnpm pact:consumer-test
-
-      - name: Publish Pact contracts
-        run: pnpm pact:consumer-publish
+          PACT_LIB_DIR="${HOME}/pact-lib"
+          go run github.com/pact-foundation/pact-go/v2 install --libDir "${PACT_LIB_DIR}"
+          sudo cp "${PACT_LIB_DIR}"/libpact_ffi* /usr/local/lib/
+          sudo ldconfig
 
       - name: Verify Pact contracts
-        run: pnpm pact:provider-verify
         env:
           PACT_PUBLISH_RESULTS: "true"
           PACT_PROVIDER_VERSION: ${{ github.sha }}
+          PACT_PROVIDER_BRANCH: ${{ inputs.branch }}
+        run: pnpm pact:provider-verify
