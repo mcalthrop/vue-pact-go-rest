@@ -55,13 +55,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run Pact consumer tests
-        run: pnpm --filter @vue-pact-go-rest/frontend pact:test
+        run: pnpm pact:consumer-test
 
       - name: Publish Pact contracts
-        run: pnpm --filter @vue-pact-go-rest/frontend pact:publish
+        run: pnpm pact:consumer-publish
 
       - name: Verify Pact contracts
-        run: pnpm --filter @vue-pact-go-rest/api pact:verify
+        run: pnpm pact:provider-verify
         env:
           PACT_PUBLISH_RESULTS: "true"
           PACT_PROVIDER_VERSION: ${{ github.sha }}

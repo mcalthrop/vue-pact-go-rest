@@ -8,6 +8,6 @@
     "lint": "make lint",
     "format:check": "true",
     "generate:types": "make generate",
-    "pact:verify": "make pact:verify"
+    "pact:provider-verify": "make pact:provider-verify"
   }
 }

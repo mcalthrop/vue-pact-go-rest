@@ -28,6 +28,16 @@
     "generate:types": {
       "outputs": ["internal/gen/**", "src/types/**"]
     },
+    "pact:consumer-test": {
+      "cache": false
+    },
+    "pact:consumer-publish": {
+      "dependsOn": ["pact:consumer-test"],
+      "cache": false
+    },
+    "pact:provider-verify": {
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true

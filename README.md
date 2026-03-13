@@ -5,7 +5,7 @@ A monorepo containing a VueJS front end and Go REST API, contract-tested with Pa
 ## Tech stack
 
 | Layer | Technology |
-|---|---|
+| --- | --- |
 | Front end | Vue 3 + TypeScript + Vite |
 | Back end | Go REST API |
 | API spec | OpenAPI 3.x |
@@ -31,7 +31,7 @@ nvm use
 ## Workspaces
 
 | Path | Description |
-|---|---|
+| --- | --- |
 | `apps/frontend` | Vue 3 front end |
 | `apps/api` | Go REST API |
 | `openapi/` | OpenAPI specification |

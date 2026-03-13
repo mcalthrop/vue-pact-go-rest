@@ -29,7 +29,7 @@ coverage:
 lint:
 	golangci-lint run ./...
 
-pact\:verify:
+pact\:provider-verify:
 	go test -count=1 -tags pact -v -run TestPactProviderVerification $(CMD_DIR)
 
 clean:
