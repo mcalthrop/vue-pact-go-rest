@@ -7,7 +7,7 @@ CMD_DIR     := ./cmd/server
 all: build
 
 generate:
-	oapi-codegen --config oapi-codegen.yaml ../../openapi/openapi.yaml
+	go tool oapi-codegen --config oapi-codegen.yaml ../../openapi/openapi.yaml
 
 build:
 	go build -o $(BUILD_DIR)/$(BINARY_NAME) $(CMD_DIR)

@@ -25,8 +25,8 @@
     "format:check": {
       "outputs": []
     },
-    "generate": {
-      "outputs": ["internal/gen/**"]
+    "generate:types": {
+      "outputs": ["internal/gen/**", "src/types/**"]
     },
     "dev": {
       "cache": false,

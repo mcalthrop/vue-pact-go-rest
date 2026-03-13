@@ -7,7 +7,7 @@
     "coverage": "make coverage",
     "lint": "make lint",
     "format:check": "true",
-    "generate": "make generate",
+    "generate:types": "make generate",
     "pact:verify": "make pact:verify"
   }
 }

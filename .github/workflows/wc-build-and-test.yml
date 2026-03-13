@@ -48,6 +48,5 @@ jobs:
 
       - name: Check generated types are up to date
         run: |
-          go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
-          pnpm --filter @vue-pact-go-rest/api generate
+          pnpm generate:types
           git diff --exit-code apps/api/internal/gen/
