@@ -49,4 +49,4 @@ jobs:
       - name: Check generated types are up to date
         run: |
           pnpm generate:types
-          git diff --exit-code apps/api/internal/gen/
+          git diff --exit-code apps/api/internal/gen/ apps/frontend/src/types/api.gen.ts

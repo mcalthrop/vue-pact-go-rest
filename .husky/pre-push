@@ -1,3 +1,5 @@
+set -euo pipefail
+
 pnpm lint
 pnpm format:check
 pnpm build
