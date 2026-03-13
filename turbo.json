@@ -22,6 +22,9 @@
     "format": {
       "outputs": []
     },
+    "format:check": {
+      "outputs": []
+    },
     "generate": {
       "outputs": ["internal/gen/**"]
     },

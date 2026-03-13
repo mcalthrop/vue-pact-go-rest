@@ -6,6 +6,7 @@
     "test": "make test",
     "coverage": "make coverage",
     "lint": "make lint",
+    "format:check": "true",
     "generate": "make generate",
     "pact:verify": "make pact:verify"
   }

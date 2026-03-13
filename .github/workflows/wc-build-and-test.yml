@@ -35,7 +35,7 @@ jobs:
         run: pnpm type-check
 
       - name: Format check
-        run: pnpm --filter @vue-pact-go-rest/frontend format:check
+        run: pnpm format:check
 
       - name: Lint
         run: pnpm lint
