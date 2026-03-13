@@ -62,7 +62,10 @@ jobs:
           cache-dependency-path: apps/api/go.sum
 
       - name: Install Pact FFI library
-        run: go run github.com/pact-foundation/pact-go/v2 install --libDir /usr/local/lib
+        run: |
+          go run github.com/pact-foundation/pact-go/v2 install --libDir "$HOME/pact-lib"
+          echo "CGO_LDFLAGS=-L$HOME/pact-lib" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$HOME/pact-lib" >> "$GITHUB_ENV"
         working-directory: apps/api
 
       - name: Install pnpm dependencies
