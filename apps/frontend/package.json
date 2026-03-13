@@ -20,7 +20,7 @@
     "format:check": "prettier --check .",
     "generate:types": "openapi-typescript ../../openapi/openapi.yaml -o src/types/api.gen.ts",
     "pact:consumer-test": "vitest run --project pact",
-    "pact:consumer-publish": "pact-broker publish pacts --consumer-app-version=$(git rev-parse HEAD) --broker-base-url=http://localhost:9292 --broker-username=pact --broker-password=pact",
+    "pact:consumer-publish": "pact-broker publish pacts --consumer-app-version=$(git rev-parse HEAD) --branch=${PACT_CONSUMER_BRANCH:-$(git rev-parse --abbrev-ref HEAD)} --broker-base-url=http://localhost:9292 --broker-username=pact --broker-password=pact",
     "lint-staged": "lint-staged"
   },
   "dependencies": {

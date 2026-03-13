@@ -2,6 +2,10 @@ name: Pact
 
 on:
   workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
 
 jobs:
   pact:
@@ -27,7 +31,7 @@ jobs:
           PACT_BROKER_DATABASE_URL: postgres://pact:pact@postgres/pact
           PACT_BROKER_BASIC_AUTH_USERNAME: pact
           PACT_BROKER_BASIC_AUTH_PASSWORD: pact
-          PACT_BROKER_ALLOW_PUBLIC_READ: "true"
+          PACT_BROKER_ALLOW_PUBLIC_READ: 'true'
         ports:
           - 9292:9292
         options: >-
@@ -59,9 +63,12 @@ jobs:
 
       - name: Publish Pact contracts
         run: pnpm pact:consumer-publish
+        env:
+          PACT_CONSUMER_BRANCH: ${{ inputs.branch }}
 
       - name: Verify Pact contracts
         run: pnpm pact:provider-verify
         env:
-          PACT_PUBLISH_RESULTS: "true"
+          PACT_PUBLISH_RESULTS: 'true'
           PACT_PROVIDER_VERSION: ${{ github.sha }}
+          PACT_PROVIDER_BRANCH: ${{ inputs.branch }}
