@@ -3,7 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", "bin/**"]
     },
     "test": {
       "dependsOn": ["^build"],
@@ -11,7 +11,7 @@
     },
     "coverage": {
       "dependsOn": ["^build"],
-      "outputs": ["coverage/**"]
+      "outputs": ["coverage/**", "*.out"]
     },
     "type-check": {
       "outputs": []
@@ -19,8 +19,28 @@
     "lint": {
       "outputs": []
     },
+    "lint-staged": {
+      "cache": false,
+      "outputs": []
+    },
     "format": {
       "outputs": []
+    },
+    "format:check": {
+      "outputs": []
+    },
+    "generate:types": {
+      "outputs": ["internal/gen/**", "src/types/**"]
+    },
+    "pact:consumer-test": {
+      "cache": false
+    },
+    "pact:consumer-publish": {
+      "dependsOn": ["pact:consumer-test"],
+      "cache": false
+    },
+    "pact:provider-verify": {
+      "cache": false
     },
     "dev": {
       "cache": false,

@@ -2,12 +2,12 @@ BINARY_NAME := api
 BUILD_DIR   := bin
 CMD_DIR     := ./cmd/server
 
-.PHONY: all build generate test lint coverage run clean pact\:verify
+.PHONY: all build generate test lint format\:check coverage run clean pact\:verify
 
 all: build
 
 generate:
-	oapi-codegen --config oapi-codegen.yaml ../../openapi/openapi.yaml
+	go tool oapi-codegen --config oapi-codegen.yaml ../../openapi/openapi.yaml
 
 build:
 	go build -o $(BUILD_DIR)/$(BINARY_NAME) $(CMD_DIR)
@@ -29,7 +29,15 @@ coverage:
 lint:
 	golangci-lint run ./...
 
-pact\:verify:
+format\:check:
+	@UNFORMATTED=$$(find . -name '*.go' -not -path './internal/gen/*' | xargs gofmt -l); \
+	if [ -n "$$UNFORMATTED" ]; then \
+		echo "The following files need formatting:"; \
+		echo "$$UNFORMATTED"; \
+		exit 1; \
+	fi
+
+pact\:provider-verify:
 	go test -count=1 -tags pact -v -run TestPactProviderVerification $(CMD_DIR)
 
 clean:

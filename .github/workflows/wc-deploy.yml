@@ -1,0 +1,20 @@
+name: Deploy
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: Deploy frontend
+        # TODO: choose a hosting platform (e.g. Vercel, Netlify) and add deploy step
+        run: echo "TODO deploy frontend"
+
+      - name: Deploy API
+        # TODO: choose a hosting platform (e.g. Fly.io, Render) and add deploy step
+        run: echo "TODO deploy API"

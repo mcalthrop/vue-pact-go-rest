@@ -6,11 +6,11 @@ Go REST API serving bread recipe data, driven by the OpenAPI spec at [`openapi/o
 
 - [Go](https://go.dev/) >= 1.25
 - [golangci-lint](https://golangci-lint.run/) v2 — for linting (`brew install golangci-lint`)
-- [oapi-codegen](https://github.com/oapi-codegen/oapi-codegen) v2 — for regenerating Go types from the OpenAPI spec (`go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest`)
+- [oapi-codegen](https://github.com/oapi-codegen/oapi-codegen) v2 — for regenerating Go types from the OpenAPI spec (no separate install needed; `make generate` uses `go tool` with the version pinned in `go.mod`)
 
 ## Directory structure
 
-```
+```txt
 apps/api/
 ├── cmd/
 │   └── server/       # Entry point (main package)
@@ -33,8 +33,8 @@ go mod download
 All commands are run from `apps/api/`.
 
 | Command | Description |
-|---|---|
-| `make generate` | Regenerate Go types from the OpenAPI spec (requires `oapi-codegen`) |
+| --- | --- |
+| `make generate` | Regenerate Go types from the OpenAPI spec (uses `go tool`; version pinned in `go.mod`) |
 | `make build` | Compile the binary to `bin/api` |
 | `make run` | Run the server locally (port 8080) |
 | `make test` | Run all unit tests |

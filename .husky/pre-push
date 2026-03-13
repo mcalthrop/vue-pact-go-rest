@@ -1,3 +1,8 @@
-cd apps/frontend
+set -euo pipefail
+
+pnpm lint
+pnpm format:check
+pnpm build
 pnpm coverage
-pnpm generate:types && git diff --exit-code src/types/api.gen.ts
+pnpm generate:types
+git diff --exit-code apps/api/internal/gen/ apps/frontend/src/types/api.gen.ts
