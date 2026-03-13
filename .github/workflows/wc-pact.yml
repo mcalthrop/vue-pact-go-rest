@@ -75,7 +75,7 @@ jobs:
       - name: Install Pact FFI library
         working-directory: apps/api
         run: |
-          set -eu
+          set -ux
 
           PACT_LIB_DIR="${HOME}/pact-lib"
           go run github.com/pact-foundation/pact-go/v2 install --libDir "${PACT_LIB_DIR}"
