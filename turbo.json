@@ -3,7 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", "bin/**"]
     },
     "test": {
       "dependsOn": ["^build"],
@@ -17,6 +17,10 @@
       "outputs": []
     },
     "lint": {
+      "outputs": []
+    },
+    "lint-staged": {
+      "cache": false,
       "outputs": []
     },
     "format": {

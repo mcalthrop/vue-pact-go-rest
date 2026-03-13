@@ -20,11 +20,14 @@
     "pact:consumer-publish": "turbo pact:consumer-publish",
     "pact:provider-verify": "turbo pact:provider-verify",
     "openapi:validate": "redocly lint openapi/openapi.yaml",
+    "lint-staged": "lint-staged && turbo lint-staged",
     "prepare": "husky"
   },
   "devDependencies": {
     "@redocly/cli": "2.21.1",
     "husky": "9.1.7",
+    "lint-staged": "16.3.3",
+    "prettier": "3.8.1",
     "turbo": "2.8.16"
   }
 }
