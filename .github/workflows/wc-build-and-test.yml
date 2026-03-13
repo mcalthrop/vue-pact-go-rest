@@ -40,7 +40,7 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Coverage
+      - name: Test with coverage
         run: pnpm coverage
 
       - name: Build
