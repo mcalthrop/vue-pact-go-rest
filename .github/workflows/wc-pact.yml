@@ -56,11 +56,6 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
 
-      - uses: actions/setup-go@v6.3.0
-        with:
-          go-version-file: apps/api/go.mod
-          cache-dependency-path: apps/api/go.sum
-
       - name: Install pnpm dependencies
         run: pnpm install --frozen-lockfile
 
@@ -72,12 +67,17 @@ jobs:
         env:
           PACT_CONSUMER_BRANCH: ${{ inputs.branch }}
 
+      - uses: actions/setup-go@v6.3.0
+        with:
+          go-version-file: apps/api/go.mod
+          cache-dependency-path: apps/api/go.sum
+
       - name: Install Pact FFI library
         working-directory: apps/api
         run: |
           go run github.com/pact-foundation/pact-go/v2 install --libDir "$HOME/pact-lib"
-          echo "CGO_LDFLAGS=-L$HOME/pact-lib" >> "$GITHUB_ENV"
-          echo "LD_LIBRARY_PATH=$HOME/pact-lib" >> "$GITHUB_ENV"
+          sudo cp "$HOME/pact-lib"/libpact_ffi* /usr/local/lib/
+          sudo ldconfig
 
       - name: Verify Pact contracts
         run: pnpm pact:provider-verify
