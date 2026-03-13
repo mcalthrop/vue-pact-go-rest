@@ -1,0 +1,20 @@
+name: Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    uses: ./.github/workflows/build-and-test.yml
+
+  pact:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/pact.yml
+
+  deploy:
+    needs: [build-and-test, pact]
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yml

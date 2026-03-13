@@ -1,9 +1,7 @@
 name: Build and test
 
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_call:
 
 jobs:
   build-and-test:
@@ -53,67 +51,3 @@ jobs:
           go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
           pnpm --filter @vue-pact-go-rest/api generate
           git diff --exit-code apps/api/internal/gen/
-
-  pact:
-    name: Pact
-    runs-on: ubuntu-latest
-    needs: build-and-test
-    if: github.ref == 'refs/heads/main'
-
-    services:
-      postgres:
-        image: postgres:17
-        env:
-          POSTGRES_USER: pact
-          POSTGRES_PASSWORD: pact
-          POSTGRES_DB: pact
-        options: >-
-          --health-cmd "pg_isready -U pact"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-      pact-broker:
-        image: pactfoundation/pact-broker:2.113.0
-        env:
-          PACT_BROKER_DATABASE_URL: postgres://pact:pact@postgres/pact
-          PACT_BROKER_BASIC_AUTH_USERNAME: pact
-          PACT_BROKER_BASIC_AUTH_PASSWORD: pact
-          PACT_BROKER_ALLOW_PUBLIC_READ: "true"
-        ports:
-          - 9292:9292
-        options: >-
-          --health-cmd "wget -q -O /dev/null http://localhost:9292/diagnostic/status/heartbeat"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
-
-    steps:
-      - uses: actions/checkout@v6.0.2
-
-      - uses: pnpm/action-setup@v4.4.0
-
-      - uses: actions/setup-node@v6.3.0
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-
-      - uses: actions/setup-go@v6.3.0
-        with:
-          go-version-file: apps/api/go.mod
-          cache-dependency-path: apps/api/go.sum
-
-      - name: Install pnpm dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run Pact consumer tests
-        run: pnpm --filter @vue-pact-go-rest/frontend pact:test
-
-      - name: Publish Pact contracts
-        run: pnpm --filter @vue-pact-go-rest/frontend pact:publish
-
-      - name: Verify Pact contracts
-        run: pnpm --filter @vue-pact-go-rest/api pact:verify
-        env:
-          PACT_PUBLISH_RESULTS: "true"
-          PACT_PROVIDER_VERSION: ${{ github.sha }}
