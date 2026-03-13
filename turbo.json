@@ -22,6 +22,9 @@
     "format": {
       "outputs": []
     },
+    "generate": {
+      "outputs": ["internal/gen/**"]
+    },
     "dev": {
       "cache": false,
       "persistent": true

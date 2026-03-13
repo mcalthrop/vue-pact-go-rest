@@ -1,0 +1,12 @@
+{
+  "name": "@vue-pact-go-rest/api",
+  "private": true,
+  "scripts": {
+    "build": "make build",
+    "test": "make test",
+    "coverage": "make coverage",
+    "lint": "make lint",
+    "generate": "make generate",
+    "pact:verify": "make pact:verify"
+  }
+}
