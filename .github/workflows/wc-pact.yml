@@ -84,4 +84,7 @@ jobs:
           PACT_PUBLISH_RESULTS: 'true'
           PACT_PROVIDER_VERSION: ${{ github.sha }}
           PACT_PROVIDER_BRANCH: ${{ inputs.branch }}
-        run: pnpm pact:provider-verify
+        run: |
+          set -ux
+          env | grep PACT
+          pnpm pact:provider-verify
