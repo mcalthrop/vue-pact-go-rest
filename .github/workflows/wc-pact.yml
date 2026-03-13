@@ -33,8 +33,6 @@ jobs:
           PACT_BROKER_BASIC_AUTH_PASSWORD: pact
           PACT_BROKER_ALLOW_PUBLIC_READ: "true"
           PACT_BROKER_PUBLIC_HEARTBEAT: "true"
-          PACT_BROKER_ALLOW_PUBLIC_READ: "true"
-          PACT_BROKER_PUBLIC_HEARTBEAT: "true"
           PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES: "30"
         ports:
           - 9292:9292
