@@ -145,15 +145,15 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 6.1: Front end CI workflow
 
-- [ ] 6.1.1 Create `.github/workflows/frontend.yml`: enforce Node version, install deps, lint, format check, test with coverage (fail if < 100%), build
-- [ ] 6.1.2 Add Pact consumer publish step to the front end workflow (on push to main)
+- [x] 6.1.1 Create `.github/workflows/frontend.yml`: enforce Node version, install deps, lint, format check, test with coverage (fail if < 100%), build
+- [x] 6.1.2 Add Pact consumer publish step to the front end workflow (on push to main)
 
 ### Task 6.2: Back end CI workflow
 
-- [ ] 6.2.1 Create `.github/workflows/api.yml`: set up Go, run `golangci-lint`, run tests with coverage (fail if < 100%), build binary
-- [ ] 6.2.2 Add generated-types drift check: run `make generate` then `git diff --exit-code apps/api/internal/gen/` to fail the build if generated code is out of sync with the OpenAPI spec
-- [ ] 6.2.3 Add Pact provider verification step to the API workflow (on push to main, after consumer publishes)
+- [x] 6.2.1 Create `.github/workflows/api.yml`: set up Go, run `golangci-lint`, run tests with coverage (fail if < 100%), build binary
+- [x] 6.2.2 Add generated-types drift check: run `make generate` then `git diff --exit-code apps/api/internal/gen/` to fail the build if generated code is out of sync with the OpenAPI spec
+- [x] 6.2.3 Add Pact provider verification step to the API workflow (on push to main, after consumer publishes)
 
 ### Task 6.3: Deployment workflow
 
-- [ ] 6.3.1 Create `.github/workflows/deploy.yml` triggered after both CI workflows pass on `main`; deploy front end (e.g. to Vercel/Netlify) and API (e.g. to Fly.io/Render) — stubs with TODO placeholders until target platform is chosen
+- [x] 6.3.1 Create `.github/workflows/deploy.yml` triggered after both CI workflows pass on `main`; deploy front end (e.g. to Vercel/Netlify) and API (e.g. to Fly.io/Render) — stubs with TODO placeholders until target platform is chosen
