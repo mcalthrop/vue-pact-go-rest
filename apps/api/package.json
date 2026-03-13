@@ -8,7 +8,7 @@
     "test": "make test",
     "coverage": "make coverage",
     "lint": "make lint",
-    "format:check": "true",
+    "format:check": "make format:check",
     "generate:types": "make generate",
     "pact:provider-verify": "make pact:provider-verify"
   }

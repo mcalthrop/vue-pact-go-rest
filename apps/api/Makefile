@@ -2,7 +2,7 @@ BINARY_NAME := api
 BUILD_DIR   := bin
 CMD_DIR     := ./cmd/server
 
-.PHONY: all build generate test lint coverage run clean pact\:verify
+.PHONY: all build generate test lint format\:check coverage run clean pact\:verify
 
 all: build
 
@@ -28,6 +28,14 @@ coverage:
 
 lint:
 	golangci-lint run ./...
+
+format\:check:
+	@UNFORMATTED=$$(find . -name '*.go' -not -path './internal/gen/*' | xargs gofmt -l); \
+	if [ -n "$$UNFORMATTED" ]; then \
+		echo "The following files need formatting:"; \
+		echo "$$UNFORMATTED"; \
+		exit 1; \
+	fi
 
 pact\:provider-verify:
 	go test -count=1 -tags pact -v -run TestPactProviderVerification $(CMD_DIR)
