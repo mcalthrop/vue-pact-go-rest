@@ -32,18 +32,26 @@ jobs:
           PACT_BROKER_BASIC_AUTH_USERNAME: pact
           PACT_BROKER_BASIC_AUTH_PASSWORD: pact
           PACT_BROKER_ALLOW_PUBLIC_READ: 'true'
+          PACT_BROKER_PUBLIC_HEARTBEAT: 'true'
           PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES: '30'
         ports:
           - 9292:9292
-        options: >-
-          --health-cmd "wget -q -O /dev/null http://localhost:9292/diagnostic/status/heartbeat"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
-          --health-start-period 30s
 
     steps:
       - uses: actions/checkout@v6.0.2
+
+      - name: Wait for Pact Broker
+        run: |
+          for i in $(seq 1 30); do
+            if wget -q -O /dev/null http://localhost:9292/diagnostic/status/heartbeat; then
+              echo "Pact Broker is ready"
+              exit 0
+            fi
+            echo "Waiting for Pact Broker... ($i/30)"
+            sleep 5
+          done
+          echo "Pact Broker failed to start"
+          exit 1
 
       - uses: pnpm/action-setup@v4.4.0
 
