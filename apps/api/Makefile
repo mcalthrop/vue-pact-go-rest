@@ -38,6 +38,7 @@ format\:check:
 	fi
 
 pact\:provider-verify:
+	env | grep PACT || true
 	go test -count=1 -tags pact -v -run TestPactProviderVerification $(CMD_DIR)
 
 clean:
