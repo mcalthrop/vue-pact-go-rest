@@ -8,7 +8,7 @@ require (
 	github.com/pact-foundation/pact-go/v2 v2.4.2 // pact build tag only — run `go mod tidy -tags pact` to keep this entry
 )
 
-require github.com/oapi-codegen/oapi-codegen/v2 v2.6.0
+require github.com/oapi-codegen/oapi-codegen/v2 v2.6.0 // indirect
 
 require (
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
