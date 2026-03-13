@@ -1,4 +1,5 @@
 dist
 coverage
+pacts
 pnpm-lock.yaml
 src/types/api.gen.ts
