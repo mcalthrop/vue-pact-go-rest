@@ -61,6 +61,10 @@ jobs:
           go-version-file: apps/api/go.mod
           cache-dependency-path: apps/api/go.sum
 
+      - name: Install Pact FFI library
+        run: go run github.com/pact-foundation/pact-go/v2 install --libDir /usr/local/lib
+        working-directory: apps/api
+
       - name: Install pnpm dependencies
         run: pnpm install --frozen-lockfile
 
