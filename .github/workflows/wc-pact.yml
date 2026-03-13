@@ -63,9 +63,9 @@ jobs:
         run: pnpm pact:consumer-test
 
       - name: Publish Pact contracts
-        run: pnpm pact:consumer-publish
         env:
           PACT_CONSUMER_BRANCH: ${{ inputs.branch }}
+        run: pnpm pact:consumer-publish
 
       - uses: actions/setup-go@v6.3.0
         with:
@@ -75,13 +75,16 @@ jobs:
       - name: Install Pact FFI library
         working-directory: apps/api
         run: |
-          go run github.com/pact-foundation/pact-go/v2 install --libDir "$HOME/pact-lib"
-          sudo cp "$HOME/pact-lib"/libpact_ffi* /usr/local/lib/
+          set -eu
+
+          PACT_LIB_DIR="${HOME}/pact-lib"
+          go run github.com/pact-foundation/pact-go/v2 install --libDir "${PACT_LIB_DIR}"
+          sudo cp "${PACT_LIB_DIR}"/libpact_ffi* /usr/local/lib/
           sudo ldconfig
 
       - name: Verify Pact contracts
-        run: pnpm pact:provider-verify
         env:
           PACT_PUBLISH_RESULTS: 'true'
           PACT_PROVIDER_VERSION: ${{ github.sha }}
           PACT_PROVIDER_BRANCH: ${{ inputs.branch }}
+        run: pnpm pact:provider-verify
