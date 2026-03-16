@@ -4,11 +4,15 @@ import { BASE_URL } from '@/api/baseUrl';
 import type { RecipeSummary } from '@/api/fetchRecipes';
 
 defineProps<{ recipe: RecipeSummary }>();
+
+function resolveImageUrl(photoUrl: string): string {
+  return new URL(photoUrl, BASE_URL).href;
+}
 </script>
 
 <template>
   <RouterLink :to="`/recipes/${encodeURIComponent(recipe.id)}`" class="recipe-card">
-    <img :src="`${BASE_URL}${recipe.photo_url}`" :alt="recipe.name" />
+    <img :src="resolveImageUrl(recipe.photo_url)" :alt="recipe.name" />
     <h2>{{ recipe.name }}</h2>
     <p>{{ recipe.summary }}</p>
   </RouterLink>

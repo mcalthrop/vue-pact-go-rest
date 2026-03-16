@@ -105,6 +105,39 @@ func TestNewServer_CORSHeaders(t *testing.T) {
 	}
 }
 
+func TestNewServer_Images_ServesFile(t *testing.T) {
+	srv := httptest.NewServer(newServer())
+	defer srv.Close()
+
+	resp, err := http.Get(srv.URL + "/images/sourdough-boule.jpg")
+	if err != nil {
+		t.Fatalf("GET /images/sourdough-boule.jpg: %v", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected 200, got %d", resp.StatusCode)
+	}
+	if ct := resp.Header.Get("Content-Type"); ct != "image/jpeg" {
+		t.Errorf("expected Content-Type image/jpeg, got %q", ct)
+	}
+}
+
+func TestNewServer_Images_NoDirectoryListing(t *testing.T) {
+	srv := httptest.NewServer(newServer())
+	defer srv.Close()
+
+	resp, err := http.Get(srv.URL + "/images/")
+	if err != nil {
+		t.Fatalf("GET /images/: %v", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	if resp.StatusCode != http.StatusNotFound {
+		t.Fatalf("expected 404 for directory listing, got %d", resp.StatusCode)
+	}
+}
+
 func TestNewServer_CORSPreflightOptions(t *testing.T) {
 	srv := httptest.NewServer(newServer())
 	defer srv.Close()
