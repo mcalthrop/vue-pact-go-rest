@@ -11,9 +11,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/gen"
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/handler"
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/repository"
+	"vue-pact-go-rest/api/internal/gen"
+	"vue-pact-go-rest/api/internal/handler"
+	"vue-pact-go-rest/api/internal/repository"
 )
 
 // mockRepository is a test double for repository.RecipeRepository.

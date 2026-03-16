@@ -3,7 +3,7 @@ package repository
 import (
 	"errors"
 
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/gen"
+	"vue-pact-go-rest/api/internal/gen"
 )
 
 // ErrRecipeNotFound is returned by GetRecipe when no recipe matches the given id.

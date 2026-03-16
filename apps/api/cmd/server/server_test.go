@@ -9,7 +9,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/gen"
+	"vue-pact-go-rest/api/internal/gen"
 )
 
 func TestMain(m *testing.M) {

@@ -4,10 +4,10 @@ import (
 	"io/fs"
 	"net/http"
 
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/gen"
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/handler"
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/repository"
-	apistatic "github.com/mcalthrop/vue-pact-go-rest/api/internal/static"
+	"vue-pact-go-rest/api/internal/gen"
+	"vue-pact-go-rest/api/internal/handler"
+	"vue-pact-go-rest/api/internal/repository"
+	apistatic "vue-pact-go-rest/api/internal/static"
 )
 
 // newServer wires up the repository, handler, and middleware and returns
