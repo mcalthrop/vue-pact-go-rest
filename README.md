@@ -1,17 +1,19 @@
 # vue-pact-go-rest
 
+> This repo is an exercise in vibe coding. See [VIBE.md](./VIBE.md) for more information.
+
 A monorepo containing a VueJS front end and Go REST API, contract-tested with Pact, driven by an OpenAPI spec.
 
 ## Tech stack
 
-| Layer | Technology |
-| --- | --- |
-| Front end | Vue 3 + TypeScript + Vite |
-| Back end | Go REST API |
-| API spec | OpenAPI 3.x |
-| Contract testing | Pact (self-hosted broker) |
-| Monorepo | Turborepo + pnpm workspaces |
-| CI/CD | GitHub Actions |
+| Layer            | Technology                  |
+| ---------------- | --------------------------- |
+| Front end        | Vue 3 + TypeScript + Vite   |
+| Back end         | Go REST API                 |
+| API spec         | OpenAPI 3.x                 |
+| Contract testing | Pact (self-hosted broker)   |
+| Monorepo         | Turborepo + pnpm workspaces |
+| CI/CD            | GitHub Actions              |
 
 ## Prerequisites
 
@@ -30,11 +32,11 @@ nvm use
 
 ## Workspaces
 
-| Path | Description |
-| --- | --- |
-| `apps/frontend` | Vue 3 front end |
-| `apps/api` | Go REST API |
-| `openapi/` | OpenAPI specification |
+| Path            | Description           |
+| --------------- | --------------------- |
+| `apps/frontend` | Vue 3 front end       |
+| `apps/api`      | Go REST API           |
+| `openapi/`      | OpenAPI specification |
 
 ## Setup
 
@@ -81,11 +83,11 @@ docker compose ps
 
 The broker is available at `http://localhost:9292`.
 
-| Setting | Value |
-| --- | --- |
-| URL | `http://localhost:9292` |
-| Username | `pact` |
-| Password | `pact` |
+| Setting  | Value                   |
+| -------- | ----------------------- |
+| URL      | `http://localhost:9292` |
+| Username | `pact`                  |
+| Password | `pact`                  |
 
 Note: These credentials are development-only defaults for local Docker Compose usage. Do not reuse them in shared, staging, or production environments; configure real credentials via environment variables (for example via a `.env` file used by `docker compose`).
 Public read access is enabled so provider verification can fetch pacts without credentials. Write operations (publish) require the username/password above.
