@@ -13,18 +13,21 @@ import { RouterLink, RouterView } from 'vue-router';
 
 <style scoped>
 header {
-  background: var(--color-bark);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-900);
   padding: var(--space-md) var(--space-xl);
 }
 
 nav a {
-  color: var(--color-cream);
+  color: var(--color-50);
   font-family: var(--font-serif);
   font-size: var(--font-size-xl);
   letter-spacing: 0.02em;
 }
 
 nav a:hover {
-  color: var(--color-wheat);
+  color: var(--color-100);
 }
 </style>
