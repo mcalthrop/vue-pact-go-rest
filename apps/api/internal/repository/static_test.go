@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/repository"
+	"vue-pact-go-rest/api/internal/repository"
 )
 
 func TestListRecipes(t *testing.T) {

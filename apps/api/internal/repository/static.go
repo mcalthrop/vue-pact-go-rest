@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/gen"
+	"vue-pact-go-rest/api/internal/gen"
 )
 
 var _ RecipeRepository = (*StaticRecipeRepository)(nil)

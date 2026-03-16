@@ -5,8 +5,8 @@ import (
 	"errors"
 	"log"
 
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/gen"
-	"github.com/mcalthrop/vue-pact-go-rest/api/internal/repository"
+	"vue-pact-go-rest/api/internal/gen"
+	"vue-pact-go-rest/api/internal/repository"
 )
 
 var _ gen.StrictServerInterface = (*RecipeHandler)(nil)

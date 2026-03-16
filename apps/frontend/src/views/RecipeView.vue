@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { BASE_URL } from '@/api/baseUrl';
 import { fetchRecipe } from '@/api/fetchRecipe';
 import type { Recipe } from '@/api/fetchRecipe';
+
+function resolveImageUrl(photoUrl: string): string {
+  return new URL(photoUrl, BASE_URL).href;
+}
 
 const route = useRoute();
 const recipe = ref<Recipe | null>(null);
@@ -39,7 +44,7 @@ watch(
     <p v-if="loading">Loading...</p>
     <p v-else-if="error" class="error">{{ error }}</p>
     <template v-else-if="recipe">
-      <img :src="recipe.photo_url" :alt="recipe.name" class="recipe-photo" />
+      <img :src="resolveImageUrl(recipe.photo_url)" :alt="recipe.name" class="recipe-photo" />
       <h1>{{ recipe.name }}</h1>
       <p class="summary">{{ recipe.summary }}</p>
       <p class="description">{{ recipe.description }}</p>
