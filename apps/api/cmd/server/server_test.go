@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"io"
+	"io/fs"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +11,7 @@ import (
 	"testing"
 
 	"vue-pact-go-rest/api/internal/gen"
+	apistatic "vue-pact-go-rest/api/internal/static"
 )
 
 func TestMain(m *testing.M) {
@@ -18,9 +20,19 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
+func newTestServer(t *testing.T) *httptest.Server {
+	t.Helper()
+	imgFS, err := fs.Sub(apistatic.Images, "images")
+	if err != nil {
+		t.Fatalf("fs.Sub: %v", err)
+	}
+	srv := httptest.NewServer(newServer(imgFS))
+	t.Cleanup(srv.Close)
+	return srv
+}
+
 func TestNewServer_ListRecipes(t *testing.T) {
-	srv := httptest.NewServer(newServer())
-	defer srv.Close()
+	srv := newTestServer(t)
 
 	resp, err := http.Get(srv.URL + "/recipes")
 	if err != nil {
@@ -45,8 +57,7 @@ func TestNewServer_ListRecipes(t *testing.T) {
 }
 
 func TestNewServer_GetRecipe_Found(t *testing.T) {
-	srv := httptest.NewServer(newServer())
-	defer srv.Close()
+	srv := newTestServer(t)
 
 	resp, err := http.Get(srv.URL + "/recipes/sourdough-boule")
 	if err != nil {
@@ -68,8 +79,7 @@ func TestNewServer_GetRecipe_Found(t *testing.T) {
 }
 
 func TestNewServer_GetRecipe_NotFound(t *testing.T) {
-	srv := httptest.NewServer(newServer())
-	defer srv.Close()
+	srv := newTestServer(t)
 
 	resp, err := http.Get(srv.URL + "/recipes/does-not-exist")
 	if err != nil {
@@ -91,8 +101,7 @@ func TestNewServer_GetRecipe_NotFound(t *testing.T) {
 }
 
 func TestNewServer_CORSHeaders(t *testing.T) {
-	srv := httptest.NewServer(newServer())
-	defer srv.Close()
+	srv := newTestServer(t)
 
 	resp, err := http.Get(srv.URL + "/recipes")
 	if err != nil {
@@ -106,8 +115,7 @@ func TestNewServer_CORSHeaders(t *testing.T) {
 }
 
 func TestNewServer_Images_ServesFile(t *testing.T) {
-	srv := httptest.NewServer(newServer())
-	defer srv.Close()
+	srv := newTestServer(t)
 
 	resp, err := http.Get(srv.URL + "/images/sourdough-boule.jpg")
 	if err != nil {
@@ -124,8 +132,7 @@ func TestNewServer_Images_ServesFile(t *testing.T) {
 }
 
 func TestNewServer_Images_NoDirectoryListing(t *testing.T) {
-	srv := httptest.NewServer(newServer())
-	defer srv.Close()
+	srv := newTestServer(t)
 
 	resp, err := http.Get(srv.URL + "/images/")
 	if err != nil {
@@ -139,8 +146,7 @@ func TestNewServer_Images_NoDirectoryListing(t *testing.T) {
 }
 
 func TestNewServer_CORSPreflightOptions(t *testing.T) {
-	srv := httptest.NewServer(newServer())
-	defer srv.Close()
+	srv := newTestServer(t)
 
 	req, err := http.NewRequest(http.MethodOptions, srv.URL+"/recipes", nil)
 	if err != nil {
