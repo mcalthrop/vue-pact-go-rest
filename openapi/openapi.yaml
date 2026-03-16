@@ -1,9 +1,9 @@
-openapi: "3.0.3"
+openapi: '3.0.3'
 
 info:
   title: Bread Recipes API
   description: REST API for browsing bread recipes
-  version: "1.0.0"
+  version: '1.0.0'
   contact:
     name: API Support
     url: https://github.com/mcalthrop/vue-pact-go-rest
@@ -30,18 +30,18 @@ paths:
       tags:
         - recipes
       responses:
-        "200":
+        '200':
           description: A list of bread recipes
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RecipeList"
-        "500":
+                $ref: '#/components/schemas/RecipeList'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /recipes/{id}:
     get:
@@ -58,24 +58,24 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: A single bread recipe
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Recipe"
-        "404":
+                $ref: '#/components/schemas/Recipe'
+        '404':
           description: Recipe not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
 components:
   schemas:
@@ -101,13 +101,13 @@ components:
           example: A tangy, chewy sourdough loaf with a crisp crust
         photo_url:
           type: string
-          format: uri
-          description: URL of the recipe photo
-          example: https://example.com/photos/sourdough-boule.jpg
+          format: uri-reference
+          description: URI reference (absolute or relative) of the recipe photo
+          example: /images/sourdough-boule.jpg
 
     Recipe:
       allOf:
-        - $ref: "#/components/schemas/RecipeSummary"
+        - $ref: '#/components/schemas/RecipeSummary'
         - type: object
           required:
             - description
@@ -126,13 +126,13 @@ components:
               description: List of ingredients with quantities
               minItems: 1
               items:
-                $ref: "#/components/schemas/Ingredient"
+                $ref: '#/components/schemas/Ingredient'
             instructions:
               type: array
               description: Ordered list of preparation steps
               minItems: 1
               items:
-                $ref: "#/components/schemas/Instruction"
+                $ref: '#/components/schemas/Instruction'
 
     Ingredient:
       type: object
@@ -177,7 +177,7 @@ components:
         recipes:
           type: array
           items:
-            $ref: "#/components/schemas/RecipeSummary"
+            $ref: '#/components/schemas/RecipeSummary'
 
     Error:
       type: object

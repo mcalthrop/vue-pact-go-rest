@@ -50,7 +50,7 @@ func seedRecipes() []gen.Recipe {
 			Id:          "sourdough-boule",
 			Name:        "Classic Sourdough Boule",
 			Summary:     "A tangy, chewy sourdough loaf with a crisp, caramelised crust",
-			PhotoUrl:    "https://images.unsplash.com/photo-1585478259715-87b8e1e2d04b?w=800",
+			PhotoUrl:    "/images/sourdough-boule.jpg",
 			Description: "A traditional sourdough boule developed over a long cold fermentation. The crust is deeply caramelised and the crumb is open and chewy with a complex, tangy flavour.",
 			Ingredients: []gen.Ingredient{
 				{Quantity: 450, Unit: "g", Name: "strong white bread flour"},
@@ -71,7 +71,7 @@ func seedRecipes() []gen.Recipe {
 			Id:          "focaccia",
 			Name:        "Focaccia",
 			Summary:     "Pillowy Italian flatbread with olive oil, sea salt, and fresh rosemary",
-			PhotoUrl:    "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800",
+			PhotoUrl:    "/images/focaccia.jpg",
 			Description: "A light, airy Italian flatbread generously drizzled with extra-virgin olive oil and topped with flaky sea salt and rosemary. Perfect as a side or torn and dipped in oil.",
 			Ingredients: []gen.Ingredient{
 				{Quantity: 500, Unit: "g", Name: "strong white bread flour"},
@@ -94,7 +94,7 @@ func seedRecipes() []gen.Recipe {
 			Id:          "brioche",
 			Name:        "Brioche",
 			Summary:     "Rich, buttery French bread with a golden crust and tender, pillowy crumb",
-			PhotoUrl:    "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800",
+			PhotoUrl:    "/images/brioche.jpg",
 			Description: "An enriched French bread made with plenty of butter and eggs. The dough is silky, the crust is a deep burnished gold, and the crumb is impossibly soft. Wonderful toasted with salted butter.",
 			Ingredients: []gen.Ingredient{
 				{Quantity: 400, Unit: "g", Name: "strong white bread flour"},
@@ -117,7 +117,7 @@ func seedRecipes() []gen.Recipe {
 			Id:          "rye-bread",
 			Name:        "Dark Rye Bread",
 			Summary:     "Dense, moist Scandinavian-style rye loaf with a deep, earthy flavour",
-			PhotoUrl:    "https://images.unsplash.com/photo-1568471173242-461f0a730452?w=800",
+			PhotoUrl:    "/images/dark-rye-bread.jpg",
 			Description: "A dense, moist loaf made with a high proportion of rye flour and fermented with a rye sourdough starter. The flavour is earthy, slightly sour, and deeply satisfying. Excellent with butter and smoked salmon.",
 			Ingredients: []gen.Ingredient{
 				{Quantity: 300, Unit: "g", Name: "dark rye flour"},

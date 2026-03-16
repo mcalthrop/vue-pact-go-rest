@@ -1,23 +1,23 @@
-/* Design system — warm bread/baking palette */
+/* Design system — cool blue palette, complementary to warm bread tones */
 :root {
   /* Colour primitives */
-  --color-cream: #faf8f3;
-  --color-wheat: #f4f0e8;
-  --color-tan: #e0d5c3;
-  --color-cinnamon: #8b5e3c;
-  --color-cinnamon-dark: #6b4428;
-  --color-bark: #2d1f14;
-  --color-bark-muted: #6b5744;
-  --color-error: #c0392b;
+  --color-50: #f3f7fb; /* near-white with cool tint */
+  --color-100: #e6eef7; /* light blue-grey */
+  --color-300: #c5d4e3; /* soft blue-grey */
+  --color-500: #3d6e96; /* mid steel blue */
+  --color-700: #4a6070; /* muted blue-grey */
+  --color-800: #2a5070; /* dark steel blue */
+  --color-900: #152535; /* deep navy */
+  --color-error: #c0392b; /* red */
 
   /* Semantic tokens */
-  --color-bg: var(--color-cream);
-  --color-surface: var(--color-wheat);
-  --color-border: var(--color-tan);
-  --color-accent: var(--color-cinnamon);
-  --color-accent-hover: var(--color-cinnamon-dark);
-  --color-text: var(--color-bark);
-  --color-text-muted: var(--color-bark-muted);
+  --color-bg: var(--color-50);
+  --color-surface: var(--color-100);
+  --color-border: var(--color-300);
+  --color-accent: var(--color-500);
+  --color-accent-hover: var(--color-700);
+  --color-text: var(--color-900);
+  --color-text-muted: var(--color-800);
 
   /* Typography */
   --font-serif: 'Georgia', 'Times New Roman', serif;

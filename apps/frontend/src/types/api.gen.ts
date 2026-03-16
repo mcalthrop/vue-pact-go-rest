@@ -65,9 +65,9 @@ export interface components {
              */
             summary: string;
             /**
-             * Format: uri
-             * @description URL of the recipe photo
-             * @example https://example.com/photos/sourdough-boule.jpg
+             * Format: uri-reference
+             * @description URI reference (absolute or relative) of the recipe photo
+             * @example /images/sourdough-boule.jpg
              */
             photo_url: string;
         };
