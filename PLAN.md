@@ -166,20 +166,42 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ---
 
-## Phase 7: Ephemeral Environments
+## Phase 7: Vue SSR Refactor
 
-### Task 7.1: Platform setup
+### Task 7.1: Add Vite SSR entry points
 
-- [ ] 7.1.1 Choose and configure hosting platforms: Railway for the Go API, Vercel for the Vue frontend; add required secrets (`RAILWAY_TOKEN`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`) to GitHub repository settings
-- [ ] 7.1.2 Make the API's base URL configurable at runtime via an environment variable (e.g. `PORT`); make the frontend's API base URL configurable at build time via `VITE_API_BASE_URL`
+- [ ] 7.1.1 Add `src/entry-client.ts` (mounts app after hydration) and `src/entry-server.ts` (exports a `render` function using `@vue/server-renderer`); update `index.html` to use `entry-client.ts` as its script entry
+- [ ] 7.1.2 Add `server.ts` at `apps/frontend` root: an Express server that calls `vite.ssrLoadModule` in dev mode and the built SSR bundle in production, injects the rendered HTML into `index.html`, and serves static assets
+- [ ] 7.1.3 Update `vite.config.ts` to support SSR build (`build.ssr`); add `build:ssr` and `build:client` scripts alongside the existing `build` script; update `turbo.json` pipeline entries accordingly
 
-### Task 7.2: Ephemeral deployment workflow
+### Task 7.2: SSR data fetching
 
-- [ ] 7.2.1 Add `wc-deploy-ephemeral.yml`: deploy the API to Railway as a PR-scoped environment; capture the preview URL as a job output
-- [ ] 7.2.2 Deploy the frontend to Vercel with `VITE_API_BASE_URL` set to the Railway preview URL from 7.2.1; post both preview URLs as a PR comment
-- [ ] 7.2.3 Add a `pull_request` (type: `closed`) workflow step to tear down the Railway ephemeral environment when a PR is merged or closed
+- [ ] 7.2.1 Add a lightweight SSR context composable (`useSSRContext`) to pass prefetched data from server to client; update `HomeView` to prefetch the recipes list on the server and hydrate from that data on the client
+- [ ] 7.2.2 Update `RecipeView` to prefetch the recipe detail on the server using the route param; return a 404 status when the recipe is not found
+- [ ] 7.2.3 Replace the `VITE_API_BASE_URL` build-time env var with a runtime env var (`API_BASE_URL`) read by the Express server and injected into the SSR context; keep `VITE_API_BASE_URL` as a client-side fallback for the dev Vite server
 
-### Task 7.3: Pact provider verification against deployed API
+### Task 7.3: Testing and quality
 
-- [ ] 7.3.1 Update the Go provider verification test to accept `PACT_PROVIDER_BASE_URL` from the environment (falling back to `http://localhost:PORT` for local runs); remove any logic that starts a local server inside the test
-- [ ] 7.3.2 In the ephemeral deployment workflow, after the API is deployed, run `pact:provider-verify` with `PACT_PROVIDER_BASE_URL` set to the Railway preview URL; publish results with the PR branch and SHA
+- [ ] 7.3.1 Update unit tests to cover SSR entry points and the prefetch composable; maintain 100% coverage threshold
+- [ ] 7.3.2 Verify ESLint, Prettier, oxlint, knip, and Husky hooks all pass with the new files in place
+- [ ] 7.3.3 Confirm Pact consumer tests are unaffected (they test the API client functions directly, not the rendering layer)
+
+---
+
+## Phase 8: Ephemeral Environments
+
+### Task 8.1: Platform setup
+
+- [ ] 8.1.1 Choose and configure hosting platforms: Railway for the Go API, Vercel for the Vue frontend; add required secrets (`RAILWAY_TOKEN`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`) to GitHub repository settings
+- [ ] 8.1.2 Make the API's base URL configurable at runtime via an environment variable (e.g. `PORT`); make the frontend's API base URL configurable at build time via `VITE_API_BASE_URL`
+
+### Task 8.2: Ephemeral deployment workflow
+
+- [ ] 8.2.1 Add `wc-deploy-ephemeral.yml`: deploy the API to Railway as a PR-scoped environment; capture the preview URL as a job output
+- [ ] 8.2.2 Deploy the frontend to Vercel with `VITE_API_BASE_URL` set to the Railway preview URL from 8.2.1; post both preview URLs as a PR comment
+- [ ] 8.2.3 Add a `pull_request` (type: `closed`) workflow step to tear down the Railway ephemeral environment when a PR is merged or closed
+
+### Task 8.3: Pact provider verification against deployed API
+
+- [ ] 8.3.1 Update the Go provider verification test to accept `PACT_PROVIDER_BASE_URL` from the environment (falling back to `http://localhost:PORT` for local runs); remove any logic that starts a local server inside the test
+- [ ] 8.3.2 In the ephemeral deployment workflow, after the API is deployed, run `pact:provider-verify` with `PACT_PROVIDER_BASE_URL` set to the Railway preview URL; publish results with the PR branch and SHA
