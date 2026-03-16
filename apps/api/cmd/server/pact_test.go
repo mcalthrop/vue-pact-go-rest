@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"io/fs"
 	"net/http/httptest"
 	"os"
 	"os/exec"
@@ -13,10 +14,15 @@ import (
 
 	"github.com/pact-foundation/pact-go/v2/models"
 	"github.com/pact-foundation/pact-go/v2/provider"
+	apistatic "vue-pact-go-rest/api/internal/static"
 )
 
 func TestPactProviderVerification(t *testing.T) {
-	srv := httptest.NewServer(newServer())
+	imgFS, err := fs.Sub(apistatic.Images, "images")
+	if err != nil {
+		t.Fatalf("fs.Sub: %v", err)
+	}
+	srv := httptest.NewServer(newServer(imgFS))
 	defer srv.Close()
 
 	publishResults, _ := strconv.ParseBool(os.Getenv("PACT_PUBLISH_RESULTS"))
