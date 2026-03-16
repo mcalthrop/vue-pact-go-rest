@@ -15,7 +15,7 @@ const mockRecipe = {
   id: 'sourdough-boule',
   name: 'Classic Sourdough Boule',
   summary: 'A tangy, chewy sourdough loaf',
-  photo_url: 'https://example.com/photos/sourdough.jpg',
+  photo_url: '/images/sourdough-boule.jpg',
 };
 
 describe('RecipeCard', () => {
@@ -30,7 +30,9 @@ describe('RecipeCard', () => {
 
     expect(wrapper.text()).toContain('Classic Sourdough Boule');
     expect(wrapper.text()).toContain('A tangy, chewy sourdough loaf');
-    expect(wrapper.find('img').attributes('src')).toBe('https://example.com/photos/sourdough.jpg');
+    expect(wrapper.find('img').attributes('src')).toBe(
+      'http://localhost:8080/images/sourdough-boule.jpg',
+    );
   });
 
   it('links to the recipe detail page', async () => {

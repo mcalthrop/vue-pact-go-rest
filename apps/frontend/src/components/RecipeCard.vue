@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
+import { BASE_URL } from '@/api/baseUrl';
 import type { RecipeSummary } from '@/api/fetchRecipes';
 
 defineProps<{ recipe: RecipeSummary }>();
@@ -7,7 +8,7 @@ defineProps<{ recipe: RecipeSummary }>();
 
 <template>
   <RouterLink :to="`/recipes/${encodeURIComponent(recipe.id)}`" class="recipe-card">
-    <img :src="recipe.photo_url" :alt="recipe.name" />
+    <img :src="`${BASE_URL}${recipe.photo_url}`" :alt="recipe.name" />
     <h2>{{ recipe.name }}</h2>
     <p>{{ recipe.summary }}</p>
   </RouterLink>
