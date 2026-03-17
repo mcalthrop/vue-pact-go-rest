@@ -32,11 +32,11 @@ nvm use
 
 ## Workspaces
 
-| Path            | Description           |
-| --------------- | --------------------- |
-| `apps/frontend` | Vue 3 front end       |
-| `apps/api`      | Go REST API           |
-| `openapi/`      | OpenAPI specification |
+| Path            | Description                                            |
+| --------------- | ------------------------------------------------------ |
+| `apps/frontend` | Vue 3 front end                                        |
+| `apps/api`      | Go REST API (also serves recipe images at `/images/*`) |
+| `openapi/`      | OpenAPI specification                                  |
 
 ## Setup
 
@@ -59,14 +59,51 @@ pnpm build
 # Run all tests
 pnpm test
 
+# Run tests with coverage (must be 100%)
+pnpm coverage
+
 # Lint all workspaces
 pnpm lint
 
-# Format all workspaces
+# Format all workspaces (writes changes)
 pnpm format
+
+# Check formatting without writing changes
+pnpm format:check
 
 # Start dev servers
 pnpm dev
+```
+
+## Code generation
+
+TypeScript (frontend) and Go (API) types are generated from the OpenAPI spec. Run after any spec change:
+
+```bash
+pnpm generate:types
+```
+
+To validate the OpenAPI spec:
+
+```bash
+pnpm openapi:validate
+```
+
+## Pact contract testing
+
+> The Pact Broker must be running (see [Pact Broker](#pact-broker) below) before running publish or verify commands.
+
+Consumer tests generate pact files and publish them to the broker:
+
+```bash
+pnpm pact:consumer-test
+pnpm pact:consumer-publish
+```
+
+Provider verification fetches pacts from the broker and verifies the running API:
+
+```bash
+pnpm pact:provider-verify
 ```
 
 ## Pact Broker
@@ -75,7 +112,7 @@ The self-hosted Pact Broker runs via Docker Compose (PostgreSQL + Pact Broker):
 
 ```bash
 # Start broker in the background
-docker compose up -d
+docker compose up --detach
 
 # Check it is healthy
 docker compose ps
@@ -97,5 +134,5 @@ Public read access is enabled so provider verification can fetch pacts without c
 docker compose down
 
 # Stop and wipe all data
-docker compose down -v
+docker compose down --volumes
 ```
