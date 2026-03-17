@@ -170,21 +170,21 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 7.1: Add Vite SSR entry points
 
-- [ ] 7.1.1 Add `src/entry-client.ts` (mounts app after hydration) and `src/entry-server.ts` (exports a `render` function using `@vue/server-renderer`); update `index.html` to use `entry-client.ts` as its script entry
-- [ ] 7.1.2 Add `server.ts` at `apps/frontend` root: an Express server that calls `vite.ssrLoadModule` in dev mode and the built SSR bundle in production, injects the rendered HTML into `index.html`, and serves static assets
-- [ ] 7.1.3 Update `vite.config.ts` to support SSR build (`build.ssr`); add `build:ssr` and `build:client` scripts alongside the existing `build` script; update `turbo.json` pipeline entries accordingly
+- [x] 7.1.1 Add `src/entry-client.ts` (mounts app after hydration) and `src/entry-server.ts` (exports a `render` function using `@vue/server-renderer`); update `index.html` to use `entry-client.ts` as its script entry
+- [x] 7.1.2 Add `server.ts` at `apps/frontend` root: an Express server that calls `vite.ssrLoadModule` in dev mode and the built SSR bundle in production, injects the rendered HTML into `index.html`, and serves static assets
+- [x] 7.1.3 Update `vite.config.ts` to support SSR build (`build.ssr`); add `build:ssr` and `build:client` scripts alongside the existing `build` script; update `turbo.json` pipeline entries accordingly
 
 ### Task 7.2: SSR data fetching
 
-- [ ] 7.2.1 Add a lightweight SSR context composable (`useSSRContext`) to pass prefetched data from server to client; update `HomeView` to prefetch the recipes list on the server and hydrate from that data on the client
-- [ ] 7.2.2 Update `RecipeView` to prefetch the recipe detail on the server using the route param; return a 404 status when the recipe is not found
-- [ ] 7.2.3 Replace the `VITE_API_BASE_URL` build-time env var with a runtime env var (`API_BASE_URL`) read by the Express server and injected into the SSR context; keep `VITE_API_BASE_URL` as a client-side fallback for the dev Vite server
+- [x] 7.2.1 Add a lightweight SSR context composable (`useSSRContext`) to pass prefetched data from server to client; update `HomeView` to prefetch the recipes list on the server and hydrate from that data on the client
+- [x] 7.2.2 Update `RecipeView` to prefetch the recipe detail on the server using the route param; return a 404 status when the recipe is not found
+- [x] 7.2.3 Replace the `VITE_API_BASE_URL` build-time env var with a runtime env var (`API_BASE_URL`) read by the Express server and injected into the SSR context; keep `VITE_API_BASE_URL` as a client-side fallback for the dev Vite server
 
 ### Task 7.3: Testing and quality
 
-- [ ] 7.3.1 Update unit tests to cover SSR entry points and the prefetch composable; maintain 100% coverage threshold
-- [ ] 7.3.2 Verify ESLint, Prettier, oxlint, knip, and Husky hooks all pass with the new files in place
-- [ ] 7.3.3 Confirm Pact consumer tests are unaffected (they test the API client functions directly, not the rendering layer)
+- [x] 7.3.1 Update unit tests to cover SSR entry points and the prefetch composable; maintain 100% coverage threshold
+- [x] 7.3.2 Verify ESLint, Prettier, oxlint, knip, and Husky hooks all pass with the new files in place
+- [x] 7.3.3 Confirm Pact consumer tests are unaffected (they test the API client functions directly, not the rendering layer)
 
 ---
 

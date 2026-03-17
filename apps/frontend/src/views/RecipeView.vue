@@ -1,18 +1,32 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, onServerPrefetch, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { BASE_URL } from '@/api/baseUrl';
+import { getBaseUrl } from '@/api/baseUrl';
 import { fetchRecipe } from '@/api/fetchRecipe';
 import type { Recipe } from '@/api/fetchRecipe';
+import { useSSRContext } from '@/composables/useSSRContext';
 
 function resolveImageUrl(photoUrl: string): string {
-  return new URL(photoUrl, BASE_URL).href;
+  return new URL(photoUrl, getBaseUrl()).href;
 }
 
+const ssrCtx = useSSRContext();
 const route = useRoute();
-const recipe = ref<Recipe | null>(null);
+const recipe = ref<Recipe | null>((ssrCtx?.recipe as Recipe | null | undefined) ?? null);
 const error = ref<string | null>(null);
-const loading = ref(true);
+const loading = ref(ssrCtx?.recipe == null);
+
+onServerPrefetch(async () => {
+  try {
+    recipe.value = await fetchRecipe(route.params.id as string);
+    if (ssrCtx) ssrCtx.recipe = recipe.value;
+  } catch (e) {
+    if (ssrCtx) ssrCtx.statusCode = 404;
+    error.value = e instanceof Error ? e.message : 'Failed to load recipe';
+  } finally {
+    loading.value = false;
+  }
+});
 
 async function loadRecipe(id: string) {
   loading.value = true;
@@ -27,7 +41,10 @@ async function loadRecipe(id: string) {
   }
 }
 
-onMounted(() => loadRecipe(route.params.id as string));
+onMounted(() => {
+  if (ssrCtx?.recipe != null) return;
+  loadRecipe(route.params.id as string);
+});
 
 watch(
   () => route.params.id,

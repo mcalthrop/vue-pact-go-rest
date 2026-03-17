@@ -24,11 +24,12 @@ export default defineConfig({
       },
       exclude: [
         ...(configDefaults.coverage.exclude ?? []),
-        'src/main.ts',
+        'src/entry-client.ts',
+        'src/entry-server.ts',
         'src/mocks/**',
-        'src/router/index.ts',
         'src/types/api.gen.ts',
         'src/pact/**',
+        'server.ts',
       ],
     },
     projects: [
@@ -38,7 +39,7 @@ export default defineConfig({
         test: {
           name: 'unit',
           environment: 'jsdom',
-          exclude: [...configDefaults.exclude, 'e2e/**', 'src/pact/**'],
+          exclude: [...configDefaults.exclude, 'e2e/**', 'src/pact/**', 'src/**/*.ssr.spec.ts'],
         },
       },
       {
@@ -48,6 +49,15 @@ export default defineConfig({
           name: 'pact',
           include: ['src/pact/**/*.pact.spec.ts'],
           pool: 'forks',
+          environment: 'node',
+        },
+      },
+      {
+        // SSR tests: node environment for server-side rendering paths.
+        extends: true,
+        test: {
+          name: 'ssr',
+          include: ['src/**/*.ssr.spec.ts'],
           environment: 'node',
         },
       },
