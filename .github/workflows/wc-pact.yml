@@ -36,6 +36,12 @@ jobs:
           PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES: "30"
         ports:
           - 9292:9292
+        options: >-
+          --health-cmd "wget --quiet --output-document=- http://localhost:9292/diagnostic/status/heartbeat || exit 1"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+          --health-start-period 10s
 
     steps:
       - uses: actions/checkout@v6.0.2
@@ -47,7 +53,7 @@ jobs:
           max_attempts: 30
           retry_wait_seconds: 5
           retry_on: error
-          command: wget -q -O /dev/null http://localhost:9292/diagnostic/status/heartbeat
+          command: wget --quiet --output-document=/dev/null http://localhost:9292/diagnostic/status/heartbeat
 
       - uses: pnpm/action-setup@v4.4.0
 
