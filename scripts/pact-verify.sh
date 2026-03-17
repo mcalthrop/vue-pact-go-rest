@@ -4,7 +4,7 @@ set -xeuo pipefail
 
 cd "$(dirname "$0")/.."
 
-docker compose up --detach
+docker compose up --detach --wait
 
 pnpm pact:consumer-test
 pnpm pact:consumer-publish
