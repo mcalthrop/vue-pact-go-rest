@@ -1,7 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { useSSRContext } from './useSSRContext';
-
-type WindowWithState = Window & { __INITIAL_STATE__?: Record<string, unknown> };
+import { useSSRContext, type WindowWithState } from './useSSRContext';
 
 describe('useSSRContext (client)', () => {
   beforeEach(() => {

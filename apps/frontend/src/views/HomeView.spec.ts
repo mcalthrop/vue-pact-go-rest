@@ -3,8 +3,7 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import HomeView from './HomeView.vue';
 import * as fetchRecipesModule from '@/api/fetchRecipes';
-
-type WindowWithState = Window & { __INITIAL_STATE__?: Record<string, unknown> };
+import type { WindowWithState } from '@/composables/useSSRContext';
 
 vi.mock('@/api/fetchRecipes');
 

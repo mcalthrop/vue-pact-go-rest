@@ -10,6 +10,8 @@
   "rules": {
     "curly": ["error", "all"],
     "func-style": ["error", "expression"],
-    "import/no-relative-parent-imports": "error"
+    "import/no-relative-parent-imports": "error",
+    "typescript/explicit-function-return-type": "error",
+    "typescript/no-explicit-any": "error"
   }
 }

@@ -33,7 +33,7 @@ onServerPrefetch(async () => {
   }
 });
 
-const loadRecipe = async (id: string) => {
+const loadRecipe = async (id: string): Promise<void> => {
   loading.value = true;
   error.value = null;
   recipe.value = null;

@@ -1,6 +1,6 @@
 import { vi, describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest';
 import { renderToString } from '@vue/server-renderer';
-import { createSSRApp, defineComponent, h } from 'vue';
+import { createSSRApp, defineComponent, h, type VNode } from 'vue';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import { setupServer } from 'msw/node';
 import HomeView from './HomeView.vue';
@@ -16,7 +16,7 @@ vi.mock('vue', async (importOriginal) => {
 
   return {
     ...actual,
-    onServerPrefetch: (cb: () => Promise<void>) => {
+    onServerPrefetch: (cb: () => Promise<void>): void => {
       if (!suppressPrefetch) {
         actual.onServerPrefetch(cb);
       }
@@ -44,11 +44,11 @@ afterEach(() => {
 });
 afterAll(() => mswServer.close());
 
-const renderHomeView = (ssrCtx?: SSRContext) => {
+const renderHomeView = (ssrCtx?: SSRContext): Promise<string> => {
   const app = createSSRApp(
     defineComponent({
       setup() {
-        return () => h(HomeView);
+        return (): VNode => h(HomeView);
       },
     }),
   );
