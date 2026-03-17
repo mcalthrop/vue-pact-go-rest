@@ -50,6 +50,21 @@ make run
 # Recipes endpoint: http://localhost:8080/recipes
 ```
 
+## Running in production
+
+Run both the API and frontend together from the repo root:
+
+```bash
+pnpm prod
+# API at http://localhost:8080, frontend at http://localhost:4173
+```
+
+To run the API alone from this workspace (requires a prior `make build` or `pnpm build`):
+
+```bash
+./bin/api
+```
+
 ## Running tests
 
 ```bash
