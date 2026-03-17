@@ -37,6 +37,7 @@ async function createServer() {
         render = (await vite!.ssrLoadModule('/src/entry-server.ts')).render as RenderFn;
       } else {
         template = readFileSync(resolve(__dirname, 'dist/client/index.html'), 'utf-8');
+        // @ts-expect-error: dist bundle has no type declarations until after first build
         render = (await import('./dist/server/entry-server.js')).render as RenderFn;
       }
 
