@@ -24,10 +24,14 @@ A monorepo containing a VueJS front end and Go REST API, contract-tested with Pa
 
 ## Node version
 
-This project requires Node **24.14.0**. Use nvm to switch:
+This project requires the node version specified in `.nvmrc`. Install and activate it with [nvm](https://github.com/nvm-sh/nvm):
 
 ```bash
-nvm use
+# Install nvm (if not already installed)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+
+# Install and use the required Node version
+nvm install
 ```
 
 ## Workspaces
@@ -42,7 +46,7 @@ nvm use
 
 ```bash
 # Install Node version
-nvm use
+nvm install
 
 # Install all workspace dependencies
 pnpm install
