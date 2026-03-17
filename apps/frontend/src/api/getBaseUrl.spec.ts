@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { getBaseUrl } from './getBaseUrl';
-
-type WindowWithState = Window & { __INITIAL_STATE__?: { apiBaseUrl?: string } };
+import type { WindowWithState } from '@/composables/useSSRContext';
 
 describe('getBaseUrl (client)', () => {
   beforeEach(() => {

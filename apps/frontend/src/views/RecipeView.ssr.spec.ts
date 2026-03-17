@@ -1,6 +1,6 @@
 import { vi, describe, it, expect, afterEach } from 'vitest';
 import { renderToString } from '@vue/server-renderer';
-import { createSSRApp, defineComponent, h } from 'vue';
+import { createSSRApp, defineComponent, h, type VNode } from 'vue';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import RecipeView from './RecipeView.vue';
 import type { SSRContext } from '@/composables/useSSRContext';
@@ -21,11 +21,14 @@ const mockRecipe = {
 
 afterEach(() => vi.clearAllMocks());
 
-const renderRecipeView = (ssrCtx?: SSRContext, recipeId = 'sourdough-boule') => {
+const renderRecipeView = async (
+  ssrCtx?: SSRContext,
+  recipeId = 'sourdough-boule',
+): Promise<string> => {
   const app = createSSRApp(
     defineComponent({
       setup() {
-        return () => h(RecipeView);
+        return (): VNode => h(RecipeView);
       },
     }),
   );
@@ -40,7 +43,9 @@ const renderRecipeView = (ssrCtx?: SSRContext, recipeId = 'sourdough-boule') => 
 
   router.push(`/recipes/${recipeId}`);
 
-  return router.isReady().then(() => renderToString(app));
+  await router.isReady();
+
+  return await renderToString(app);
 };
 
 describe('RecipeView SSR', () => {

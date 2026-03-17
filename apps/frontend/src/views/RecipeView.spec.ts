@@ -3,8 +3,7 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import RecipeView from './RecipeView.vue';
 import * as fetchRecipeModule from '@/api/fetchRecipe';
-
-type WindowWithState = Window & { __INITIAL_STATE__?: Record<string, unknown> };
+import type { WindowWithState } from '@/composables/useSSRContext';
 type Wrapper = ReturnType<typeof mount<typeof RecipeView>>;
 
 vi.mock('@/api/fetchRecipe');

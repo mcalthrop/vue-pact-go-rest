@@ -12,33 +12,33 @@ const apiBaseUrl = (process.env.API_BASE_URL ?? 'http://localhost:8080').replace
 
 type RenderFn = (url: string, ssrCtx: SSRContext) => Promise<string>;
 
-const createServer = async () => {
+const createServer = async (): Promise<void> => {
   const app = express();
   let vite: ViteDevServer | undefined;
 
-  if (!isProd) {
+  if (isProd) {
+    const sirv = (await import('sirv')).default;
+    app.use(sirv(resolve(__dirname, 'dist/client'), { extensions: [] }));
+  } else {
     const { createServer: createViteServer } = await import('vite');
     vite = await createViteServer({ server: { middlewareMode: true }, appType: 'custom' });
     app.use(vite.middlewares);
-  } else {
-    const sirv = (await import('sirv')).default;
-    app.use(sirv(resolve(__dirname, 'dist/client'), { extensions: [] }));
   }
 
-  app.use('*', async (req, res) => {
+  app.use('/{*path}', async (req, res) => {
     const url = req.originalUrl;
     try {
       let template: string;
       let render: RenderFn;
 
-      if (!isProd) {
-        template = readFileSync(resolve(__dirname, 'index.html'), 'utf-8');
-        template = await vite!.transformIndexHtml(url, template);
-        render = (await vite!.ssrLoadModule('/src/entry-server.ts')).render as RenderFn;
-      } else {
+      if (isProd) {
         template = readFileSync(resolve(__dirname, 'dist/client/index.html'), 'utf-8');
         // @ts-expect-error: dist bundle has no type declarations until after first build
         render = (await import('./dist/server/entry-server.js')).render as RenderFn;
+      } else {
+        template = readFileSync(resolve(__dirname, 'index.html'), 'utf-8');
+        template = await vite!.transformIndexHtml(url, template);
+        render = (await vite!.ssrLoadModule('/src/entry-server.ts')).render as RenderFn;
       }
 
       const ssrCtx: SSRContext = { apiBaseUrl };
@@ -46,7 +46,7 @@ const createServer = async () => {
       const stateScript = `<script>window.__INITIAL_STATE__=${JSON.stringify(ssrCtx)}</script>`;
       const html = template
         .replace('<!--ssr-outlet-->', appHtml)
-        .replace('</head>', `${stateScript}</head>`);
+        .replace('<!--ssr-state-->', stateScript);
 
       res
         .status(ssrCtx.statusCode ?? 200)

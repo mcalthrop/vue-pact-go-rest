@@ -1,4 +1,4 @@
-type WindowWithState = Window & { __INITIAL_STATE__?: { apiBaseUrl?: string } };
+import type { WindowWithState } from '@/composables/useSSRContext';
 
 export const getBaseUrl = (): string => {
   if (typeof window === 'undefined') {
