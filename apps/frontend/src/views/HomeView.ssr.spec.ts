@@ -13,10 +13,13 @@ let suppressPrefetch = false;
 
 vi.mock('vue', async (importOriginal) => {
   const actual = await importOriginal<typeof import('vue')>();
+
   return {
     ...actual,
     onServerPrefetch: (cb: () => Promise<void>) => {
-      if (!suppressPrefetch) actual.onServerPrefetch(cb);
+      if (!suppressPrefetch) {
+        actual.onServerPrefetch(cb);
+      }
     },
   };
 });
@@ -41,7 +44,7 @@ afterEach(() => {
 });
 afterAll(() => mswServer.close());
 
-function renderHomeView(ssrCtx?: SSRContext) {
+const renderHomeView = (ssrCtx?: SSRContext) => {
   const app = createSSRApp(
     defineComponent({
       setup() {
@@ -54,9 +57,12 @@ function renderHomeView(ssrCtx?: SSRContext) {
     routes: [{ path: '/', component: HomeView }],
   });
   app.use(router);
-  if (ssrCtx) app.provide('ssrContext', ssrCtx);
+  if (ssrCtx) {
+    app.provide('ssrContext', ssrCtx);
+  }
+
   return renderToString(app);
-}
+};
 
 describe('HomeView SSR', () => {
   it('prefetches recipes and stores them in ssrContext', async () => {

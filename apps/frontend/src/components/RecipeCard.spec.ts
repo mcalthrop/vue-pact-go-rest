@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import RecipeCard from './RecipeCard.vue';
-import { getBaseUrl } from '@/api/baseUrl';
+import { getBaseUrl } from '@/api/getBaseUrl';
 
 const router = createRouter({
   history: createMemoryHistory(),

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import { getBaseUrl } from '@/api/baseUrl';
+import { getBaseUrl } from '@/api/getBaseUrl';
 import type { RecipeSummary } from '@/api/fetchRecipes';
 
 defineProps<{ recipe: RecipeSummary }>();
 
-function resolveImageUrl(photoUrl: string): string {
+const resolveImageUrl = (photoUrl: string): string => {
   return new URL(photoUrl, getBaseUrl()).href;
-}
+};
 </script>
 
 <template>

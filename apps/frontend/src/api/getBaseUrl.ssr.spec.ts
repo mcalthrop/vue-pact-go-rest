@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { getBaseUrl } from './baseUrl';
+import { getBaseUrl } from './getBaseUrl';
 
 type GlobalWithProcess = { process?: { env?: Record<string, string | undefined> } };
 
-function setProcess(value: GlobalWithProcess['process']) {
+const setProcess = (value: GlobalWithProcess['process']): void => {
   (globalThis as unknown as GlobalWithProcess).process = value;
-}
+};
 
 describe('getBaseUrl (server)', () => {
   let savedProcess: GlobalWithProcess['process'];

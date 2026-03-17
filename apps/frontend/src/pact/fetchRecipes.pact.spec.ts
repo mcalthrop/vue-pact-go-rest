@@ -8,7 +8,7 @@ import { fetchRecipes } from '@/api/fetchRecipes';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Point the API client at the Pact mock server during executeTest.
-vi.mock('@/api/baseUrl', () => ({
+vi.mock('@/api/getBaseUrl', () => ({
   getBaseUrl: () =>
     (globalThis as { __pactMockUrl?: string }).__pactMockUrl ?? 'http://localhost:8080',
 }));

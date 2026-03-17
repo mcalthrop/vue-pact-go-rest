@@ -13,7 +13,9 @@ const loading = ref(ssrCtx?.recipes == null);
 onServerPrefetch(async () => {
   try {
     recipes.value = await fetchRecipes();
-    if (ssrCtx) ssrCtx.recipes = recipes.value;
+    if (ssrCtx) {
+      ssrCtx.recipes = recipes.value;
+    }
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Failed to load recipes';
   } finally {
@@ -22,7 +24,10 @@ onServerPrefetch(async () => {
 });
 
 onMounted(async () => {
-  if (ssrCtx?.recipes != null) return;
+  if (ssrCtx?.recipes != null) {
+    return;
+  }
+
   try {
     recipes.value = await fetchRecipes();
   } catch (e) {

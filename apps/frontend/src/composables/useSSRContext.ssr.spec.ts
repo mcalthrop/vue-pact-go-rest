@@ -2,6 +2,7 @@ import { vi, describe, it, expect } from 'vitest';
 
 vi.mock('vue', async (importOriginal) => {
   const actual = await importOriginal<typeof import('vue')>();
+
   return { ...actual, inject: vi.fn() };
 });
 

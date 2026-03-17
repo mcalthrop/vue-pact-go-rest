@@ -21,7 +21,7 @@ const mockRecipe = {
 
 afterEach(() => vi.clearAllMocks());
 
-function renderRecipeView(ssrCtx?: SSRContext, recipeId = 'sourdough-boule') {
+const renderRecipeView = (ssrCtx?: SSRContext, recipeId = 'sourdough-boule') => {
   const app = createSSRApp(
     defineComponent({
       setup() {
@@ -34,10 +34,14 @@ function renderRecipeView(ssrCtx?: SSRContext, recipeId = 'sourdough-boule') {
     routes: [{ path: '/recipes/:id', component: RecipeView }],
   });
   app.use(router);
-  if (ssrCtx) app.provide('ssrContext', ssrCtx);
+  if (ssrCtx) {
+    app.provide('ssrContext', ssrCtx);
+  }
+
   router.push(`/recipes/${recipeId}`);
+
   return router.isReady().then(() => renderToString(app));
-}
+};
 
 describe('RecipeView SSR', () => {
   it('prefetches recipe and stores it in ssrContext', async () => {

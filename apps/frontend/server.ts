@@ -12,7 +12,7 @@ const apiBaseUrl = (process.env.API_BASE_URL ?? 'http://localhost:8080').replace
 
 type RenderFn = (url: string, ssrCtx: SSRContext) => Promise<string>;
 
-async function createServer() {
+const createServer = async () => {
   const app = express();
   let vite: ViteDevServer | undefined;
 
@@ -61,6 +61,6 @@ async function createServer() {
   app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
   });
-}
+};
 
 createServer();

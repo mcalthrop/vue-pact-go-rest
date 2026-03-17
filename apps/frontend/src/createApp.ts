@@ -4,7 +4,7 @@ import App from './App.vue';
 import HomeView from './views/HomeView.vue';
 import RecipeView from './views/RecipeView.vue';
 
-export function createApp(isSSR = false) {
+export const createApp = (isSSR = false) => {
   const app = isSSR ? createSSRApp(App) : createVueApp(App);
   const router = createRouter({
     history: isSSR ? createMemoryHistory() : createWebHistory(import.meta.env.BASE_URL),
@@ -14,5 +14,6 @@ export function createApp(isSSR = false) {
     ],
   });
   app.use(router);
+
   return { app, router };
-}
+};

@@ -1,12 +1,13 @@
 import type { components } from '@/types/api.gen';
-import { getBaseUrl } from './baseUrl';
+import { getBaseUrl } from './getBaseUrl';
 
 export type Recipe = components['schemas']['Recipe'];
 
-export async function fetchRecipe(id: string): Promise<Recipe> {
+export const fetchRecipe = async (id: string): Promise<Recipe> => {
   const res = await fetch(`${getBaseUrl()}/recipes/${encodeURIComponent(id)}`);
   if (!res.ok) {
     throw new Error(`fetchRecipe failed: ${res.status}`);
   }
+
   return res.json() as Promise<Recipe>;
-}
+};
