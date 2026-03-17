@@ -47,6 +47,14 @@ For example:
 - Copilot [flagged the use of a deprecated transitive dependency](https://github.com/mcalthrop/vue-pact-go-rest/pull/2#discussion_r2924559176); I instructed Claude to [raise a new PR](https://github.com/mcalthrop/vue-pact-go-rest/pull/3) to address the issue.
 - Copilot flagged that [serving a directory with `http.FileServer` enables directory listings](https://github.com/mcalthrop/vue-pact-go-rest/pull/30#discussion_r2940933659).
 
+## Decisions
+
+- **No SSR**:
+  - Planned a Vue SSR refactor using Vite SSR + a custom Express server
+  - Doing SSR with plain Vue.js requires substantial boilerplate
+  - The idiomatic solution is Nuxt.js, but that would mean migrating away from Vue.js
+  - Since the goal is to stay with Vue.js, SSR was dropped
+
 ## Learnings
 
 - Had to ask Claude to generate types from OpenAPI spec rather than hand-coding them – for both front end and API
