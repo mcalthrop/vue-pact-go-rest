@@ -104,6 +104,14 @@ describe('HomeView SSR', () => {
     expect(html).toContain('Classic Sourdough Boule');
   });
 
+  it('renders error without ssrContext provided', async () => {
+    vi.mocked(fetchRecipesModule.fetchRecipes).mockRejectedValue(new Error('Network error'));
+
+    const html = await renderHomeView();
+
+    expect(html).toContain('Network error');
+  });
+
   it('renders loading state when prefetch is suppressed', async () => {
     suppressPrefetch = true;
     const ssrCtx: SSRContext = { apiBaseUrl: 'http://localhost:8080' };
