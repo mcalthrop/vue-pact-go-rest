@@ -42,11 +42,8 @@ func TestPactProviderVerification(t *testing.T) {
 		BrokerUsername: envOrDefault("PACT_BROKER_USERNAME", "pact"),
 		BrokerPassword: envOrDefault("PACT_BROKER_PASSWORD", "pact"),
 
-		ConsumerVersionSelectors: []provider.Selector{
-			&provider.ConsumerVersionSelector{MainBranch: true},
-			&provider.ConsumerVersionSelector{Branch: os.Getenv("PACT_PROVIDER_BRANCH")},
-		},
-		FailIfNoPactsFound: true,
+		ConsumerVersionSelectors: consumerVersionSelectors(),
+		FailIfNoPactsFound:       true,
 
 		StateHandlers: models.StateHandlers{
 			"recipes exist":                        noopStateHandler,
@@ -61,6 +58,16 @@ func TestPactProviderVerification(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+func consumerVersionSelectors() []provider.Selector {
+	selectors := []provider.Selector{
+		&provider.ConsumerVersionSelector{MainBranch: true},
+	}
+	if branch := os.Getenv("PACT_PROVIDER_BRANCH"); branch != "" {
+		selectors = append(selectors, &provider.ConsumerVersionSelector{Branch: branch})
+	}
+	return selectors
 }
 
 func noopStateHandler(_ bool, _ models.ProviderState) (models.ProviderStateResponse, error) {

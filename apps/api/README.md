@@ -7,6 +7,7 @@ Go REST API serving bread recipe data, driven by the OpenAPI spec at [`openapi/o
 - [Go](https://go.dev/) >= 1.25
 - [golangci-lint](https://golangci-lint.run/) v2 — for linting (`brew install golangci-lint`)
 - [oapi-codegen](https://github.com/oapi-codegen/oapi-codegen) v2 — for regenerating Go types from the OpenAPI spec (no separate install needed; `make generate` uses `go tool` with the version pinned in `go.mod`)
+- `libpact_ffi` — native library required for Pact provider verification (one-time install; see [Pact provider verification](#pact-provider-verification) below)
 
 ## Directory structure
 
@@ -83,4 +84,20 @@ Install golangci-lint (see [installation guide](https://golangci-lint.run/usage/
 
 ```bash
 make lint
+```
+
+## Pact provider verification
+
+The provider verification test requires the native `libpact_ffi` library. Install it once from `apps/api/`:
+
+```bash
+PACT_LIB_DIR="${HOME}/pact-lib"
+go run github.com/pact-foundation/pact-go/v2 install --libDir "${PACT_LIB_DIR}"
+sudo cp "${PACT_LIB_DIR}"/libpact_ffi* /usr/local/lib/
+```
+
+Then run verification (requires the Pact Broker to be running — see repo root README):
+
+```bash
+make pact:provider-verify
 ```
