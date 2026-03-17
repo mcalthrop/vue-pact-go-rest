@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 pnpm lint
 pnpm format:check
