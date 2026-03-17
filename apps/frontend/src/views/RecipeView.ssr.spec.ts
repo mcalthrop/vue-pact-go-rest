@@ -21,7 +21,10 @@ const mockRecipe = {
 
 afterEach(() => vi.clearAllMocks());
 
-const renderRecipeView = (ssrCtx?: SSRContext, recipeId = 'sourdough-boule'): Promise<string> => {
+const renderRecipeView = async (
+  ssrCtx?: SSRContext,
+  recipeId = 'sourdough-boule',
+): Promise<string> => {
   const app = createSSRApp(
     defineComponent({
       setup() {
@@ -40,7 +43,9 @@ const renderRecipeView = (ssrCtx?: SSRContext, recipeId = 'sourdough-boule'): Pr
 
   router.push(`/recipes/${recipeId}`);
 
-  return router.isReady().then(() => renderToString(app));
+  await router.isReady();
+
+  return await renderToString(app);
 };
 
 describe('RecipeView SSR', () => {
