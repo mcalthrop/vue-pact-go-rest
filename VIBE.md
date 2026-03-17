@@ -54,4 +54,4 @@ For example:
 - I took the approach of keeping my suggested changes to a minimum so that I can better evaluate what Claude produced at the end of the process
 - Claude is costing me $20-30 per day
 - I had to make quite a few changes to the code that Claude generated, and updated the plan along the way – but I almost always prompted Claude to make those changes, with a few rare exceptions
-- Things were going pretty smoothly until I got to the task to write the CI pipelines: I had to prompt Claude make a lot of changes to the initial code that Claude generated
+- Things were going pretty smoothly until I got to the task to write the CI pipelines: I had to prompt Claude to make a lot of changes to the initial code that Claude generated
