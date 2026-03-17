@@ -8,7 +8,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U pact"]
+      test: ['CMD-SHELL', 'pg_isready -U pact']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -16,7 +16,7 @@ services:
   pact-broker:
     image: pactfoundation/pact-broker:2.137.0-pactbroker2.118.0
     ports:
-      - "9292:9292"
+      - '9292:9292'
     depends_on:
       postgres:
         condition: service_healthy
@@ -24,8 +24,19 @@ services:
       PACT_BROKER_DATABASE_URL: postgres://pact:pact@postgres/pact
       PACT_BROKER_BASIC_AUTH_USERNAME: pact
       PACT_BROKER_BASIC_AUTH_PASSWORD: pact
-      PACT_BROKER_ALLOW_PUBLIC_READ: "true"
+      PACT_BROKER_ALLOW_PUBLIC_READ: 'true'
+      PACT_BROKER_PUBLIC_HEARTBEAT: 'true'
       PACT_BROKER_BASE_URL: http://localhost:9292
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'wget --quiet --output-document=- http://localhost:9292/diagnostic/status/heartbeat || exit 1',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
 volumes:
   postgres_data:

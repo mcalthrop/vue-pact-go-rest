@@ -20,7 +20,7 @@ A monorepo containing a VueJS front end and Go REST API, contract-tested with Pa
 - [nvm](https://github.com/nvm-sh/nvm) — Node version manager
 - [pnpm](https://pnpm.io/) >= 10.18.1
 - [Go](https://go.dev/) >= 1.25
-- [Docker](https://www.docker.com/) — for the self-hosted Pact Broker
+- [Docker](https://www.docker.com/) — runs the self-hosted Pact Broker (see [Pact contract testing](#pact-contract-testing))
 
 ## Node version
 
@@ -98,34 +98,7 @@ pnpm openapi:validate
 
 ## Pact contract testing
 
-> The Pact Broker must be running (see [Pact Broker](#pact-broker) below) before running publish or verify commands.
-
-Consumer tests generate pact files and publish them to the broker:
-
-```bash
-pnpm pact:consumer-test
-pnpm pact:consumer-publish
-```
-
-Provider verification fetches pacts from the broker and verifies the running API:
-
-```bash
-pnpm pact:provider-verify
-```
-
-## Pact Broker
-
-The self-hosted Pact Broker runs via Docker Compose (PostgreSQL + Pact Broker):
-
-```bash
-# Start broker in the background
-docker compose up --detach
-
-# Check it is healthy
-docker compose ps
-```
-
-The broker is available at `http://localhost:9292`.
+The self-hosted Pact Broker runs via Docker Compose (PostgreSQL + Pact Broker) and must be running before consumer publish or provider verify commands are executed.
 
 | Setting  | Value                   |
 | -------- | ----------------------- |
@@ -133,11 +106,28 @@ The broker is available at `http://localhost:9292`.
 | Username | `pact`                  |
 | Password | `pact`                  |
 
-Note: These credentials are development-only defaults for local Docker Compose usage. Do not reuse them in shared, staging, or production environments; configure real credentials via environment variables (for example via a `.env` file used by `docker compose`).
-Public read access is enabled so provider verification can fetch pacts without credentials. Write operations (publish) require the username/password above.
+> These credentials are development-only defaults. Do not reuse them in shared or production environments.
+
+To run the full consumer-publish + provider-verify cycle in one command:
 
 ```bash
-# Stop and remove containers (data is preserved in the postgres_data volume)
+pnpm pact:verify
+```
+
+Each separate step:
+
+```bash
+# Start the broker
+docker compose up --detach
+
+# Generate and publish consumer pacts
+pnpm pact:consumer-test
+pnpm pact:consumer-publish
+
+# Verify the provider against published pacts
+pnpm pact:provider-verify
+
+# Stop the broker (data preserved in postgres_data volume)
 docker compose down
 
 # Stop and wipe all data
