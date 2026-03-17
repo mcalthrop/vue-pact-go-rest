@@ -1,3 +1,4 @@
+import escapeHtml from 'escape-html';
 import express from 'express';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -54,7 +55,10 @@ const createServer = async (): Promise<void> => {
         .send(html);
     } catch (e) {
       vite?.ssrFixStacktrace(e as Error);
-      res.status(500).send((e as Error).message);
+      res
+        .status(500)
+        .type('html')
+        .send(escapeHtml((e as Error).message));
     }
   });
 

@@ -30,6 +30,9 @@ importers:
       '@vue/server-renderer':
         specifier: 3.5.30
         version: 3.5.30(vue@3.5.30(typescript@5.9.3))
+      escape-html:
+        specifier: ^1.0.3
+        version: 1.0.3
       express:
         specifier: 5.2.1
         version: 5.2.1
@@ -52,6 +55,9 @@ importers:
       '@tsconfig/node24':
         specifier: 24.0.4
         version: 24.0.4
+      '@types/escape-html':
+        specifier: ^1.0.4
+        version: 1.0.4
       '@types/express':
         specifier: 5.0.6
         version: 5.0.6
@@ -1901,6 +1907,12 @@ packages:
     resolution:
       {
         integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==,
+      }
+
+  '@types/escape-html@1.0.4':
+    resolution:
+      {
+        integrity: sha512-qZ72SFTgUAZ5a7Tj6kf2SHLetiH5S6f8G5frB2SPQ3EyF02kxdyBFf4Tz4banE3xCgGnKgWLt//a6VuYHKYJTg==,
       }
 
   '@types/esrecurse@4.3.1':
@@ -7564,6 +7576,8 @@ snapshots:
       '@types/node': 24.12.0
 
   '@types/deep-eql@4.0.2': {}
+
+  '@types/escape-html@1.0.4': {}
 
   '@types/esrecurse@4.3.1': {}
 
