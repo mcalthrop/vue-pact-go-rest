@@ -73,6 +73,9 @@ pnpm format:check
 
 # Start dev servers
 pnpm dev
+
+# Build and start production servers (API on :8080, frontend on :4173)
+pnpm prod
 ```
 
 ## Code generation

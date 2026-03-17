@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "build-only": "vite build",
-    "preview": "vite preview",
+    "prod": "vite preview",
     "type-check": "vue-tsc --build",
     "test": "vitest run",
     "coverage": "vitest run --coverage --project unit",
