@@ -7,8 +7,8 @@ import { useSSRContext } from '@/composables/useSSRContext';
 
 const ssrCtx = useSSRContext();
 const recipes = ref<RecipeSummary[]>((ssrCtx?.recipes as RecipeSummary[] | undefined) ?? []);
-const error = ref<string | null>(null);
-const loading = ref(ssrCtx?.recipes == null);
+const error = ref<string | null>(ssrCtx?.error ?? null);
+const loading = ref(ssrCtx?.recipes == null && ssrCtx?.error == null);
 
 onServerPrefetch(async () => {
   try {
@@ -17,14 +17,18 @@ onServerPrefetch(async () => {
       ssrCtx.recipes = recipes.value;
     }
   } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Failed to load recipes';
+    const message = e instanceof Error ? e.message : 'Failed to load recipes';
+    error.value = message;
+    if (ssrCtx) {
+      ssrCtx.error = message;
+    }
   } finally {
     loading.value = false;
   }
 });
 
 onMounted(async () => {
-  if (ssrCtx?.recipes != null) {
+  if (ssrCtx?.recipes != null || ssrCtx?.error != null) {
     return;
   }
 

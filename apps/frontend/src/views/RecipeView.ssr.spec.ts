@@ -70,6 +70,7 @@ describe('RecipeView SSR', () => {
 
     expect(ssrCtx.recipe).toBeUndefined();
     expect(ssrCtx.statusCode).toBe(404);
+    expect(ssrCtx.error).toBe('fetchRecipe failed: 404');
     expect(html).toContain('fetchRecipe failed: 404');
   });
 
@@ -80,6 +81,7 @@ describe('RecipeView SSR', () => {
     const html = await renderRecipeView(ssrCtx);
 
     expect(ssrCtx.statusCode).toBe(404);
+    expect(ssrCtx.error).toBe('Failed to load recipe');
     expect(html).toContain('Failed to load recipe');
   });
 

@@ -15,10 +15,15 @@ type RenderFn = (url: string, ssrCtx: SSRContext) => Promise<string>;
 const createServer = async (): Promise<void> => {
   const app = express();
   let vite: ViteDevServer | undefined;
+  let prodTemplate: string | undefined;
+  let prodRender: RenderFn | undefined;
 
   if (isProd) {
     const sirv = (await import('sirv')).default;
     app.use(sirv(resolve(__dirname, 'dist/client'), { extensions: [] }));
+    prodTemplate = readFileSync(resolve(__dirname, 'dist/client/index.html'), 'utf-8');
+    // @ts-expect-error: dist bundle has no type declarations until after first build
+    prodRender = (await import('./dist/server/entry-server.js')).render as RenderFn;
   } else {
     const { createServer: createViteServer } = await import('vite');
     vite = await createViteServer({ server: { middlewareMode: true }, appType: 'custom' });
@@ -27,14 +32,14 @@ const createServer = async (): Promise<void> => {
 
   app.use('/{*path}', async (req, res) => {
     const url = req.originalUrl;
+
     try {
       let template: string;
       let render: RenderFn;
 
       if (isProd) {
-        template = readFileSync(resolve(__dirname, 'dist/client/index.html'), 'utf-8');
-        // @ts-expect-error: dist bundle has no type declarations until after first build
-        render = (await import('./dist/server/entry-server.js')).render as RenderFn;
+        template = prodTemplate!;
+        render = prodRender!;
       } else {
         template = readFileSync(resolve(__dirname, 'index.html'), 'utf-8');
         template = await vite!.transformIndexHtml(url, template);
@@ -43,7 +48,8 @@ const createServer = async (): Promise<void> => {
 
       const ssrCtx: SSRContext = { apiBaseUrl };
       const appHtml = await render(url, ssrCtx);
-      const stateScript = `<script>window.__INITIAL_STATE__=${JSON.stringify(ssrCtx)}</script>`;
+      const safeJson = JSON.stringify(ssrCtx).replace(/</g, '\\u003c').replace(/>/g, '\\u003e');
+      const stateScript = `<script>window.__INITIAL_STATE__=${safeJson}</script>`;
       const html = template
         .replace('<!--ssr-outlet-->', appHtml)
         .replace('<!--ssr-state-->', stateScript);
@@ -54,7 +60,8 @@ const createServer = async (): Promise<void> => {
         .send(html);
     } catch (e) {
       vite?.ssrFixStacktrace(e as Error);
-      res.status(500).send((e as Error).message);
+      const message = isProd ? 'Internal Server Error' : (e as Error).message;
+      res.status(500).type('text/plain').send(message);
     }
   });
 

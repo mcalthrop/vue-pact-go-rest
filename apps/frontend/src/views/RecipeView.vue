@@ -13,8 +13,8 @@ const resolveImageUrl = (photoUrl: string): string => {
 const ssrCtx = useSSRContext();
 const route = useRoute();
 const recipe = ref<Recipe | null>((ssrCtx?.recipe as Recipe | null | undefined) ?? null);
-const error = ref<string | null>(null);
-const loading = ref(ssrCtx?.recipe == null);
+const error = ref<string | null>(ssrCtx?.error ?? null);
+const loading = ref(ssrCtx?.recipe == null && ssrCtx?.error == null);
 
 onServerPrefetch(async () => {
   try {
@@ -23,11 +23,12 @@ onServerPrefetch(async () => {
       ssrCtx.recipe = recipe.value;
     }
   } catch (e) {
+    const message = e instanceof Error ? e.message : 'Failed to load recipe';
+    error.value = message;
     if (ssrCtx) {
       ssrCtx.statusCode = 404;
+      ssrCtx.error = message;
     }
-
-    error.value = e instanceof Error ? e.message : 'Failed to load recipe';
   } finally {
     loading.value = false;
   }
@@ -47,7 +48,7 @@ const loadRecipe = async (id: string): Promise<void> => {
 };
 
 onMounted(() => {
-  if (ssrCtx?.recipe != null) {
+  if (ssrCtx?.recipe != null || ssrCtx?.error != null) {
     return;
   }
 

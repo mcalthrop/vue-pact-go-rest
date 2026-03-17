@@ -3,6 +3,7 @@ import { inject } from 'vue';
 export interface SSRContext {
   apiBaseUrl: string;
   statusCode?: number;
+  error?: string;
   [key: string]: unknown;
 }
 

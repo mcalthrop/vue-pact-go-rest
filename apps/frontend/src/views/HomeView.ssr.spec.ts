@@ -82,6 +82,7 @@ describe('HomeView SSR', () => {
     const html = await renderHomeView(ssrCtx);
 
     expect(ssrCtx.recipes).toBeUndefined();
+    expect(ssrCtx.error).toBe('Network error');
     expect(html).toContain('Network error');
   });
 
@@ -91,6 +92,7 @@ describe('HomeView SSR', () => {
 
     const html = await renderHomeView(ssrCtx);
 
+    expect(ssrCtx.error).toBe('Failed to load recipes');
     expect(html).toContain('Failed to load recipes');
   });
 
