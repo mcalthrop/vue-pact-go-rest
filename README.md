@@ -117,8 +117,8 @@ pnpm pact:verify
 Each separate step:
 
 ```bash
-# Start the broker (waits until healthy)
-docker compose up --detach --wait
+# Start the broker
+docker compose up --detach
 
 # Generate and publish consumer pacts
 pnpm pact:consumer-test
