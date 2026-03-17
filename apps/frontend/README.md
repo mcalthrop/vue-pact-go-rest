@@ -21,7 +21,7 @@ All commands are run from `apps/frontend/`.
 | --------------------- | ------------------------------------------------------------------------------------------------- |
 | `pnpm dev`            | Start the Vite dev server (hot-reload)                                                            |
 | `pnpm build`          | Type-check and compile for production                                                             |
-| `pnpm preview`        | Preview the production build locally                                                              |
+| `pnpm prod`           | Build and serve the production build (run from repo root to start API and frontend together)      |
 | `pnpm test`           | Run unit tests once (Vitest)                                                                      |
 | `pnpm test:watch`     | Run unit tests in watch mode                                                                      |
 | `pnpm type-check`     | Run `vue-tsc` type checking                                                                       |
@@ -56,4 +56,13 @@ pnpm test
 ```bash
 pnpm build
 # Output in dist/
+```
+
+## Running in production
+
+Run both the API and frontend together from the repo root:
+
+```bash
+pnpm prod
+# API at http://localhost:8080, frontend at http://localhost:4173
 ```
