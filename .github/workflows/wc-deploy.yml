@@ -27,7 +27,7 @@ jobs:
         working-directory: apps/api
         run: |
           npm install --global @railway/cli
-          railway up -s api --detach
+          railway up --service api --detach
 
       - uses: pnpm/action-setup@v4.4.0
 
