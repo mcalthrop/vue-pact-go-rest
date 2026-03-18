@@ -28,7 +28,8 @@ export default defineConfigWithVueTs(
 
   ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
 
-  // Must be last — disables ESLint rules that conflict with Prettier
+  // Disables ESLint rules that conflict with Prettier; must come before any
+  // rules that intentionally re-enable formatting-style rules (e.g. padding-line)
   pluginPrettier,
 
   // Padding-line rules — placed after Prettier to avoid being disabled
