@@ -24,10 +24,11 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          RAILWAY_SERVICE: vue-pact-go-rest
         working-directory: apps/api
         run: |
           npm install --global @railway/cli
-          railway up --service vue-pact-go-rest --detach
+          railway up --service "${RAILWAY_SERVICE}" --detach
 
       - uses: pnpm/action-setup@v4.4.0
 

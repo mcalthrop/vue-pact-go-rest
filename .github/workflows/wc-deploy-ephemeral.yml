@@ -43,6 +43,9 @@ jobs:
     if: inputs.action == 'deploy'
     name: Deploy API (Railway)
     runs-on: ubuntu-latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
     outputs:
       api_url: ${{ steps.get-url.outputs.url }}
 
@@ -52,32 +55,28 @@ jobs:
       - name: Install Railway CLI
         run: npm install --global @railway/cli
 
-      - name: Create environment (if not exists)
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
-        run: |
-          CREATE_OUTPUT=$(railway environment new "${RAILWAY_ENV}" --duplicate production 2>&1)
-          EXIT_CODE=$?
-          echo "railway environment new output: ${CREATE_OUTPUT}"
-          [ "${EXIT_CODE}" -eq 0 ] || echo "${CREATE_OUTPUT}" | grep --quiet --fixed-strings "already exists"
-
       - name: Show Railway service context (debug)
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         run: |
+          set -ux
+
           echo "RAILWAY_ENV:     ${RAILWAY_ENV}"
           echo "RAILWAY_SERVICE: ${RAILWAY_SERVICE}"
-          railway whoami || true
-          railway service || true
+          railway whoami || :
+          railway service || :
+
+      - name: Create environment (if not exists)
+        run: |
+          set -ux
+
+          CREATE_OUTPUT=$(railway environment new "${RAILWAY_ENV}" --duplicate production 2>&1)
+          EXIT_CODE=$?
+          [[ "${EXIT_CODE}" -eq 0 ]] || echo "${CREATE_OUTPUT}" | grep --quiet --fixed-strings "already exists"
 
       - name: Deploy to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         working-directory: apps/api
         run: |
+          set -ux
+
           railway up \
             --environment "${RAILWAY_ENV}" \
             --service "${RAILWAY_SERVICE}" \
@@ -85,10 +84,9 @@ jobs:
 
       - name: Get Railway URL
         id: get-url
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         run: |
+          set -ux
+
           DOMAIN=$(railway domain --environment "${RAILWAY_ENV}" --service "${RAILWAY_SERVICE}")
           echo "url=https://${DOMAIN}" >> "$GITHUB_OUTPUT"
 
