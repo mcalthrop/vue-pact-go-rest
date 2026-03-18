@@ -59,8 +59,10 @@ jobs:
         run: |
           set -ux
 
-          echo "RAILWAY_ENV:     ${RAILWAY_ENV}"
-          echo "RAILWAY_SERVICE: ${RAILWAY_SERVICE}"
+          railway link \
+            --project vue-pact-go-rest \
+            --service "${RAILWAY_SERVICE}" \
+            --environment "${RAILWAY_ENV}" || :
           railway whoami || :
           railway service "${RAILWAY_SERVICE}" || :
 
