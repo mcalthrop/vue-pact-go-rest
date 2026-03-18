@@ -4,7 +4,8 @@
   "packageManager": "pnpm@10.18.1",
   "engines": {
     "node": "24.14.0",
-    "pnpm": ">=10.18.1"
+    "pnpm": ">=10.18.1",
+    "npm": "please-use-pnpm"
   },
   "scripts": {
     "build": "turbo build",
