@@ -51,12 +51,14 @@ jobs:
       - name: Install Railway CLI
         run: npm install --global @railway/cli
 
-      - name: Create environment (idempotent)
+      - name: Create environment (if not exists)
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         run: |
-          railway environment new "${RAILWAY_ENV}" || :
+          if ! railway environment list | grep -qF "${RAILWAY_ENV}"; then
+            railway environment new "${RAILWAY_ENV}"
+          fi
 
       - name: Deploy to Railway
         env:
