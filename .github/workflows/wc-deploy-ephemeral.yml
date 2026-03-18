@@ -56,7 +56,7 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         run: |
-          CREATE_OUTPUT=$(railway environment new "${RAILWAY_ENV}" 2>&1) || \
+          CREATE_OUTPUT=$(railway environment new "${RAILWAY_ENV}" --duplicate production 2>&1) || \
             echo "${CREATE_OUTPUT}" | grep --quiet --fixed-strings "already exists"
 
       - name: Deploy to Railway
