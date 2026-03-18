@@ -59,10 +59,8 @@ jobs:
         run: |
           set -ux
 
-          railway link \
-            --project vue-pact-go-rest \
-            --service "${RAILWAY_SERVICE}" \
-            --environment "${RAILWAY_ENV}" || :
+          RAILWAY_TOKEN_LENGTH="${#RAILWAY_TOKEN}"
+          RAILWAY_PROJECT_ID_LENGTH="${#RAILWAY_PROJECT_ID}"
           railway whoami || :
           railway service "${RAILWAY_SERVICE}" || :
 
