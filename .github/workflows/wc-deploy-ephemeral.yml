@@ -60,10 +60,8 @@ jobs:
         run: |
           set -ux
 
-          # RAILWAY_TOKEN_LENGTH="${#RAILWAY_TOKEN}"
-          RAILWAY_API_TOKEN_LENGTH="${#RAILWAY_API_TOKEN}"
-          RAILWAY_PROJECT_ID_LENGTH="${#RAILWAY_PROJECT_ID}"
           railway whoami || :
+          railway link "${RAILWAY_PROJECT_ID}" || :
           railway service "${RAILWAY_SERVICE}" || :
 
       - name: Create environment (if not exists)
