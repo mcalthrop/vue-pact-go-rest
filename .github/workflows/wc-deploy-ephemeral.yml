@@ -35,6 +35,7 @@ on:
 
 env:
   RAILWAY_ENV: pr-${{ inputs.pr_number }}
+  RAILWAY_SERVICE: vue-pact-go-rest
 
 jobs:
   # ── Deploy API to a per-PR Railway environment ──────────────────────────────
@@ -56,8 +57,20 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         run: |
-          CREATE_OUTPUT=$(railway environment new "${RAILWAY_ENV}" --duplicate production 2>&1) || \
-            echo "${CREATE_OUTPUT}" | grep --quiet --fixed-strings "already exists"
+          CREATE_OUTPUT=$(railway environment new "${RAILWAY_ENV}" --duplicate production 2>&1)
+          EXIT_CODE=$?
+          echo "railway environment new output: ${CREATE_OUTPUT}"
+          [ "${EXIT_CODE}" -eq 0 ] || echo "${CREATE_OUTPUT}" | grep --quiet --fixed-strings "already exists"
+
+      - name: Show Railway service context (debug)
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+        run: |
+          echo "RAILWAY_ENV:     ${RAILWAY_ENV}"
+          echo "RAILWAY_SERVICE: ${RAILWAY_SERVICE}"
+          railway whoami || true
+          railway service || true
 
       - name: Deploy to Railway
         env:
@@ -67,7 +80,7 @@ jobs:
         run: |
           railway up \
             --environment "${RAILWAY_ENV}" \
-            --service vue-pact-go-rest \
+            --service "${RAILWAY_SERVICE}" \
             --detach
 
       - name: Get Railway URL
@@ -76,7 +89,7 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         run: |
-          DOMAIN=$(railway domain --environment "${RAILWAY_ENV}" --service vue-pact-go-rest)
+          DOMAIN=$(railway domain --environment "${RAILWAY_ENV}" --service "${RAILWAY_SERVICE}")
           echo "url=https://${DOMAIN}" >> "$GITHUB_OUTPUT"
 
   # ── Build and deploy frontend to Netlify ────────────────────────────────────
