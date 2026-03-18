@@ -27,7 +27,7 @@ jobs:
         working-directory: apps/api
         run: |
           npm install --global @railway/cli
-          railway up --service api --detach
+          railway up --service vue-pact-go-rest --detach
 
       - uses: pnpm/action-setup@v4.4.0
 
