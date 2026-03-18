@@ -5,6 +5,8 @@ on:
     secrets:
       RAILWAY_TOKEN:
         required: true
+      RAILWAY_PROJECT_ID:
+        required: true
       NETLIFY_AUTH_TOKEN:
         required: true
       NETLIFY_SITE_ID:
@@ -21,10 +23,11 @@ jobs:
       - name: Deploy API to Railway (production)
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         working-directory: apps/api
         run: |
           npm install --global @railway/cli
-          railway up --service api --detach
+          railway up -s api --detach
 
       - uses: pnpm/action-setup@v4.4.0
 
