@@ -61,7 +61,7 @@ jobs:
           set -ux
 
           railway whoami || :
-          railway link "${RAILWAY_PROJECT_ID}" || :
+          railway link --project "${RAILWAY_PROJECT_ID}" || :
           railway service "${RAILWAY_SERVICE}" || :
 
       - name: Create environment (if not exists)
