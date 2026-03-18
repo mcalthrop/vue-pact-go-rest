@@ -45,6 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
       RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
     outputs:
       api_url: ${{ steps.get-url.outputs.url }}
@@ -60,6 +61,7 @@ jobs:
           set -ux
 
           RAILWAY_TOKEN_LENGTH="${#RAILWAY_TOKEN}"
+          RAILWAY_API_TOKEN_LENGTH="${#RAILWAY_API_TOKEN}"
           RAILWAY_PROJECT_ID_LENGTH="${#RAILWAY_PROJECT_ID}"
           railway whoami || :
           railway service "${RAILWAY_SERVICE}" || :
