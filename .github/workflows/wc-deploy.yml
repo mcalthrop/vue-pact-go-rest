@@ -2,6 +2,13 @@ name: Deploy
 
 on:
   workflow_call:
+    secrets:
+      RAILWAY_TOKEN:
+        required: true
+      NETLIFY_AUTH_TOKEN:
+        required: true
+      NETLIFY_SITE_ID:
+        required: true
 
 jobs:
   deploy:
@@ -11,10 +18,33 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
 
-      - name: Deploy frontend
-        # TODO: choose a hosting platform (e.g. Vercel, Netlify) and add deploy step
-        run: echo "TODO deploy frontend"
+      - name: Deploy API to Railway (production)
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        working-directory: apps/api
+        run: |
+          npm install --global @railway/cli
+          railway up --service api --detach
 
-      - name: Deploy API
-        # TODO: choose a hosting platform (e.g. Fly.io, Render) and add deploy step
-        run: echo "TODO deploy API"
+      - uses: pnpm/action-setup@v4.4.0
+
+      - uses: actions/setup-node@v6.3.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build frontend
+        run: pnpm --filter frontend build-only
+
+      - name: Deploy frontend to Netlify (production)
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          pnpm exec netlify deploy \
+            --dir apps/frontend/dist \
+            --prod \
+            --message "main (${{ github.sha }})"

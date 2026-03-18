@@ -1,0 +1,262 @@
+name: Deploy Ephemeral
+
+on:
+  workflow_call:
+    inputs:
+      action:
+        description: "'deploy' or 'teardown'"
+        required: true
+        type: string
+      pr_number:
+        required: true
+        type: string
+      branch:
+        required: true
+        type: string
+      sha:
+        required: true
+        type: string
+    outputs:
+      api_url:
+        description: 'Railway API preview URL'
+        value: ${{ jobs.deploy-api.outputs.api_url }}
+      frontend_url:
+        description: 'Netlify frontend preview URL'
+        value: ${{ jobs.deploy-frontend.outputs.frontend_url }}
+    secrets:
+      RAILWAY_TOKEN:
+        required: true
+      NETLIFY_AUTH_TOKEN:
+        required: true
+      NETLIFY_SITE_ID:
+        required: true
+
+env:
+  RAILWAY_ENV: pr-${{ inputs.pr_number }}
+
+jobs:
+  # ── Deploy API to a per-PR Railway environment ──────────────────────────────
+  deploy-api:
+    if: inputs.action == 'deploy'
+    name: Deploy API (Railway)
+    runs-on: ubuntu-latest
+    outputs:
+      api_url: ${{ steps.get-url.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: Install Railway CLI
+        run: npm install --global @railway/cli
+
+      - name: Create environment (idempotent)
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway environment create "${RAILWAY_ENV}" \
+            --project-id "${RAILWAY_PROJECT_ID}" || :
+
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        working-directory: apps/api
+        run: |
+          railway up \
+            --environment "${RAILWAY_ENV}" \
+            --service api \
+            --detach
+
+      - name: Get Railway URL
+        id: get-url
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          DOMAIN=$(railway domain \
+            --environment "${RAILWAY_ENV}" \
+            --service api)
+          echo "url=https://${DOMAIN}" >> "$GITHUB_OUTPUT"
+
+  # ── Build and deploy frontend to Netlify ────────────────────────────────────
+  deploy-frontend:
+    if: inputs.action == 'deploy'
+    needs: deploy-api
+    name: Deploy frontend (Netlify)
+    runs-on: ubuntu-latest
+    outputs:
+      frontend_url: ${{ steps.netlify.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - uses: pnpm/action-setup@v4.4.0
+
+      - uses: actions/setup-node@v6.3.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build frontend
+        env:
+          VITE_API_BASE_URL: ${{ needs.deploy-api.outputs.api_url }}
+        run: pnpm --filter frontend build-only
+
+      - name: Deploy to Netlify
+        id: netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          URL=$(pnpm exec netlify deploy \
+            --dir apps/frontend/dist \
+            --message "PR #${{ inputs.pr_number }} (${{ inputs.sha }})" \
+            --json \
+            | jq -r '.deploy_url')
+          echo "url=${URL}" >> "$GITHUB_OUTPUT"
+
+  # ── Verify Pact contracts against the deployed API ──────────────────────────
+  pact-verify:
+    if: inputs.action == 'deploy'
+    needs: deploy-api
+    name: Pact verify (deployed API)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: pact
+          POSTGRES_PASSWORD: pact
+          POSTGRES_DB: pact
+        options: >-
+          --health-cmd "pg_isready -U pact"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      pact-broker:
+        image: pactfoundation/pact-broker:2.137.0-pactbroker2.118.0
+        env:
+          PACT_BROKER_DATABASE_URL: postgres://pact:pact@postgres/pact
+          PACT_BROKER_BASIC_AUTH_USERNAME: pact
+          PACT_BROKER_BASIC_AUTH_PASSWORD: pact
+          PACT_BROKER_ALLOW_PUBLIC_READ: 'true'
+          PACT_BROKER_PUBLIC_HEARTBEAT: 'true'
+          PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES: '30'
+        ports:
+          - 9292:9292
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: Wait for Pact Broker
+        uses: nick-fields/retry@v3.0.2
+        with:
+          timeout_seconds: 10
+          max_attempts: 30
+          retry_wait_seconds: 5
+          retry_on: error
+          command: wget --quiet --output-document=/dev/null http://localhost:9292/diagnostic/status/heartbeat
+
+      - uses: pnpm/action-setup@v4.4.0
+
+      - uses: actions/setup-node@v6.3.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install pnpm dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Publish Pact contracts
+        env:
+          PACT_CONSUMER_BRANCH: ${{ inputs.branch }}
+        run: pnpm pact:consumer-publish
+
+      - uses: actions/setup-go@v6.3.0
+        with:
+          go-version-file: apps/api/go.mod
+          cache-dependency-path: apps/api/go.sum
+
+      - name: Install Pact FFI library
+        working-directory: apps/api
+        run: |
+          set -ux
+
+          PACT_LIB_DIR="${HOME}/pact-lib"
+          go run github.com/pact-foundation/pact-go/v2 install --libDir "${PACT_LIB_DIR}"
+          sudo cp "${PACT_LIB_DIR}"/libpact_ffi* /usr/local/lib/
+          sudo ldconfig
+
+      - name: Verify Pact contracts against deployed API
+        env:
+          PACT_PROVIDER_BASE_URL: ${{ needs.deploy-api.outputs.api_url }}
+          PACT_PUBLISH_RESULTS: 'true'
+          PACT_PROVIDER_VERSION: ${{ inputs.sha }}
+          PACT_PROVIDER_BRANCH: ${{ inputs.branch }}
+        run: pnpm pact:provider-verify
+
+  # ── Post preview URLs as a PR comment ───────────────────────────────────────
+  comment:
+    if: inputs.action == 'deploy'
+    needs: [deploy-api, deploy-frontend]
+    name: Post preview URLs
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/github-script@v7.0.1
+        with:
+          script: |
+            const apiUrl      = '${{ needs.deploy-api.outputs.api_url }}';
+            const frontendUrl = '${{ needs.deploy-frontend.outputs.frontend_url }}';
+            const body = [
+              '## Ephemeral Environment',
+              '',
+              '| Service  | URL |',
+              '| -------- | --- |',
+              `| Frontend | ${frontendUrl} |`,
+              `| API      | ${apiUrl} |`,
+            ].join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              issue_number: Number('${{ inputs.pr_number }}'),
+            });
+
+            const existing = comments.find(c => c.body.includes('## Ephemeral Environment'));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner:      context.repo.owner,
+                repo:       context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner:        context.repo.owner,
+                repo:         context.repo.repo,
+                issue_number: Number('${{ inputs.pr_number }}'),
+                body,
+              });
+            }
+
+  # ── Tear down the Railway environment when the PR is closed ─────────────────
+  teardown:
+    if: inputs.action == 'teardown'
+    name: Tear down Railway environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Railway CLI
+        run: npm install --global @railway/cli
+
+      - name: Delete Railway environment
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway environment delete "${RAILWAY_ENV}" \
+            --project-id "${RAILWAY_PROJECT_ID}" \
+            --yes

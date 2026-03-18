@@ -18,12 +18,19 @@ import (
 )
 
 func TestPactProviderVerification(t *testing.T) {
-	imgFS, err := fs.Sub(apistatic.Images, "images")
-	if err != nil {
-		t.Fatalf("fs.Sub: %v", err)
+	var providerBaseURL string
+
+	if externalURL := os.Getenv("PACT_PROVIDER_BASE_URL"); externalURL != "" {
+		providerBaseURL = externalURL
+	} else {
+		imgFS, err := fs.Sub(apistatic.Images, "images")
+		if err != nil {
+			t.Fatalf("fs.Sub: %v", err)
+		}
+		srv := httptest.NewServer(newServer(imgFS))
+		defer srv.Close()
+		providerBaseURL = srv.URL
 	}
-	srv := httptest.NewServer(newServer(imgFS))
-	defer srv.Close()
 
 	publishResults, _ := strconv.ParseBool(os.Getenv("PACT_PUBLISH_RESULTS"))
 
@@ -36,7 +43,7 @@ func TestPactProviderVerification(t *testing.T) {
 
 	err = verifier.VerifyProvider(t, provider.VerifyRequest{
 		Provider:        "go-api",
-		ProviderBaseURL: srv.URL,
+		ProviderBaseURL: providerBaseURL,
 
 		BrokerURL:      envOrDefault("PACT_BROKER_URL", "http://localhost:9292"),
 		BrokerUsername: envOrDefault("PACT_BROKER_USERNAME", "pact"),
