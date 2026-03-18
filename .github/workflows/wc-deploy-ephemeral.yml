@@ -62,13 +62,6 @@ jobs:
 
           railway whoami || :
 
-      - name: Create environment (if not exists)
-        run: |
-          set -ux
-
-          CREATE_OUTPUT=$(railway environment new "${RAILWAY_ENV}" --duplicate production 2>&1) || \
-            echo "${CREATE_OUTPUT}" | grep --quiet --fixed-strings "already exists"
-
       - name: Link environment
         run: |
           set -ux
@@ -77,6 +70,13 @@ jobs:
             --project "${RAILWAY_PROJECT_ID}" \
             --environment "${RAILWAY_ENV}"
           railway service "${RAILWAY_SERVICE}"
+
+      - name: Create environment (if not exists)
+        run: |
+          set -ux
+
+          CREATE_OUTPUT=$(railway environment new "${RAILWAY_ENV}" --duplicate production 2>&1) || \
+            echo "${CREATE_OUTPUT}" | grep --quiet --fixed-strings "already exists"
 
       - name: Deploy to Railway
         working-directory: apps/api
