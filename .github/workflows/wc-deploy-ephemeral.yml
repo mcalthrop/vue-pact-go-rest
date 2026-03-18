@@ -67,6 +67,7 @@ jobs:
         run: |
           railway up \
             --environment "${RAILWAY_ENV}" \
+            --service vue-pact-go-rest \
             --detach
 
       - name: Get Railway URL
@@ -75,7 +76,7 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         run: |
-          DOMAIN=$(railway domain --environment "${RAILWAY_ENV}")
+          DOMAIN=$(railway domain --environment "${RAILWAY_ENV}" --service vue-pact-go-rest)
           echo "url=https://${DOMAIN}" >> "$GITHUB_OUTPUT"
 
   # ── Build and deploy frontend to Netlify ────────────────────────────────────
