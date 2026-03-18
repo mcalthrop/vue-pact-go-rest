@@ -5,9 +5,9 @@ import type { RecipeSummary } from '@/api/fetchRecipes';
 
 defineProps<{ recipe: RecipeSummary }>();
 
-function resolveImageUrl(photoUrl: string): string {
+const resolveImageUrl = (photoUrl: string): string => {
   return new URL(photoUrl, BASE_URL).href;
-}
+};
 </script>
 
 <template>

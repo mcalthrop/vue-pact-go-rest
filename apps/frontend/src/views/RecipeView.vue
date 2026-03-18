@@ -5,16 +5,16 @@ import { BASE_URL } from '@/api/baseUrl';
 import { fetchRecipe } from '@/api/fetchRecipe';
 import type { Recipe } from '@/api/fetchRecipe';
 
-function resolveImageUrl(photoUrl: string): string {
+const resolveImageUrl = (photoUrl: string): string => {
   return new URL(photoUrl, BASE_URL).href;
-}
+};
 
 const route = useRoute();
 const recipe = ref<Recipe | null>(null);
 const error = ref<string | null>(null);
 const loading = ref(true);
 
-async function loadRecipe(id: string) {
+const loadRecipe = async (id: string): Promise<void> => {
   loading.value = true;
   error.value = null;
   recipe.value = null;
@@ -25,7 +25,7 @@ async function loadRecipe(id: string) {
   } finally {
     loading.value = false;
   }
-}
+};
 
 onMounted(() => loadRecipe(route.params.id as string));
 

@@ -9,7 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Point the API client at the Pact mock server during executeTest.
 vi.mock('@/api/baseUrl', () => ({
-  get BASE_URL() {
+  get BASE_URL(): string {
     return (globalThis as { __pactMockUrl?: string }).__pactMockUrl ?? 'http://localhost:8080';
   },
 }));
