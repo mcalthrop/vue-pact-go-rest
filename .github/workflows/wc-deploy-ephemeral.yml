@@ -24,7 +24,7 @@ on:
         description: 'Netlify frontend preview URL'
         value: ${{ jobs.deploy-frontend.outputs.frontend_url }}
     secrets:
-      RAILWAY_TOKEN:
+      RAILWAY_API_TOKEN:
         required: true
       RAILWAY_PROJECT_ID:
         required: true
@@ -44,7 +44,7 @@ jobs:
     name: Deploy API (Railway)
     runs-on: ubuntu-latest
     env:
-      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      # # RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
       RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
     outputs:
@@ -60,7 +60,7 @@ jobs:
         run: |
           set -ux
 
-          RAILWAY_TOKEN_LENGTH="${#RAILWAY_TOKEN}"
+          # RAILWAY_TOKEN_LENGTH="${#RAILWAY_TOKEN}"
           RAILWAY_API_TOKEN_LENGTH="${#RAILWAY_API_TOKEN}"
           RAILWAY_PROJECT_ID_LENGTH="${#RAILWAY_PROJECT_ID}"
           railway whoami || :
@@ -271,7 +271,7 @@ jobs:
 
       - name: Delete Railway environment
         env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          # # RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         run: |
           railway environment delete "${RAILWAY_ENV}" --yes
