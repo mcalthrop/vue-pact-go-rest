@@ -56,21 +56,27 @@ jobs:
       - name: Install Railway CLI
         run: npm install --global @railway/cli
 
-      - name: Show Railway service context (debug)
+      - name: Show Railway service context (DEBUG)
         run: |
           set -ux
 
           railway whoami || :
-          railway link --project "${RAILWAY_PROJECT_ID}" || :
-          railway service "${RAILWAY_SERVICE}" || :
 
       - name: Create environment (if not exists)
         run: |
           set -ux
 
-          CREATE_OUTPUT=$(railway environment new "${RAILWAY_ENV}" --duplicate production 2>&1)
-          EXIT_CODE=$?
-          [[ "${EXIT_CODE}" -eq 0 ]] || echo "${CREATE_OUTPUT}" | grep --quiet --fixed-strings "already exists"
+          CREATE_OUTPUT=$(railway environment new "${RAILWAY_ENV}" --duplicate production 2>&1) || \
+            echo "${CREATE_OUTPUT}" | grep --quiet --fixed-strings "already exists"
+
+      - name: Link environment
+        run: |
+          set -ux
+
+          railway link \
+            --project "${RAILWAY_PROJECT_ID}" \
+            --environment "${RAILWAY_ENV}"
+          railway service "${RAILWAY_SERVICE}"
 
       - name: Deploy to Railway
         working-directory: apps/api
