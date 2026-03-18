@@ -4,6 +4,8 @@
     "buildFlags": ["-tags=pact"]
   },
   "cSpell.words": [
-    "oxlint"
+    "oxlint",
+    "teardown",
+    "vite"
   ]
 }
