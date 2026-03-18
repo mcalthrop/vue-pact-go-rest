@@ -69,7 +69,6 @@ jobs:
           railway link \
             --project "${RAILWAY_PROJECT_ID}" \
             --environment "${RAILWAY_ENV}"
-          railway service "${RAILWAY_SERVICE}"
 
       - name: Create environment (if not exists)
         run: |
@@ -87,6 +86,7 @@ jobs:
             --environment "${RAILWAY_ENV}" \
             --service "${RAILWAY_SERVICE}" \
             --detach
+          railway service "${RAILWAY_SERVICE}"
 
       - name: Get Railway URL
         id: get-url
