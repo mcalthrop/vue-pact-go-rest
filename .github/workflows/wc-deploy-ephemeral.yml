@@ -35,7 +35,7 @@ on:
 
 env:
   RAILWAY_ENV: pr-${{ inputs.pr_number }}
-  RAILWAY_SERVICE: vue-pact-go-rest
+  RAILWAY_SERVICE: '@vue-pact-go-rest/api'
 
 jobs:
   # ── Deploy API to a per-PR Railway environment ──────────────────────────────
@@ -62,7 +62,7 @@ jobs:
           echo "RAILWAY_ENV:     ${RAILWAY_ENV}"
           echo "RAILWAY_SERVICE: ${RAILWAY_SERVICE}"
           railway whoami || :
-          railway service || :
+          railway service "${RAILWAY_SERVICE}" || :
 
       - name: Create environment (if not exists)
         run: |

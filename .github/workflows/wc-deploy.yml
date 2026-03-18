@@ -24,7 +24,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
-          RAILWAY_SERVICE: vue-pact-go-rest
+          RAILWAY_SERVICE: '@vue-pact-go-rest/api'
         working-directory: apps/api
         run: |
           npm install --global @railway/cli
