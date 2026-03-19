@@ -34,7 +34,7 @@ env:
   RAILWAY_SERVICE: '@vue-pact-go-rest/api'
 
 jobs:
-  # ── Wait for Railway's automatic deployment ──────────────────────────────────
+  # ── Wait for Railway's automatic deployment ——
   wait-for-api:
     name: Wait for API (Railway)
     runs-on: ubuntu-latest
@@ -74,7 +74,7 @@ jobs:
           API_URL=$(railway domain --json | jq -r '.domains[0]')
           echo "api_url=${API_URL}" >> "${GITHUB_OUTPUT}"
 
-  # ── Build and deploy frontend to Netlify ────────────────────────────────────
+  # ── Build and deploy frontend to Netlify ——
   deploy-frontend:
     needs: wait-for-api
     name: Deploy frontend (Netlify)
@@ -101,7 +101,7 @@ jobs:
         run: |
           set -ux
 
-          export VITE_API_BASE_URL
+          export VITE_API_BASE_URL="${VITE_API_BASE_URL}"
           pnpm --filter frontend build-only
 
       - name: Deploy to Netlify
@@ -112,8 +112,8 @@ jobs:
         run: |
           set -ux
 
-          NETLIFY_OUTPUT=$(pnpm --filter @vue-pact-go-rest/frontend \
-            exec netlify deploy \
+          NETLIFY_OUTPUT=$(pnpm exec netlify deploy \
+            --filter @vue-pact-go-rest/frontend \
             --dir apps/frontend/dist \
             --context deploy-preview \
             --message "PR #${{ inputs.pr_number }} (${{ inputs.sha }})" \
@@ -121,7 +121,7 @@ jobs:
           FRONTEND_URL=$(echo "${NETLIFY_OUTPUT}" | jq --raw-output '.deploy_url')
           echo "frontend_url=${FRONTEND_URL}" >> "${GITHUB_OUTPUT}"
 
-  # ── Verify Pact contracts against the deployed API ──────────────────────────
+  # ── Verify Pact contracts against the deployed API ——
   pact-verify:
     needs: wait-for-api
     name: Pact verify (deployed API)
@@ -131,7 +131,7 @@ jobs:
       provider_base_url: ${{ needs.wait-for-api.outputs.api_url }}
       sha: ${{ inputs.sha }}
 
-  # ── Post preview URLs as a PR comment ───────────────────────────────────────
+  # ── Post preview URLs as a PR comment ——
   comment:
     needs: [wait-for-api, deploy-frontend]
     name: Post preview URLs
