@@ -108,11 +108,11 @@ jobs:
         run: |
           set -ux
 
-          FRONTEND_URL=$(pnpm exec netlify deploy \
+          NETLIFY_OUTPUT=$(pnpm exec netlify deploy \
             --dir apps/frontend/dist \
             --message "PR #${{ inputs.pr_number }} (${{ inputs.sha }})" \
-            --json \
-            | jq -r '.deploy_url')
+            --json 2>/dev/null)
+          FRONTEND_URL=$(echo "${NETLIFY_OUTPUT}" | jq -r '.deploy_url')
           echo "frontend_url=${FRONTEND_URL}" >> "${GITHUB_OUTPUT}"
 
   # ── Verify Pact contracts against the deployed API ──────────────────────────
