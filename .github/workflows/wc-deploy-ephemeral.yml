@@ -3,10 +3,6 @@ name: Deploy Ephemeral
 on:
   workflow_call:
     inputs:
-      action:
-        description: "'deploy' or 'teardown'"
-        required: true
-        type: string
       pr_number:
         required: true
         type: string
@@ -19,7 +15,7 @@ on:
     outputs:
       api_url:
         description: 'Railway API preview URL'
-        value: ${{ jobs.deploy-api.outputs.api_url }}
+        value: ${{ jobs.wait-for-api.outputs.api_url }}
       frontend_url:
         description: 'Netlify frontend preview URL'
         value: ${{ jobs.deploy-frontend.outputs.frontend_url }}
@@ -38,72 +34,44 @@ env:
   RAILWAY_SERVICE: '@vue-pact-go-rest/api'
 
 jobs:
-  # ── Deploy API to a per-PR Railway environment ──────────────────────────────
-  deploy-api:
-    if: inputs.action == 'deploy'
-    name: Deploy API (Railway)
+  # ── Wait for Railway's automatic deployment ──────────────────────────────────
+  wait-for-api:
+    name: Wait for API (Railway)
     runs-on: ubuntu-latest
     env:
-      # # RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
       RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
     outputs:
-      api_url: ${{ steps.get-url.outputs.url }}
+      api_url: ${{ steps.get-api-url.outputs.api_url }}
 
     steps:
-      - uses: actions/checkout@v6.0.2
-
       - name: Install Railway CLI
         run: npm install --global @railway/cli
 
-      - name: Show Railway service context (DEBUG)
-        run: |
-          set -ux
-
-          railway whoami || :
-
-      - name: Link environment
-        run: |
-          set -ux
-
-          railway link \
-            --project "${RAILWAY_PROJECT_ID}" \
-            --environment "${RAILWAY_ENV}"
-
-      - name: Create environment (if not exists)
-        run: |
-          set -ux
-
-          CREATE_OUTPUT=$(railway environment new "${RAILWAY_ENV}" --duplicate production 2>&1) || \
-            echo "${CREATE_OUTPUT}" | grep --quiet --fixed-strings "already exists"
-
-      - name: Deploy to Railway
-        working-directory: apps/api
-        run: |
-          set -ux
-
-          railway up \
-            --environment "${RAILWAY_ENV}" \
-            --service "${RAILWAY_SERVICE}" \
-            --detach
-          railway service "${RAILWAY_SERVICE}"
+      - name: Wait for Railway domain to be available
+        uses: nick-fields/retry@v3.0.2
+        with:
+          timeout_seconds: 30
+          max_attempts: 20
+          retry_wait_seconds: 15
+          retry_on: error
+          command: railway domain --environment "${RAILWAY_ENV}" --service "${RAILWAY_SERVICE}"
 
       - name: Get Railway URL
-        id: get-url
+        id: get-api-url
         run: |
           set -ux
 
-          DOMAIN=$(railway domain --environment "${RAILWAY_ENV}" --service "${RAILWAY_SERVICE}")
-          echo "url=https://${DOMAIN}" >> "$GITHUB_OUTPUT"
+          RAILWAY_DOMAIN=$(railway domain --environment "${RAILWAY_ENV}" --service "${RAILWAY_SERVICE}")
+          echo "api_url=https://${RAILWAY_DOMAIN}" >> "${GITHUB_OUTPUT}"
 
   # ── Build and deploy frontend to Netlify ────────────────────────────────────
   deploy-frontend:
-    if: inputs.action == 'deploy'
-    needs: deploy-api
+    needs: wait-for-api
     name: Deploy frontend (Netlify)
     runs-on: ubuntu-latest
     outputs:
-      frontend_url: ${{ steps.netlify.outputs.url }}
+      frontend_url: ${{ steps.netlify.outputs.frontend_url }}
 
     steps:
       - uses: actions/checkout@v6.0.2
@@ -120,7 +88,7 @@ jobs:
 
       - name: Build frontend
         env:
-          VITE_API_BASE_URL: ${{ needs.deploy-api.outputs.api_url }}
+          VITE_API_BASE_URL: ${{ needs.wait-for-api.outputs.api_url }}
         run: pnpm --filter frontend build-only
 
       - name: Deploy to Netlify
@@ -129,17 +97,18 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: |
-          URL=$(pnpm exec netlify deploy \
+          set -ux
+
+          FRONTEND_URL=$(pnpm exec netlify deploy \
             --dir apps/frontend/dist \
             --message "PR #${{ inputs.pr_number }} (${{ inputs.sha }})" \
             --json \
             | jq -r '.deploy_url')
-          echo "url=${URL}" >> "$GITHUB_OUTPUT"
+          echo "frontend_url=${FRONTEND_URL}" >> "${GITHUB_OUTPUT}"
 
   # ── Verify Pact contracts against the deployed API ──────────────────────────
   pact-verify:
-    if: inputs.action == 'deploy'
-    needs: deploy-api
+    needs: wait-for-api
     name: Pact verify (deployed API)
     runs-on: ubuntu-latest
 
@@ -212,7 +181,7 @@ jobs:
 
       - name: Verify Pact contracts against deployed API
         env:
-          PACT_PROVIDER_BASE_URL: ${{ needs.deploy-api.outputs.api_url }}
+          PACT_PROVIDER_BASE_URL: ${{ needs.wait-for-api.outputs.api_url }}
           PACT_PUBLISH_RESULTS: 'true'
           PACT_PROVIDER_VERSION: ${{ inputs.sha }}
           PACT_PROVIDER_BRANCH: ${{ inputs.branch }}
@@ -220,8 +189,7 @@ jobs:
 
   # ── Post preview URLs as a PR comment ───────────────────────────────────────
   comment:
-    if: inputs.action == 'deploy'
-    needs: [deploy-api, deploy-frontend]
+    needs: [wait-for-api, deploy-frontend]
     name: Post preview URLs
     runs-on: ubuntu-latest
 
@@ -229,7 +197,7 @@ jobs:
       - uses: actions/github-script@v7.0.1
         with:
           script: |
-            const apiUrl      = '${{ needs.deploy-api.outputs.api_url }}';
+            const apiUrl      = '${{ needs.wait-for-api.outputs.api_url }}';
             const frontendUrl = '${{ needs.deploy-frontend.outputs.frontend_url }}';
             const body = [
               '## Ephemeral Environment',
@@ -262,20 +230,3 @@ jobs:
                 body,
               });
             }
-
-  # ── Tear down the Railway environment when the PR is closed ─────────────────
-  teardown:
-    if: inputs.action == 'teardown'
-    name: Tear down Railway environment
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Install Railway CLI
-        run: npm install --global @railway/cli
-
-      - name: Delete Railway environment
-        env:
-          # # RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
-        run: |
-          railway environment delete "${RAILWAY_ENV}" --yes

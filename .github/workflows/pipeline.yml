@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened]
 
 jobs:
   build-and-test:
@@ -23,17 +23,6 @@ jobs:
     needs: [build-and-test, pact]
     uses: ./.github/workflows/wc-deploy-ephemeral.yml
     with:
-      action: deploy
-      pr_number: ${{ github.event.pull_request.number }}
-      branch: ${{ github.head_ref }}
-      sha: ${{ github.event.pull_request.head.sha }}
-    secrets: inherit
-
-  teardown-ephemeral:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    uses: ./.github/workflows/wc-deploy-ephemeral.yml
-    with:
-      action: teardown
       pr_number: ${{ github.event.pull_request.number }}
       branch: ${{ github.head_ref }}
       sha: ${{ github.event.pull_request.head.sha }}

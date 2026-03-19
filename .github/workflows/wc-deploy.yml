@@ -3,7 +3,7 @@ name: Deploy
 on:
   workflow_call:
     secrets:
-      RAILWAY_TOKEN:
+      RAILWAY_API_TOKEN:
         required: true
       RAILWAY_PROJECT_ID:
         required: true
@@ -12,23 +12,30 @@ on:
       NETLIFY_SITE_ID:
         required: true
 
+env:
+  RAILWAY_SERVICE: '@vue-pact-go-rest/api'
+
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    env:
+      RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+      RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
 
     steps:
       - uses: actions/checkout@v6.0.2
 
-      - name: Deploy API to Railway (production)
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
-          RAILWAY_SERVICE: '@vue-pact-go-rest/api'
-        working-directory: apps/api
+      - name: Install Railway CLI
+        run: npm install --global @railway/cli
+
+      - name: Get Railway URL
+        id: get-api-url
         run: |
-          npm install --global @railway/cli
-          railway up --service "${RAILWAY_SERVICE}" --detach
+          set -ux
+
+          RAILWAY_DOMAIN=$(railway domain --environment production --service "${RAILWAY_SERVICE}")
+          echo "api_url=https://${RAILWAY_DOMAIN}" >> "${GITHUB_OUTPUT}"
 
       - uses: pnpm/action-setup@v4.4.0
 
@@ -41,6 +48,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build frontend
+        env:
+          VITE_API_BASE_URL: ${{ steps.get-api-url.outputs.api_url }}
         run: pnpm --filter frontend build-only
 
       - name: Deploy frontend to Netlify (production)
