@@ -12,13 +12,6 @@ on:
       sha:
         required: true
         type: string
-    outputs:
-      api_url:
-        description: 'Railway API preview URL'
-        value: ${{ jobs.wait-for-api.outputs.api_url }}
-      frontend_url:
-        description: 'Netlify frontend preview URL'
-        value: ${{ jobs.deploy-frontend.outputs.frontend_url }}
     secrets:
       RAILWAY_API_TOKEN:
         required: true
@@ -29,16 +22,14 @@ on:
       NETLIFY_SITE_ID:
         required: true
 
-env:
-  RAILWAY_ENV: vue-pact-go-rest-pr-${{ inputs.pr_number }}
-  RAILWAY_SERVICE: '@vue-pact-go-rest/api'
-
 jobs:
-  # ── Wait for Railway's automatic deployment ——
-  wait-for-api:
-    name: Wait for API (Railway)
+  # ── Get API URL from Railway ——
+  get-api-url:
+    name: Get API URL (Railway)
     runs-on: ubuntu-latest
     permissions: {}
+    env:
+      RAILWAY_ENV: vue-pact-go-rest-pr-${{ inputs.pr_number }}
     outputs:
       api_url: ${{ steps.get-api-url.outputs.api_url }}
 
@@ -52,15 +43,15 @@ jobs:
           railway-api-token: ${{ secrets.RAILWAY_API_TOKEN }}
           railway-project-id: ${{ secrets.RAILWAY_PROJECT_ID }}
           railway-environment: ${{ env.RAILWAY_ENV }}
-          railway-service: ${{ env.RAILWAY_SERVICE }}
-          wait-for-domain: 'true'
 
   # ── Build and deploy frontend to Netlify ——
   deploy-frontend:
-    needs: wait-for-api
+    needs: get-api-url
     name: Deploy frontend (Netlify)
     runs-on: ubuntu-latest
     permissions: {}
+    env:
+      VITE_API_BASE_URL: ${{ needs.get-api-url.outputs.api_url }}
     outputs:
       frontend_url: ${{ steps.deploy-to-netlify.outputs.frontend_url }}
 
@@ -78,8 +69,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build frontend
-        env:
-          VITE_API_BASE_URL: ${{ needs.wait-for-api.outputs.api_url }}
         run: |
           set -ux
 
@@ -91,7 +80,6 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          VITE_API_BASE_URL: ${{ needs.wait-for-api.outputs.api_url }}
         run: |
           set -ux
 
@@ -118,19 +106,19 @@ jobs:
 
   # ── Verify Pact contracts against the deployed API ——
   pact-verify:
-    needs: wait-for-api
+    needs: get-api-url
     name: Pact verify (deployed API)
     permissions:
       contents: read
     uses: ./.github/workflows/wc-pact.yml
     with:
       branch: ${{ inputs.branch }}
-      provider_base_url: ${{ needs.wait-for-api.outputs.api_url }}
+      provider_base_url: ${{ needs.get-api-url.outputs.api_url }}
       sha: ${{ inputs.sha }}
 
   # ── Post preview URLs as a PR comment ——
   comment:
-    needs: [wait-for-api, deploy-frontend]
+    needs: [get-api-url, deploy-frontend]
     name: Post preview URLs
     runs-on: ubuntu-latest
     permissions:
@@ -142,7 +130,7 @@ jobs:
         with:
           script: |
             const issue_number = Number('${{ inputs.pr_number }}');
-            const apiUrl       = '${{ needs.wait-for-api.outputs.api_url }}';
+            const apiUrl       = '${{ needs.get-api-url.outputs.api_url }}';
             const frontendUrl  = '${{ needs.deploy-frontend.outputs.frontend_url }}';
             const body = [
               '## Ephemeral environments',
