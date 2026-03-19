@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v6.0.2
+
       - name: Get Railway URL
         id: get-api-url
         uses: ./.github/actions/get-api-url
@@ -25,8 +27,6 @@ jobs:
           railway_api_token: ${{ secrets.RAILWAY_API_TOKEN }}
           railway_project_id: ${{ secrets.RAILWAY_PROJECT_ID }}
           railway_environment: production
-
-      - uses: actions/checkout@v6.0.2
 
       - uses: pnpm/action-setup@v4.4.0
 

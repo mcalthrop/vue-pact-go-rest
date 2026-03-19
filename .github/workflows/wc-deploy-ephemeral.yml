@@ -34,6 +34,8 @@ jobs:
       api_url: ${{ steps.get-api-url.outputs.api_url }}
 
     steps:
+      - uses: actions/checkout@v6.0.2
+
       - name: Get Railway URL
         id: get-api-url
         uses: ./.github/actions/get-api-url
