@@ -1,35 +1,40 @@
-BINARY_NAME := api
-BUILD_DIR   := bin
-CMD_DIR     := ./cmd/server
+BUILD_DIR             := bin
+BINARY_NAME           := $(CURDIR)/$(BUILD_DIR)/api
+CMD_DIR               := $(CURDIR)/cmd/server
+COVERAGE_FILTERED_OUT := coverage.filtered.out
+COVERAGE_OUT          := coverage.out
 
-.PHONY: all build generate test lint format\:check coverage run clean pact\:verify
+.PHONY: all build generate-types test lint format-check coverage dev prod clean pact-verify
 
 all: build
 
-generate:
+generate-types:
 	go tool oapi-codegen --config oapi-codegen.yaml ../../openapi/openapi.yaml
 
 build:
-	go build -o $(BUILD_DIR)/$(BINARY_NAME) $(CMD_DIR)
+	go build -o $(BINARY_NAME) $(CMD_DIR)
 
-run:
+dev:
 	go run $(CMD_DIR)
+
+prod:
+	$(BINARY_NAME)
 
 test:
 	go test ./...
 
 coverage:
-	go test -coverprofile=coverage.out ./...
-	@grep -v -E "internal/gen/|cmd/server/main\.go" coverage.out > coverage.filtered.out
-	@go tool cover -func=coverage.filtered.out
-	@TOTAL=$$(go tool cover -func=coverage.filtered.out | grep "^total:" | awk '{print $$3}'); \
+	go test -coverprofile=$(COVERAGE_OUT) ./...
+	@grep -v -E "internal/gen/|cmd/server/main\.go" $(COVERAGE_OUT) > $(COVERAGE_FILTERED_OUT)
+	@go tool cover -func=$(COVERAGE_FILTERED_OUT)
+	@TOTAL=$$(go tool cover -func=$(COVERAGE_FILTERED_OUT) | grep "^total:" | awk '{print $$3}'); \
 	echo "Coverage (excluding generated code): $$TOTAL"; \
-	if [ "$$TOTAL" != "100.0%" ]; then echo "Coverage must be 100%"; exit 1; fi
+	if [ "$$TOTAL" != "100.0%" ]; then echo "ERROR: coverage must be 100%"; exit 1; fi
 
 lint:
 	golangci-lint run ./...
 
-format\:check:
+format-check:
 	@UNFORMATTED=$$(find . -name '*.go' -not -path './internal/gen/*' | xargs gofmt -l); \
 	if [ -n "$$UNFORMATTED" ]; then \
 		echo "The following files need formatting:"; \
@@ -37,8 +42,8 @@ format\:check:
 		exit 1; \
 	fi
 
-pact\:provider-verify:
+pact-provider-verify:
 	go test -count=1 -tags pact -v -run TestPactProviderVerification $(CMD_DIR)
 
 clean:
-	rm -rf $(BUILD_DIR) coverage.out coverage.filtered.out
+	rm -rf $(BUILD_DIR) $(COVERAGE_OUT) $(COVERAGE_FILTERED_OUT)

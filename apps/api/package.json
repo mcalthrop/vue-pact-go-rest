@@ -3,14 +3,14 @@
   "private": true,
   "scripts": {
     "lint-staged": "lint-staged",
-    "dev": "make run",
-    "prod": "./bin/api",
+    "dev": "make dev",
+    "prod": "make prod",
     "build": "make build",
     "test": "make test",
     "coverage": "make coverage",
     "lint": "make lint",
-    "format:check": "make format:check",
-    "generate:types": "make generate",
-    "pact:provider-verify": "make pact:provider-verify"
+    "format:check": "make format-check",
+    "generate:types": "make generate-types",
+    "pact:provider-verify": "make pact-provider-verify"
   }
 }
