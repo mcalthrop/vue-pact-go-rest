@@ -123,14 +123,14 @@ jobs:
           FRONTEND_URL=$(echo "${NETLIFY_OUTPUT}" | jq --raw-output '.deploy_url')
 
           pnpm exec netlify \
+            env:list \
             --filter @vue-pact-go-rest/frontend \
-            --context branch:${BRANCH_NAME} \
-            env:list
+            --context branch:${BRANCH_NAME}
 
           pnpm exec netlify \
+            env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
             --filter @vue-pact-go-rest/frontend \
-            --context branch:${BRANCH_NAME} \
-            env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}"
+            --context branch:${BRANCH_NAME}
 
           echo "frontend_url=${FRONTEND_URL}" >> "${GITHUB_OUTPUT}"
 

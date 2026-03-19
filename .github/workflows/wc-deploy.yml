@@ -80,7 +80,6 @@ jobs:
             --message "main (${{ github.sha }})"
 
           pnpm exec netlify \
-            VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
+            env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
             --filter @vue-pact-go-rest/frontend \
-            --context production \
-            env:set
+            --context production
