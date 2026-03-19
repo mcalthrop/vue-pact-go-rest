@@ -2,18 +2,18 @@ name: Get API URL
 description: Install Railway CLI, link to an environment, and return the API URL.
 
 inputs:
-  railway-api-token:
+  railway_api_token:
     description: Railway API token
     required: true
-  railway-project-id:
+  railway_project_id:
     description: Railway project ID
     required: true
-  railway-environment:
+  railway_environment:
     description: Railway environment name
     required: true
 
 outputs:
-  api-url:
+  api_url:
     description: The Railway API URL
     value: ${{ steps.get-api-url.outputs.api_url }}
 
@@ -27,9 +27,9 @@ runs:
     - name: Link to Railway environment and service
       shell: bash
       env:
-        RAILWAY_API_TOKEN: ${{ inputs.railway-api-token }}
-        RAILWAY_PROJECT_ID: ${{ inputs.railway-project-id }}
-        RAILWAY_ENVIRONMENT: ${{ inputs.railway-environment }}
+        RAILWAY_API_TOKEN: ${{ inputs.railway_api_token }}
+        RAILWAY_PROJECT_ID: ${{ inputs.railway_project_id }}
+        RAILWAY_ENVIRONMENT: ${{ inputs.railway_environment }}
         RAILWAY_SERVICE: '@vue-pact-go-rest/api'
       run: |
         set -ux
@@ -52,7 +52,7 @@ runs:
       id: get-api-url
       shell: bash
       env:
-        RAILWAY_API_TOKEN: ${{ inputs.railway-api-token }}
+        RAILWAY_API_TOKEN: ${{ inputs.railway_api_token }}
       run: |
         set -ux
 
