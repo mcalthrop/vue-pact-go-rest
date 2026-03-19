@@ -21,6 +21,8 @@ jobs:
   deploy-ephemeral:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     needs: [build-and-test, pact]
+    permissions:
+      issues: write
     uses: ./.github/workflows/wc-deploy-ephemeral.yml
     with:
       pr_number: ${{ github.event.pull_request.number }}
