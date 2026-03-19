@@ -12,15 +12,15 @@ jobs:
     uses: ./.github/workflows/wc-build-and-test.yml
 
   pact:
-    if: github.event.action != 'closed'
+    if: github.ref == 'refs/heads/main'
     needs: build-and-test
     uses: ./.github/workflows/wc-pact.yml
     with:
-      branch: ${{ github.head_ref || github.ref_name }}
+      branch: ${{ github.ref_name }}
 
   deploy-ephemeral:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
-    needs: [build-and-test, pact]
+    needs: [build-and-test]
     permissions:
       issues: write
       pull-requests: write

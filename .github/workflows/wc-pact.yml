@@ -6,6 +6,14 @@ on:
       branch:
         required: true
         type: string
+      provider_base_url:
+        required: false
+        type: string
+        default: ''
+      sha:
+        required: false
+        type: string
+        default: ''
 
 jobs:
   pact:
@@ -31,9 +39,9 @@ jobs:
           PACT_BROKER_DATABASE_URL: postgres://pact:pact@postgres/pact
           PACT_BROKER_BASIC_AUTH_USERNAME: pact
           PACT_BROKER_BASIC_AUTH_PASSWORD: pact
-          PACT_BROKER_ALLOW_PUBLIC_READ: "true"
-          PACT_BROKER_PUBLIC_HEARTBEAT: "true"
-          PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES: "30"
+          PACT_BROKER_ALLOW_PUBLIC_READ: 'true'
+          PACT_BROKER_PUBLIC_HEARTBEAT: 'true'
+          PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES: '30'
         ports:
           - 9292:9292
 
@@ -81,7 +89,8 @@ jobs:
 
       - name: Verify Pact contracts
         env:
-          PACT_PUBLISH_RESULTS: "true"
-          PACT_PROVIDER_VERSION: ${{ github.sha }}
+          PACT_PROVIDER_BASE_URL: ${{ inputs.provider_base_url }}
+          PACT_PUBLISH_RESULTS: 'true'
+          PACT_PROVIDER_VERSION: ${{ inputs.sha || github.sha }}
           PACT_PROVIDER_BRANCH: ${{ inputs.branch }}
         run: pnpm pact:provider-verify

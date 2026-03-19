@@ -125,82 +125,11 @@ jobs:
   pact-verify:
     needs: wait-for-api
     name: Pact verify (deployed API)
-    runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:17
-        env:
-          POSTGRES_USER: pact
-          POSTGRES_PASSWORD: pact
-          POSTGRES_DB: pact
-        options: >-
-          --health-cmd "pg_isready -U pact"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-      pact-broker:
-        image: pactfoundation/pact-broker:2.137.0-pactbroker2.118.0
-        env:
-          PACT_BROKER_DATABASE_URL: postgres://pact:pact@postgres/pact
-          PACT_BROKER_BASIC_AUTH_USERNAME: pact
-          PACT_BROKER_BASIC_AUTH_PASSWORD: pact
-          PACT_BROKER_ALLOW_PUBLIC_READ: 'true'
-          PACT_BROKER_PUBLIC_HEARTBEAT: 'true'
-          PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES: '30'
-        ports:
-          - 9292:9292
-
-    steps:
-      - uses: actions/checkout@v6.0.2
-
-      - name: Wait for Pact Broker
-        uses: nick-fields/retry@v3.0.2
-        with:
-          timeout_seconds: 10
-          max_attempts: 30
-          retry_wait_seconds: 5
-          retry_on: error
-          command: wget --quiet --output-document=/dev/null http://localhost:9292/diagnostic/status/heartbeat
-
-      - uses: pnpm/action-setup@v4.4.0
-
-      - uses: actions/setup-node@v6.3.0
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-
-      - name: Install pnpm dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Publish Pact contracts
-        env:
-          PACT_CONSUMER_BRANCH: ${{ inputs.branch }}
-        run: pnpm pact:consumer-publish
-
-      - uses: actions/setup-go@v6.3.0
-        with:
-          go-version-file: apps/api/go.mod
-          cache-dependency-path: apps/api/go.sum
-
-      - name: Install Pact FFI library
-        working-directory: apps/api
-        run: |
-          set -ux
-
-          PACT_LIB_DIR="${HOME}/pact-lib"
-          go run github.com/pact-foundation/pact-go/v2 install --libDir "${PACT_LIB_DIR}"
-          sudo cp "${PACT_LIB_DIR}"/libpact_ffi* /usr/local/lib/
-          sudo ldconfig
-
-      - name: Verify Pact contracts against deployed API
-        env:
-          PACT_PROVIDER_BASE_URL: ${{ needs.wait-for-api.outputs.api_url }}
-          PACT_PUBLISH_RESULTS: 'true'
-          PACT_PROVIDER_VERSION: ${{ inputs.sha }}
-          PACT_PROVIDER_BRANCH: ${{ inputs.branch }}
-        run: pnpm pact:provider-verify
+    uses: ./.github/workflows/wc-pact.yml
+    with:
+      branch: ${{ inputs.branch }}
+      provider_base_url: ${{ needs.wait-for-api.outputs.api_url }}
+      sha: ${{ inputs.sha }}
 
   # ── Post preview URLs as a PR comment ───────────────────────────────────────
   comment:
@@ -219,7 +148,7 @@ jobs:
             const apiUrl       = '${{ needs.wait-for-api.outputs.api_url }}';
             const frontendUrl  = '${{ needs.deploy-frontend.outputs.frontend_url }}';
             const body = [
-              '## Ephemeral Environment',
+              '## Ephemeral environments',
               '',
               '| Service  | URL |',
               '| -------- | --- |',
@@ -234,7 +163,7 @@ jobs:
               issue_number,
             });
 
-            const existing = comments.find(({ body }) => body.includes('## Ephemeral Environment'));
+            const existing = comments.find(({ body }) => body.includes('## Ephemeral environments'));
             if (existing) {
               const comment_id = existing.id;
               await github.rest.issues.updateComment({
