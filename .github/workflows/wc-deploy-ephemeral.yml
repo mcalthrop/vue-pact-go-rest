@@ -92,6 +92,9 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
 
+      - name: Install Netlify CLI
+        run: npm install --global netlify-cli
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -108,7 +111,7 @@ jobs:
         run: |
           set -ux
 
-          NETLIFY_OUTPUT=$(pnpm exec netlify deploy \
+          NETLIFY_OUTPUT=$(netlify deploy \
             --dir apps/frontend/dist \
             --message "PR #${{ inputs.pr_number }} (${{ inputs.sha }})" \
             --json 2>/dev/null)
