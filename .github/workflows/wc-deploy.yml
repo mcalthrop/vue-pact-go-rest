@@ -62,7 +62,7 @@ jobs:
         run: |
           set -ux
 
-          export VITE_API_BASE_URL="${VITE_API_BASE_URL}"
+          export VITE_API_BASE_URL
           pnpm --filter frontend build-only
 
       - name: Deploy frontend to Netlify (production)
@@ -70,8 +70,15 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: |
+          set -ux
+
           pnpm exec netlify deploy \
             --no-build
             --dir apps/frontend/dist \
+            --context production \
             --prod \
             --message "main (${{ github.sha }})"
+
+          pnpm exec netlify \
+            env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
+            --context production

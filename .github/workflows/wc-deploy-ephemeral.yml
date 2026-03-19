@@ -101,9 +101,8 @@ jobs:
         run: |
           set -ux
 
-          export VITE_API_BASE_URL="${VITE_API_BASE_URL}"
+          export VITE_API_BASE_URL
           pnpm --filter frontend build-only
-          grep VITE_API_BASE_URL --files-with-matches apps/frontend/dist/assets/*.js || :
 
       - name: Deploy to Netlify
         id: deploy-to-netlify
@@ -113,14 +112,23 @@ jobs:
         run: |
           set -ux
 
+          BRANCH_NAME="${{ inputs.branch }}"
           grep VITE_API_BASE_URL --files-with-matches apps/frontend/dist/assets/*.js || :
           NETLIFY_OUTPUT=$(pnpm exec netlify deploy \
             --filter @vue-pact-go-rest/frontend \
             --dir apps/frontend/dist \
-            --context deploy-preview \
+            --context branch:${BRANCH_NAME} \
             --message "PR #${{ inputs.pr_number }} (${{ inputs.sha }})" \
             --json 2>&1)
           FRONTEND_URL=$(echo "${NETLIFY_OUTPUT}" | jq --raw-output '.deploy_url')
+
+          pnpm exec netlify \
+            env:list --context branch:${BRANCH_NAME}
+
+          pnpm exec netlify \
+            env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
+            --context branch:${BRANCH_NAME}
+
           echo "frontend_url=${FRONTEND_URL}" >> "${GITHUB_OUTPUT}"
 
   # ── Verify Pact contracts against the deployed API ——
