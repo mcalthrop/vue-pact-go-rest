@@ -1,6 +1,6 @@
-BUILD_DIR             := $(CURDIR)/bin
+BUILD_DIR             := ./bin
 BINARY_NAME           := $(BUILD_DIR)/api
-CMD_DIR               := $(CURDIR)/cmd/server
+CMD_DIR               := ./cmd/server
 COVERAGE_FILTERED_OUT := coverage.filtered.out
 COVERAGE_OUT          := coverage.out
 
