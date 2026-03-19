@@ -109,10 +109,12 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          VITE_API_BASE_URL: ${{ needs.wait-for-api.outputs.api_url }}
         run: |
           set -ux
 
           BRANCH_NAME="${{ inputs.branch }}"
+          # TODO: remove next line
           grep VITE_API_BASE_URL --files-with-matches apps/frontend/dist/assets/*.js || :
           NETLIFY_OUTPUT=$(pnpm exec netlify deploy \
             --filter @vue-pact-go-rest/frontend \
