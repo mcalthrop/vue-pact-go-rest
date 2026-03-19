@@ -2,13 +2,10 @@
   "$schema": "https://railway.com/railway.schema.json",
   "build": {
     "builder": "RAILPACK",
-    "buildCommand": "pnpm --filter api build",
+    "buildCommand": "make build",
     "watchPatterns": ["apps/api/**"]
   },
   "deploy": {
-    "startCommand": "pnpm --filter api prod",
-    "healthcheckPath": "/diagnostic/status/heartbeat",
-    "healthcheckTimeout": 300,
-    "restartPolicyType": "ALWAYS"
+    "startCommand": "./bin/api"
   }
 }
