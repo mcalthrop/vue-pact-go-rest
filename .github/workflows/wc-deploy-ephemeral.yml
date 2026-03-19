@@ -116,7 +116,6 @@ jobs:
           grep VITE_API_BASE_URL --files-with-matches apps/frontend/dist/assets/*.js || :
           NETLIFY_OUTPUT=$(pnpm exec netlify deploy \
             --filter @vue-pact-go-rest/frontend \
-            --no-build \
             --dir apps/frontend/dist \
             --context branch:${BRANCH_NAME} \
             --message "PR #${{ inputs.pr_number }} (${{ inputs.sha }})" \
