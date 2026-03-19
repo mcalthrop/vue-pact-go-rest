@@ -29,13 +29,22 @@ jobs:
       - name: Install Railway CLI
         run: npm install --global @railway/cli
 
+      - name: Link to Railway environment and service
+        run: |
+          set -ux
+
+          railway link \
+            --project "${RAILWAY_PROJECT_ID}" \
+            --environment production \
+            --service "${RAILWAY_SERVICE}"
+
       - name: Get Railway URL
         id: get-api-url
         run: |
           set -ux
 
-          RAILWAY_DOMAIN=$(railway domain --environment production --service "${RAILWAY_SERVICE}")
-          echo "api_url=https://${RAILWAY_DOMAIN}" >> "${GITHUB_OUTPUT}"
+          API_URL=$(railway domain --json | jq -r '.domains[0]')
+          echo "api_url=${API_URL}" >> "${GITHUB_OUTPUT}"
 
       - uses: pnpm/action-setup@v4.4.0
 
