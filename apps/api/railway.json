@@ -6,7 +6,7 @@
     "watchPatterns": ["apps/api/**"]
   },
   "deploy": {
-    "startCommand": "make prod",
+    "startCommand": "./bin/api",
     "healthcheckPath": "/diagnostic/status/heartbeat",
     "healthcheckTimeout": 300,
     "restartPolicyType": "ALWAYS"
