@@ -155,7 +155,7 @@ jobs:
               `| Frontend | ${frontendUrl} |`,
               `| API      | ${apiUrl}/recipes |`,
             ].join('\n');
-            const { repo: { owner, repo }} = context;
+            const { repo: { owner, repo } } = context;
 
             const { data: comments } = await github.rest.issues.listComments({
               owner,
