@@ -39,41 +39,21 @@ jobs:
     name: Wait for API (Railway)
     runs-on: ubuntu-latest
     permissions: {}
-    env:
-      RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
-      RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
     outputs:
       api_url: ${{ steps.get-api-url.outputs.api_url }}
 
     steps:
-      - name: Install Railway CLI
-        run: npm install --global @railway/cli
-
-      - name: Link to Railway environment and service
-        run: |
-          set -ux
-
-          railway link \
-            --project "${RAILWAY_PROJECT_ID}" \
-            --environment "${RAILWAY_ENV}" \
-            --service "${RAILWAY_SERVICE}"
-
-      - name: Wait for Railway domain to be available
-        uses: nick-fields/retry@v3.0.2
-        with:
-          timeout_seconds: 30
-          max_attempts: 20
-          retry_wait_seconds: 15
-          retry_on: error
-          command: railway domain --json | jq -e '.domains | length > 0'
+      - uses: actions/checkout@v6.0.2
 
       - name: Get Railway URL
         id: get-api-url
-        run: |
-          set -ux
-
-          API_URL=$(railway domain --json | jq -r '.domains[0]')
-          echo "api_url=${API_URL}" >> "${GITHUB_OUTPUT}"
+        uses: ./.github/actions/get-railway-url
+        with:
+          railway-api-token: ${{ secrets.RAILWAY_API_TOKEN }}
+          railway-project-id: ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway-environment: ${{ env.RAILWAY_ENV }}
+          railway-service: ${{ env.RAILWAY_SERVICE }}
+          wait-for-domain: 'true'
 
   # ── Build and deploy frontend to Netlify ——
   deploy-frontend:
@@ -183,17 +163,7 @@ jobs:
             const existing = comments.find(({ body }) => body.includes('## Ephemeral environments'));
             if (existing) {
               const comment_id = existing.id;
-              await github.rest.issues.updateComment({
-                owner,
-                repo,
-                comment_id,
-                body,
-              });
+              await github.rest.issues.updateComment({ owner, repo, comment_id, body });
             } else {
-              await github.rest.issues.createComment({
-                owner,
-                repo,
-                issue_number,
-                body,
-              });
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
             }

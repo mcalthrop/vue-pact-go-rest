@@ -19,32 +19,18 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    env:
-      RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
-      RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
 
     steps:
       - uses: actions/checkout@v6.0.2
 
-      - name: Install Railway CLI
-        run: npm install --global @railway/cli
-
-      - name: Link to Railway environment and service
-        run: |
-          set -ux
-
-          railway link \
-            --project "${RAILWAY_PROJECT_ID}" \
-            --environment production \
-            --service "${RAILWAY_SERVICE}"
-
       - name: Get Railway URL
         id: get-api-url
-        run: |
-          set -ux
-
-          API_URL=$(railway domain --json | jq -r '.domains[0]')
-          echo "api_url=${API_URL}" >> "${GITHUB_OUTPUT}"
+        uses: ./.github/actions/get-railway-url
+        with:
+          railway-api-token: ${{ secrets.RAILWAY_API_TOKEN }}
+          railway-project-id: ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway-environment: production
+          railway-service: ${{ env.RAILWAY_SERVICE }}
 
       - uses: pnpm/action-setup@v4.4.0
 
@@ -81,5 +67,10 @@ jobs:
 
           pnpm exec netlify \
             env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
+            --filter @vue-pact-go-rest/frontend \
+            --context production
+
+          pnpm exec netlify \
+            env:list VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
             --filter @vue-pact-go-rest/frontend \
             --context production
