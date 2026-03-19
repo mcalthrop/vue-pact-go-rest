@@ -108,8 +108,10 @@ jobs:
         run: |
           set -ux
 
-          NETLIFY_OUTPUT=$(pnpm exec netlify deploy \
+          NETLIFY_OUTPUT=$(pnpm --filter @vue-pact-go-rest/frontend \
+            exec netlify deploy \
             --dir apps/frontend/dist \
+            --context deploy-preview \
             --message "PR #${{ inputs.pr_number }} (${{ inputs.sha }})" \
             --json 2>&1)
           FRONTEND_URL=$(echo "${NETLIFY_OUTPUT}" | \
