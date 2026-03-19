@@ -80,7 +80,7 @@ jobs:
     name: Deploy frontend (Netlify)
     runs-on: ubuntu-latest
     outputs:
-      frontend_url: ${{ steps.netlify.outputs.frontend_url }}
+      frontend_url: ${{ steps.deploy-to-netlify.outputs.frontend_url }}
 
     steps:
       - uses: actions/checkout@v6.0.2
@@ -101,17 +101,18 @@ jobs:
         run: pnpm --filter frontend build-only
 
       - name: Deploy to Netlify
-        id: netlify
+        id: deploy-to-netlify
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: |
           set -ux
 
-          FRONTEND_URL=$(pnpm exec netlify deploy \
+          NETLIFY_OUTPUT=$(pnpm exec netlify deploy \
             --dir apps/frontend/dist \
             --message "PR #${{ inputs.pr_number }} (${{ inputs.sha }})" \
-            --json 2>&1 1>/dev/null | \
+            --json 2>&1)
+          FRONTEND_URL=$(echo "${NETLIFY_OUTPUT}" | \
             jq --raw-input --slurp --raw-output \
               'split("\n") | map(try fromjson | .deploy_url // empty) | .[0] // empty')
           echo "frontend_url=${FRONTEND_URL}" >> "${GITHUB_OUTPUT}"
@@ -202,6 +203,8 @@ jobs:
     needs: [wait-for-api, deploy-frontend]
     name: Post preview URLs
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
 
     steps:
       - uses: actions/github-script@v7.0.1
@@ -224,7 +227,7 @@ jobs:
               issue_number: Number('${{ inputs.pr_number }}'),
             });
 
-            const existing = comments.find(c => c.body.includes('## Ephemeral Environment'));
+            const existing = comments.find(({ body }) => body.includes('## Ephemeral Environment'));
             if (existing) {
               await github.rest.issues.updateComment({
                 owner:      context.repo.owner,
