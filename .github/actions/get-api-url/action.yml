@@ -1,5 +1,5 @@
-name: Get Railway URL
-description: Install Railway CLI, link to an environment, and return its domain URL.
+name: Get API URL
+description: Install Railway CLI, link to an environment, and return the API URL.
 
 inputs:
   railway-api-token:

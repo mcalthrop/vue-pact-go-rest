@@ -25,7 +25,7 @@ jobs:
 
       - name: Get Railway URL
         id: get-api-url
-        uses: ./.github/actions/get-railway-url
+        uses: ./.github/actions/get-api-url
         with:
           railway-api-token: ${{ secrets.RAILWAY_API_TOKEN }}
           railway-project-id: ${{ secrets.RAILWAY_PROJECT_ID }}
