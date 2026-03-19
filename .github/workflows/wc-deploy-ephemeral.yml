@@ -38,6 +38,7 @@ jobs:
   wait-for-api:
     name: Wait for API (Railway)
     runs-on: ubuntu-latest
+    permissions: {}
     env:
       RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
       RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
@@ -79,6 +80,7 @@ jobs:
     needs: wait-for-api
     name: Deploy frontend (Netlify)
     runs-on: ubuntu-latest
+    permissions: {}
     outputs:
       frontend_url: ${{ steps.deploy-to-netlify.outputs.frontend_url }}
 
@@ -114,8 +116,6 @@ jobs:
           set -ux
 
           BRANCH_NAME="${{ inputs.branch }}"
-          # TODO: remove next line
-          grep VITE_API_BASE_URL --files-with-matches apps/frontend/dist/assets/*.js || :
           NETLIFY_OUTPUT=$(pnpm exec netlify deploy \
             --filter @vue-pact-go-rest/frontend \
             --dir apps/frontend/dist \
@@ -125,12 +125,12 @@ jobs:
           FRONTEND_URL=$(echo "${NETLIFY_OUTPUT}" | jq --raw-output '.deploy_url')
 
           pnpm exec netlify \
-            env:list \
+            env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
             --filter @vue-pact-go-rest/frontend \
             --context branch:${BRANCH_NAME}
 
           pnpm exec netlify \
-            env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
+            env:list \
             --filter @vue-pact-go-rest/frontend \
             --context branch:${BRANCH_NAME}
 
@@ -140,6 +140,8 @@ jobs:
   pact-verify:
     needs: wait-for-api
     name: Pact verify (deployed API)
+    permissions:
+      contents: read
     uses: ./.github/workflows/wc-pact.yml
     with:
       branch: ${{ inputs.branch }}

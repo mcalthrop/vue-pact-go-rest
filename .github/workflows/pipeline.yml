@@ -9,11 +9,13 @@ on:
 jobs:
   build-and-test:
     if: github.event.action != 'closed'
+    permissions: {}
     uses: ./.github/workflows/wc-build-and-test.yml
 
   pact:
     if: github.ref == 'refs/heads/main'
     needs: build-and-test
+    permissions: {}
     uses: ./.github/workflows/wc-pact.yml
     with:
       branch: ${{ github.ref_name }}
@@ -34,5 +36,6 @@ jobs:
   deploy:
     if: github.ref == 'refs/heads/main'
     needs: [build-and-test, pact]
+    permissions: {}
     uses: ./.github/workflows/wc-deploy.yml
     secrets: inherit
