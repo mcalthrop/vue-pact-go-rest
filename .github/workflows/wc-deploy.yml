@@ -59,7 +59,11 @@ jobs:
       - name: Build frontend
         env:
           VITE_API_BASE_URL: ${{ steps.get-api-url.outputs.api_url }}
-        run: pnpm --filter frontend build-only
+        run: |
+          set -ux
+
+          export VITE_API_BASE_URL
+          pnpm --filter frontend build-only
 
       - name: Deploy frontend to Netlify (production)
         env:
