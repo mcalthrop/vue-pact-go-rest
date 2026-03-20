@@ -66,12 +66,10 @@ jobs:
 
           pnpm exec netlify \
             env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
-            --site "${NETLIFY_SITE_ID}" \
             --filter "${NETLIFY_FILTER}" \
             --context "${NETLIFY_CONTEXT}"
 
           pnpm exec netlify \
             env:list \
             --filter "${NETLIFY_FILTER}" \
-            --site "${NETLIFY_SITE_ID}" \
             --context "${NETLIFY_CONTEXT}"

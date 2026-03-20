@@ -98,13 +98,11 @@ jobs:
           pnpm exec netlify \
             env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
             --filter "${NETLIFY_FILTER}" \
-            --site "${NETLIFY_SITE_ID}" \
             --context "${NETLIFY_CONTEXT}"
 
           pnpm exec netlify \
             env:list \
             --filter "${NETLIFY_FILTER}" \
-            --site "${NETLIFY_SITE_ID}" \
             --context "${NETLIFY_CONTEXT}"
 
           echo "frontend_url=${FRONTEND_URL}" >> "${GITHUB_OUTPUT}"
