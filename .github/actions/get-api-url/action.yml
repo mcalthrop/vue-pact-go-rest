@@ -29,6 +29,10 @@ runs:
       run: |
         set -ux
 
+        RAILWAY_PROJECT_ID="${{ inputs.railway_project_id }}"
+        RAILWAY_ENV="${{ inputs.railway_environment }}"
+        RAILWAY_SERVICE="vue-pact-go-rest"
+
         railway link \
           --project "${RAILWAY_PROJECT_ID}" \
           --environment "${RAILWAY_ENV}" \
