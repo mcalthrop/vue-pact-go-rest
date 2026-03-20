@@ -51,22 +51,27 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_CONTEXT: production
+          NETLIFY_FILTER: '@vue-pact-go-rest/frontend'
         run: |
           set -ux
 
           pnpm exec netlify deploy \
-            --filter @vue-pact-go-rest/frontend \
+            --filter "${NETLIFY_FILTER}" \
             --dir apps/frontend/dist \
-            --context production \
+            --site "${NETLIFY_SITE_ID}" \
+            --context "${NETLIFY_CONTEXT}" \
             --prod \
             --message "main (${{ github.sha }})"
 
           pnpm exec netlify \
             env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
-            --filter @vue-pact-go-rest/frontend \
-            --context production
+            --site "${NETLIFY_SITE_ID}" \
+            --filter "${NETLIFY_FILTER}" \
+            --context "${NETLIFY_CONTEXT}"
 
           pnpm exec netlify \
-            env:list VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
-            --filter @vue-pact-go-rest/frontend \
-            --context production
+            env:list \
+            --filter "${NETLIFY_FILTER}" \
+            --site "${NETLIFY_SITE_ID}" \
+            --context "${NETLIFY_CONTEXT}"

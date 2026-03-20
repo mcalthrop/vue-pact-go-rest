@@ -3,7 +3,7 @@
   "build": {
     "builder": "RAILPACK",
     "buildCommand": "make build",
-    "watchPatterns": ["apps/api/**"]
+    "watchPatterns": ["apps/api/**", ".github/**"]
   },
   "deploy": {
     "startCommand": "./bin/api"
