@@ -170,14 +170,14 @@ Status legend: `[ ]` = not started, `[x]` = completed, `[-]` = in progress
 
 ### Task 7.1: Platform setup
 
-- [x] 7.1.1 Choose and configure hosting platforms: Railway for the Go API, Netlify for the Vue frontend; add required secrets (`RAILWAY_TOKEN`, `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID`) to GitHub repository settings
+- [x] 7.1.1 Choose and configure hosting platforms: Railway for the Go API, Netlify for the Vue frontend; add required secrets (`RAILWAY_API_TOKEN`, `RAILWAY_PROJECT_ID`, `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID`) to GitHub repository settings
 - [x] 7.1.2 Make the API's base URL configurable at runtime via an environment variable (e.g. `PORT`); make the frontend's API base URL configurable at build time via `VITE_API_BASE_URL`
 
 ### Task 7.2: Ephemeral deployment workflow
 
 - [x] 7.2.1 Add `wc-deploy-ephemeral.yml`: deploy the API to Railway as a PR-scoped environment; capture the preview URL as a job output
 - [x] 7.2.2 Deploy the frontend to Netlify with `VITE_API_BASE_URL` set to the Railway preview URL from 7.2.1; post both preview URLs as a PR comment
-- [x] 7.2.3 Add a `pull_request` (type: `closed`) workflow step to tear down the Railway ephemeral environment when a PR is merged or closed
+- [x] 7.2.3 Tear down the Railway ephemeral environment when a PR is merged or closed (handled automatically by Railway)
 
 ### Task 7.3: Pact provider verification against deployed API
 
