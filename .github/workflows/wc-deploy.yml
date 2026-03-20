@@ -53,6 +53,7 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_CONTEXT: production
           NETLIFY_FILTER: '@vue-pact-go-rest/frontend'
+          VITE_API_BASE_URL: ${{ steps.get-api-url.outputs.api_url }}
         run: |
           set -ux
 
