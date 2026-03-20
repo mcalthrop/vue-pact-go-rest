@@ -1,0 +1,148 @@
+name: Deploy Ephemeral
+
+on:
+  workflow_call:
+    inputs:
+      pr_number:
+        required: true
+        type: string
+      branch:
+        required: true
+        type: string
+      sha:
+        required: true
+        type: string
+    secrets:
+      RAILWAY_API_TOKEN:
+        required: true
+      RAILWAY_PROJECT_ID:
+        required: true
+      NETLIFY_AUTH_TOKEN:
+        required: true
+      NETLIFY_SITE_ID:
+        required: true
+
+jobs:
+  # ── Get API URL from Railway ——
+  get-api-url:
+    name: Get API URL (Railway)
+    runs-on: ubuntu-latest
+    permissions: {}
+    env:
+      RAILWAY_ENV: vue-pact-go-rest-pr-${{ inputs.pr_number }}
+    outputs:
+      api_url: ${{ steps.get-api-url.outputs.api_url }}
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: Get Railway URL
+        id: get-api-url
+        uses: ./.github/actions/get-api-url
+        with:
+          railway_api_token: ${{ secrets.RAILWAY_API_TOKEN }}
+          railway_project_id: ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway_environment: ${{ env.RAILWAY_ENV }}
+
+  # ── Build and deploy frontend to Netlify ——
+  deploy-frontend:
+    needs: get-api-url
+    name: Deploy frontend (Netlify)
+    runs-on: ubuntu-latest
+    permissions: {}
+    env:
+      VITE_API_BASE_URL: ${{ needs.get-api-url.outputs.api_url }}
+    outputs:
+      frontend_url: ${{ steps.deploy-to-netlify.outputs.frontend_url }}
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - uses: pnpm/action-setup@v4.4.0
+
+      - uses: actions/setup-node@v6.3.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build frontend
+        run: |
+          set -ux
+
+          export VITE_API_BASE_URL
+          pnpm --filter frontend build-only
+
+      - name: Deploy to Netlify
+        id: deploy-to-netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_CONTEXT: branch:${{ inputs.branch }}
+          NETLIFY_FILTER: '@vue-pact-go-rest/frontend'
+        run: |
+          set -ux
+
+          BRANCH_NAME="${{ inputs.branch }}"
+          NETLIFY_OUTPUT=$(pnpm exec netlify deploy \
+            --filter "${NETLIFY_FILTER}" \
+            --dir apps/frontend/dist \
+            --site "${NETLIFY_SITE_ID}" \
+            --context "${NETLIFY_CONTEXT}" \
+            --message "PR #${{ inputs.pr_number }} (${{ inputs.sha }})" \
+            --json 2>&1)
+          FRONTEND_URL=$(echo "${NETLIFY_OUTPUT}" | jq --raw-output '.deploy_url')
+
+          pnpm exec netlify \
+            env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
+            --filter "${NETLIFY_FILTER}" \
+            --context "${NETLIFY_CONTEXT}"
+
+          pnpm exec netlify \
+            env:list \
+            --filter "${NETLIFY_FILTER}" \
+            --context "${NETLIFY_CONTEXT}"
+
+          echo "frontend_url=${FRONTEND_URL}" >> "${GITHUB_OUTPUT}"
+
+  # ── Verify Pact contracts against the deployed API ——
+  pact-verify:
+    needs: get-api-url
+    name: Pact verify (deployed API)
+    permissions:
+      contents: read
+    uses: ./.github/workflows/wc-pact.yml
+    with:
+      branch: ${{ inputs.branch }}
+      provider_base_url: ${{ needs.get-api-url.outputs.api_url }}
+      sha: ${{ inputs.sha }}
+
+  # ── Post preview URLs as a PR comment ——
+  comment:
+    needs: [get-api-url, deploy-frontend]
+    name: Post preview URLs
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/github-script@v8.0.0
+        with:
+          script: |
+            const { repo: { owner, repo } } = context;
+            const issue_number = Number('${{ inputs.pr_number }}');
+            const apiUrl       = '${{ needs.get-api-url.outputs.api_url }}';
+            const frontendUrl  = '${{ needs.deploy-frontend.outputs.frontend_url }}';
+            const body = [
+              '## Ephemeral environments',
+              '',
+              '| Service  | URL |',
+              '| -------- | --- |',
+              `| Frontend | ${frontendUrl} |`,
+              `| API      | ${apiUrl}/recipes |`,
+            ].join('\n');
+
+            await github.rest.issues.createComment({ owner, repo, issue_number, body });
