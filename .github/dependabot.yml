@@ -1,0 +1,79 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      vue:
+        patterns:
+          - 'vue'
+          - 'vue-router'
+          - '@vitejs/plugin-vue'
+          - 'vite-plugin-vue-devtools'
+          - '@vue/*'
+          - 'vue-tsc'
+      vitest:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+      eslint:
+        patterns:
+          - 'eslint'
+          - 'eslint-*'
+          - '*eslint*'
+          - 'oxlint'
+          - 'knip'
+      pact:
+        patterns:
+          - '@pact-foundation/*'
+      openapi:
+        patterns:
+          - 'openapi-typescript'
+          - '@redocly/*'
+      typescript:
+        patterns:
+          - 'typescript'
+          - '@tsconfig/*'
+          - '@types/*'
+      build-tools:
+        patterns:
+          - 'vite'
+          - 'turbo'
+          - 'husky'
+          - 'lint-staged'
+          - 'prettier'
+          - 'npm-run-all2'
+          - 'jiti'
+          - 'msw'
+
+  - package-ecosystem: gomod
+    directory: /apps/api
+    schedule:
+      interval: weekly
+    groups:
+      openapi:
+        patterns:
+          - 'github.com/getkin/kin-openapi'
+          - 'github.com/oapi-codegen/*'
+          - 'github.com/oasdiff/*'
+          - 'github.com/speakeasy-api/*'
+      pact:
+        patterns:
+          - 'github.com/pact-foundation/*'
+      golang-x:
+        patterns:
+          - 'golang.org/x/*'
+      google:
+        patterns:
+          - 'google.golang.org/*'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns:
+          - '*'
