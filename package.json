@@ -13,6 +13,7 @@
     "format": "turbo format",
     "format:check": "turbo format:check",
     "dev": "turbo dev",
+    "prod": "turbo prod",
     "coverage": "turbo coverage",
     "type-check": "turbo type-check",
     "generate:types": "turbo generate:types",

@@ -4,7 +4,7 @@ CMD_DIR               := ./cmd/server
 COVERAGE_FILTERED_OUT := coverage.filtered.out
 COVERAGE_OUT          := coverage.out
 
-.PHONY: all build generate-types test lint format-check coverage dev clean pact-provider-verify
+.PHONY: all build generate-types test lint format-check coverage dev prod clean pact-provider-verify
 
 all: build
 
@@ -16,6 +16,9 @@ build:
 
 dev:
 	go run $(CMD_DIR)
+
+prod:
+	$(BINARY_NAME)
 
 test:
 	go test ./...
