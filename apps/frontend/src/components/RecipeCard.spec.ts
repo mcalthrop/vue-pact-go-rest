@@ -1,8 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import RecipeCard from './RecipeCard.vue';
-import { BASE_URL } from '@/api/baseUrl';
+import { getBaseUrl } from '@/api/getBaseUrl';
+
+vi.mock('@/api/getBaseUrl', () => ({ getBaseUrl: (): string => 'http://localhost:8080' }));
 
 const router = createRouter({
   history: createMemoryHistory(),
@@ -32,7 +34,7 @@ describe('RecipeCard', () => {
     expect(wrapper.text()).toContain('Classic Sourdough Boule');
     expect(wrapper.text()).toContain('A tangy, chewy sourdough loaf');
     expect(wrapper.find('img').attributes('src')).toBe(
-      new URL(mockRecipe.photo_url, BASE_URL).href,
+      new URL(mockRecipe.photo_url, getBaseUrl()).href,
     );
   });
 
