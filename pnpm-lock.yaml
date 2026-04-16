@@ -24,8 +24,8 @@ importers:
         specifier: 3.8.1
         version: 3.8.1
       turbo:
-        specifier: 2.9.0
-        version: 2.9.0
+        specifier: 2.9.7-canary.7
+        version: 2.9.7-canary.7
 
   apps/api: {}
 
@@ -1860,50 +1860,50 @@ packages:
         integrity: sha512-2A933l5P5oCbv6qSxHs7ckKwobs8BDAe9SJ/Xr2Hy+nDlwmLE1GhFh/g/vXGRZWgxBg9nX/5piDtHR9Dkw/XuA==,
       }
 
-  '@turbo/darwin-64@2.9.0':
+  '@turbo/darwin-64@2.9.7-canary.7':
     resolution:
       {
-        integrity: sha512-owaWYafOebw2en9INuP321/fSN82pIQl38VLgIDd6YJ7+jUasEkORQEkWUC8aAqsIsukLhbGdPnklzUqBwBijQ==,
+        integrity: sha512-heWQITENUN9ZZhD3e0kZRqQ5YmxnGszdbE1eE9uQGm5m12iftPvXTdykrQ/DgR2Eegi6BW83XrS89Z8EDcBGaA==,
       }
     cpu: [x64]
     os: [darwin]
 
-  '@turbo/darwin-arm64@2.9.0':
+  '@turbo/darwin-arm64@2.9.7-canary.7':
     resolution:
       {
-        integrity: sha512-1Jj+CXYexJraJ/vvNg5fN9cyVKx/KJyDcWVHvqZWc3aMCC/M4+HxUtnrMu1MEttv5gA4vKOGwa2FCJ9VmfSUGg==,
+        integrity: sha512-d1d6p0h73Yq43aHpKbKC4GB3AuWWviuTemrezubVtOd+WCJuxhGNqjaaYzlQNv5cypG8C8fv7dWp/SOMQw+LEw==,
       }
     cpu: [arm64]
     os: [darwin]
 
-  '@turbo/linux-64@2.9.0':
+  '@turbo/linux-64@2.9.7-canary.7':
     resolution:
       {
-        integrity: sha512-OcCTATltui6jKitb+PaYwiIkLi3bjBP9+9e7gyh0jbivXKoeIFQniMMXbXScQY28zidHw300Ym5itxBMsT/tGw==,
+        integrity: sha512-uTAlHfzsxQmale4YAwro3uG9o9z3fATYqWlVSmH22umfmdwyi5cReGfWtsYj6nV575I4V8lDYy0opiAeg9FPdQ==,
       }
     cpu: [x64]
     os: [linux]
 
-  '@turbo/linux-arm64@2.9.0':
+  '@turbo/linux-arm64@2.9.7-canary.7':
     resolution:
       {
-        integrity: sha512-+NaycIHwYmwt5WLa6V5OZGgtvPwUTwenA7cYLHo+QBsGW7uGROPvOpFU0WED2C5KcGvlu4GP9ks3Ih6Cg5oZew==,
+        integrity: sha512-wEw2wV6ofkrqxYu5WTEFn41vSfDDaDdtzeBGpJTBaasbfLjQ/WmVyFmTdrzRTrGTfK6FDJ1CBFvUuGzpjIMesw==,
       }
     cpu: [arm64]
     os: [linux]
 
-  '@turbo/windows-64@2.9.0':
+  '@turbo/windows-64@2.9.7-canary.7':
     resolution:
       {
-        integrity: sha512-HCFf7WXdGWzCQw76/34l/BdYC9tzOihYAQX6ks34WY6MnhpPPAO9YbfV1c/SBcTIjpnQhoAGEBBYrQQ9h7R18w==,
+        integrity: sha512-m7rQVj78ivK0Q1TQaU0aCrWg1rCqWFAgl6PK6JG24ZaD2xLAMDd0Z1FBC4kZel3Vb13sUQZvVhpLZRd0CSq+Hw==,
       }
     cpu: [x64]
     os: [win32]
 
-  '@turbo/windows-arm64@2.9.0':
+  '@turbo/windows-arm64@2.9.7-canary.7':
     resolution:
       {
-        integrity: sha512-/pdxvCMtom9qYplukZzacCL96Vht/datjiRYc3M1geknY+mg8+f047xLxe98PwNhX1sZyovea4RtH8bNU7JLGA==,
+        integrity: sha512-EP2l7V+bustk8OuphKeTI1skvO+XXLuBSBnlZzWb9zopM0wk+KZUHVUQJmW+BfrIwyC1gIvPKxwhDeHqkoKI8A==,
       }
     cpu: [arm64]
     os: [win32]
@@ -5764,10 +5764,10 @@ packages:
         integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==,
       }
 
-  turbo@2.9.0:
+  turbo@2.9.7-canary.7:
     resolution:
       {
-        integrity: sha512-T1PcaG7rej+JLqCyIwwu9NqKiWsoTrEsiSMj4aS9xlPsXoAZw+N8yZjKRdh1WwcQPrAeB0qswgPDoHG59hF4CQ==,
+        integrity: sha512-hDF4lIW5ATz1Y06NvBuNswF2b4p2YPJFsaEEs4HLynl2iJS1/06IZv07EqO+bC7biDy68i1uLuEeMtrbelue2Q==,
       }
     hasBin: true
 
@@ -7360,22 +7360,22 @@ snapshots:
 
   '@tsconfig/node24@24.0.4': {}
 
-  '@turbo/darwin-64@2.9.0':
+  '@turbo/darwin-64@2.9.7-canary.7':
     optional: true
 
-  '@turbo/darwin-arm64@2.9.0':
+  '@turbo/darwin-arm64@2.9.7-canary.7':
     optional: true
 
-  '@turbo/linux-64@2.9.0':
+  '@turbo/linux-64@2.9.7-canary.7':
     optional: true
 
-  '@turbo/linux-arm64@2.9.0':
+  '@turbo/linux-arm64@2.9.7-canary.7':
     optional: true
 
-  '@turbo/windows-64@2.9.0':
+  '@turbo/windows-64@2.9.7-canary.7':
     optional: true
 
-  '@turbo/windows-arm64@2.9.0':
+  '@turbo/windows-arm64@2.9.7-canary.7':
     optional: true
 
   '@tybys/wasm-util@0.10.1':
@@ -9761,14 +9761,14 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  turbo@2.9.0:
+  turbo@2.9.7-canary.7:
     optionalDependencies:
-      '@turbo/darwin-64': 2.9.0
-      '@turbo/darwin-arm64': 2.9.0
-      '@turbo/linux-64': 2.9.0
-      '@turbo/linux-arm64': 2.9.0
-      '@turbo/windows-64': 2.9.0
-      '@turbo/windows-arm64': 2.9.0
+      '@turbo/darwin-64': 2.9.7-canary.7
+      '@turbo/darwin-arm64': 2.9.7-canary.7
+      '@turbo/linux-64': 2.9.7-canary.7
+      '@turbo/linux-arm64': 2.9.7-canary.7
+      '@turbo/windows-64': 2.9.7-canary.7
+      '@turbo/windows-arm64': 2.9.7-canary.7
 
   type-check@0.4.0:
     dependencies:
