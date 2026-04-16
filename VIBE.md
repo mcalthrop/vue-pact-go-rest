@@ -56,7 +56,7 @@ For example:
   - Since the goal is to stay with Vue.js, SSR was dropped
 - **No main deployments**:
   - My first complete solution included deploying to ephemeral environments and a main deployment
-  - this proved incredibly time-consuming, so I decided to remove it from the requirements to limit the scope
+  - This proved incredibly time-consuming, so I decided to remove it from the requirements to limit the scope
 
 ## Learnings
 
