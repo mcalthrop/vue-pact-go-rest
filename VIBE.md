@@ -54,6 +54,9 @@ For example:
   - Doing SSR with plain Vue.js requires substantial boilerplate
   - The idiomatic solution is Nuxt.js, but that would mean migrating away from Vue.js
   - Since the goal is to stay with Vue.js, SSR was dropped
+- **No main deployments**:
+  - My first complete solution included deploying to ephemeral environments and a main deployment
+  - this proved incredibly time-consuming, so I decided to remove it from the requirements to limit the scope
 
 ## Learnings
 
