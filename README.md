@@ -18,7 +18,7 @@ A monorepo containing a VueJS front end and Go REST API, contract-tested with Pa
 ## Prerequisites
 
 - [nvm](https://github.com/nvm-sh/nvm) — Node version manager
-- [pnpm](https://pnpm.io/) >= 10.18.1
+- [pnpm](https://pnpm.io/) >= 10.33.0
 - [Go](https://go.dev/) >= 1.25
 - [Docker](https://www.docker.com/) — runs the self-hosted Pact Broker (see [Pact contract testing](#pact-contract-testing))
 
