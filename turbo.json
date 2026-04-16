@@ -47,11 +47,6 @@
     "dev": {
       "cache": false,
       "persistent": true
-    },
-    "prod": {
-      "dependsOn": ["build"],
-      "cache": false,
-      "persistent": true
     }
   }
 }

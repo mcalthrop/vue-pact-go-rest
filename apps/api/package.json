@@ -4,7 +4,6 @@
   "scripts": {
     "lint-staged": "lint-staged",
     "dev": "make dev",
-    "prod": "make prod",
     "build": "make build",
     "test": "make test",
     "coverage": "make coverage",

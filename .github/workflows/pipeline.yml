@@ -14,8 +14,3 @@ jobs:
     uses: ./.github/workflows/wc-pact.yml
     with:
       branch: ${{ github.head_ref || github.ref_name }}
-
-  deploy:
-    needs: [build-and-test, pact]
-    if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/wc-deploy.yml
