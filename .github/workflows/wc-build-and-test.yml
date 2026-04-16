@@ -18,13 +18,13 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
 
+      - name: Install pnpm dependencies
+        run: pnpm install --frozen-lockfile
+
       - uses: actions/setup-go@v6.4.0
         with:
           go-version-file: apps/api/go.mod
           cache-dependency-path: apps/api/go.sum
-
-      - name: Install pnpm dependencies
-        run: pnpm install --frozen-lockfile
 
       - name: Install golangci-lint
         run: |
