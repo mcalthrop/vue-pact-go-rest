@@ -39,7 +39,6 @@ export default defineConfig({
           name: 'unit',
           environment: 'jsdom',
           exclude: [...configDefaults.exclude, 'e2e/**', 'src/pact/**'],
-          env: { VITE_API_BASE_URL: 'http://localhost:8080' },
         },
       },
       {

@@ -6,14 +6,6 @@ on:
       branch:
         required: true
         type: string
-      provider_base_url:
-        required: false
-        type: string
-        default: ''
-      sha:
-        required: false
-        type: string
-        default: ''
 
 jobs:
   pact:
@@ -89,8 +81,7 @@ jobs:
 
       - name: Verify Pact contracts
         env:
-          PACT_PROVIDER_BASE_URL: ${{ inputs.provider_base_url }}
           PACT_PUBLISH_RESULTS: 'true'
-          PACT_PROVIDER_VERSION: ${{ inputs.sha || github.sha }}
+          PACT_PROVIDER_VERSION: ${{ github.sha }}
           PACT_PROVIDER_BRANCH: ${{ inputs.branch }}
         run: pnpm pact:provider-verify

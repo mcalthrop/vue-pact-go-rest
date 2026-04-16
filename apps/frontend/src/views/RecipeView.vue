@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { getBaseUrl } from '@/api/getBaseUrl';
+import { BASE_URL } from '@/api/baseUrl';
 import { fetchRecipe } from '@/api/fetchRecipe';
 import type { Recipe } from '@/api/fetchRecipe';
 
 const resolveImageUrl = (photoUrl: string): string => {
-  return new URL(photoUrl, getBaseUrl()).href;
+  return new URL(photoUrl, BASE_URL).href;
 };
 
 const route = useRoute();

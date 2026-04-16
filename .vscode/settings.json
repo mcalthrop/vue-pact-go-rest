@@ -4,10 +4,6 @@
     "buildFlags": ["-tags=pact"]
   },
   "cSpell.words": [
-    "healthcheck",
-    "oxlint",
-    "railpack",
-    "teardown",
-    "vite"
+    "oxlint"
   ]
 }

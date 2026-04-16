@@ -5,7 +5,6 @@ import RecipeView from './RecipeView.vue';
 import * as fetchRecipeModule from '@/api/fetchRecipe';
 
 vi.mock('@/api/fetchRecipe');
-vi.mock('@/api/getBaseUrl', () => ({ getBaseUrl: (): string => 'http://localhost:8080' }));
 
 const router = createRouter({
   history: createMemoryHistory(),

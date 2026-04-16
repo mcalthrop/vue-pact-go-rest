@@ -2,15 +2,6 @@ name: Deploy
 
 on:
   workflow_call:
-    secrets:
-      RAILWAY_API_TOKEN:
-        required: true
-      RAILWAY_PROJECT_ID:
-        required: true
-      NETLIFY_AUTH_TOKEN:
-        required: true
-      NETLIFY_SITE_ID:
-        required: true
 
 jobs:
   deploy:
@@ -20,57 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
 
-      - name: Get Railway URL
-        id: get-api-url
-        uses: ./.github/actions/get-api-url
-        with:
-          railway_api_token: ${{ secrets.RAILWAY_API_TOKEN }}
-          railway_project_id: ${{ secrets.RAILWAY_PROJECT_ID }}
-          railway_environment: production
+      - name: Deploy frontend
+        # TODO: choose a hosting platform (e.g. Vercel, Netlify) and add deploy step
+        run: echo "TODO deploy frontend"
 
-      - uses: pnpm/action-setup@v4.4.0
-
-      - uses: actions/setup-node@v6.3.0
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build frontend
-        env:
-          VITE_API_BASE_URL: ${{ steps.get-api-url.outputs.api_url }}
-        run: |
-          set -ux
-
-          export VITE_API_BASE_URL
-          pnpm --filter frontend build-only
-
-      - name: Deploy frontend to Netlify (production)
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_CONTEXT: production
-          NETLIFY_FILTER: '@vue-pact-go-rest/frontend'
-          VITE_API_BASE_URL: ${{ steps.get-api-url.outputs.api_url }}
-        run: |
-          set -ux
-
-          pnpm exec netlify deploy \
-            --filter "${NETLIFY_FILTER}" \
-            --dir apps/frontend/dist \
-            --site "${NETLIFY_SITE_ID}" \
-            --context "${NETLIFY_CONTEXT}" \
-            --prod \
-            --message "main (${{ github.sha }})"
-
-          pnpm exec netlify \
-            env:set VITE_API_BASE_URL "${VITE_API_BASE_URL}" \
-            --filter "${NETLIFY_FILTER}" \
-            --context "${NETLIFY_CONTEXT}"
-
-          pnpm exec netlify \
-            env:list \
-            --filter "${NETLIFY_FILTER}" \
-            --context "${NETLIFY_CONTEXT}"
+      - name: Deploy API
+        # TODO: choose a hosting platform (e.g. Fly.io, Render) and add deploy step
+        run: echo "TODO deploy API"
