@@ -17,6 +17,7 @@
       "outputs": []
     },
     "lint": {
+      "cache": false,
       "outputs": []
     },
     "lint-staged": {
