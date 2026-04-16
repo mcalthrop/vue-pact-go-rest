@@ -18,14 +18,6 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
 
-      - name: Debug pnpm selection
-        run: |
-          set -ux
-
-          which pnpm || true
-          pnpm --version || true
-          node --version || true
-
       - name: Install pnpm dependencies
         run: pnpm install --frozen-lockfile
 
