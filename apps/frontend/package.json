@@ -44,7 +44,7 @@
     "eslint-plugin-oxlint": "1.60.0",
     "eslint-plugin-vue": "10.8.0",
     "jiti": "2.6.1",
-    "jsdom": "28.1.0",
+    "jsdom": "29.0.2",
     "knip": "6.4.1",
     "lint-staged": "16.3.3",
     "msw": "2.12.10",
