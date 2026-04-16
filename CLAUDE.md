@@ -4,7 +4,7 @@ Project-specific instructions for Claude Code.
 
 ## Node version
 
-Always run `source ~/.zshrc && nvm install` before executing any `pnpm` or `node` commands, to ensure the correct Node version is active.
+Always use `zsh -i -c "..."` when running any `pnpm`, `node`, or `git` commands that may invoke Node (e.g. Husky hooks), to ensure the correct Node version from `.nvmrc` is active.
 
 ## Code organisation
 

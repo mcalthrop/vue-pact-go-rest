@@ -5,7 +5,8 @@
   "engines": {
     "node": "24.14.0",
     "pnpm": ">=10.18.1",
-    "npm": "please-use-pnpm"
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm"
   },
   "scripts": {
     "build": "turbo build",
@@ -13,8 +14,8 @@
     "lint": "turbo lint",
     "format": "turbo format",
     "format:check": "turbo format:check",
-    "dev": "VITE_API_BASE_URL=http://localhost:8080 turbo dev",
-    "prod": "VITE_API_BASE_URL=http://localhost:8080 turbo prod",
+    "dev": "turbo dev",
+    "prod": "turbo prod",
     "coverage": "turbo coverage",
     "type-check": "turbo type-check",
     "generate:types": "turbo generate:types",
@@ -27,7 +28,6 @@
     "prepare": "husky"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@parcel/watcher", "esbuild", "netlify-cli", "sharp", "unix-dgram"],
     "overrides": {
       "fast-xml-parser": "5.5.6",
       "undici": "7.24.4"
@@ -37,7 +37,6 @@
     "@redocly/cli": "2.23.0",
     "husky": "9.1.7",
     "lint-staged": "16.3.3",
-    "netlify-cli": "24.3.0",
     "prettier": "3.8.1",
     "turbo": "2.8.16"
   }

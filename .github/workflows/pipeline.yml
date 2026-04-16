@@ -4,39 +4,13 @@ on:
   push:
     branches: [main]
   pull_request:
-    types: [opened, synchronize, reopened]
 
 jobs:
   build-and-test:
-    if: github.event.action != 'closed'
-    permissions: {}
     uses: ./.github/workflows/wc-build-and-test.yml
 
   pact:
-    if: github.ref == 'refs/heads/main'
     needs: build-and-test
-    permissions: {}
     uses: ./.github/workflows/wc-pact.yml
     with:
-      branch: ${{ github.ref_name }}
-
-  deploy-ephemeral:
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
-    needs: [build-and-test]
-    permissions:
-      contents: read
-      issues: write
-      pull-requests: write
-    uses: ./.github/workflows/wc-deploy-ephemeral.yml
-    with:
-      pr_number: ${{ github.event.pull_request.number }}
-      branch: ${{ github.head_ref }}
-      sha: ${{ github.event.pull_request.head.sha }}
-    secrets: inherit
-
-  deploy:
-    if: github.ref == 'refs/heads/main'
-    needs: [build-and-test, pact]
-    permissions: {}
-    uses: ./.github/workflows/wc-deploy.yml
-    secrets: inherit
+      branch: ${{ github.head_ref || github.ref_name }}
