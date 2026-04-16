@@ -49,12 +49,12 @@ jobs:
           retry_on: error
           command: wget --quiet --output-document=/dev/null http://localhost:9292/diagnostic/status/heartbeat
 
+      - uses: pnpm/action-setup@v5.0.0
+
       - uses: actions/setup-node@v6.3.0
         with:
           node-version-file: .nvmrc
           cache: pnpm
-
-      - uses: pnpm/action-setup@v5.0.0
 
       - name: Install pnpm dependencies
         run: pnpm install --frozen-lockfile
