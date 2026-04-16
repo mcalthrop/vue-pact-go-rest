@@ -11,20 +11,20 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
 
-      - uses: pnpm/action-setup@v4.4.0
+      - uses: pnpm/action-setup@v6.0.0
 
       - uses: actions/setup-node@v6.3.0
         with:
           node-version-file: .nvmrc
           cache: pnpm
 
-      - uses: actions/setup-go@v6.3.0
+      - name: Install pnpm dependencies
+        run: pnpm install --frozen-lockfile
+
+      - uses: actions/setup-go@v6.4.0
         with:
           go-version-file: apps/api/go.mod
           cache-dependency-path: apps/api/go.sum
-
-      - name: Install pnpm dependencies
-        run: pnpm install --frozen-lockfile
 
       - name: Install golangci-lint
         run: |

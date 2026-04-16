@@ -5,7 +5,7 @@ Vue 3 + TypeScript frontend for the Bread Recipes app, consuming the API defined
 ## Prerequisites
 
 - Node 24.14.0 (managed via [nvm](https://github.com/nvm-sh/nvm) — run `nvm install` from the repo root)
-- pnpm >= 10.18.1
+- pnpm >= 10.33.0
 
 ## Setup
 
