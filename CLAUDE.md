@@ -1,3 +1,3 @@
-# CLAUDE.md
+# Claude instructions
 
-@rules/all.md
+@ai-resources/CLAUDE.md
