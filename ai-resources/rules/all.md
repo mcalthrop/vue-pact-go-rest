@@ -1,7 +1,9 @@
 # All Rules
 
 @general.md
-@zsh-node-commands.md
+@cli-flags.md
+@shell-commands.md
+@shell-style.md
 @code-organisation.md
 @pull-requests.md
 @conventional-commits.md
