@@ -49,9 +49,9 @@ jobs:
           retry_on: error
           command: wget --quiet --output-document=/dev/null http://localhost:9292/diagnostic/status/heartbeat
 
-      - uses: pnpm/action-setup@v6.0.0
+      - uses: pnpm/action-setup@v6.0.3
 
-      - uses: actions/setup-node@v6.3.0
+      - uses: actions/setup-node@v6.4.0
         with:
           node-version-file: .nvmrc
           cache: pnpm
